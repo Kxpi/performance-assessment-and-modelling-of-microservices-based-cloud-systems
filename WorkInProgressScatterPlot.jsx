@@ -1,15 +1,12 @@
-import React, { useRef, useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { XYPlot, XAxis, YAxis, MarkSeries, Hint } from 'react-vis';
 import { compose, withState, withProps } from 'recompose';
 import _dropWhile from 'lodash/dropWhile';
 import _round from 'lodash/round';
-
-import './react-vis.css';
+import { XYPlot, XAxis, YAxis, MarkSeries, Hint, makeWidthFlexible } from 'react-vis';
 import './ScatterPlot.css';
 
-const ONE_DAY = 24 * 60 * 60 * 1000000; // microseconds in a day
+const ONE_DAY = 25 * 60 * 60 * 1000000; // microseconds in a day
 const ONE_HOUR = 60 * 60 * 1000000; // microseconds in an hour
 const ONE_MINUTE = 60 * 1000000; // microseconds in a minute
 const ONE_SECOND = 1000000; // microseconds in a second
@@ -23,6 +20,8 @@ const UNIT_STEPS = [
     { unit: 'ms', microseconds: ONE_MILLISECOND, ofPrevious: 1000 },
     { unit: 'μs', microseconds: 1, ofPrevious: 1000 },
 ];
+
+const FlexibleXYPlot = makeWidthFlexible(XYPlot);
 
 
 function formatDuration(duration) {
@@ -46,61 +45,52 @@ function formatDuration(duration) {
 
 
 function ScatterPlotImpl(props) {
-    const { data, onValueClick, overValue, onValueOver, onValueOut, calculateContainerWidth } = props;
-
-    const containerRef = useRef(null);
-    const [containerWidth, setContainerWidth] = useState(0);
-
-    useLayoutEffect(() => {
-        function updateContainerWidth() {
-            if (containerRef.current) {
-                setContainerWidth(calculateContainerWidth(containerRef.current));
-            }
-        }
-
-        // Calculate the initial width on first render.
-        updateContainerWidth();
-
-        window.addEventListener('resize', updateContainerWidth);
-
-        return () => window.removeEventListener('resize', updateContainerWidth);
-    }, []);
+    const { data, onValueClick, overValue, onValueOver, onValueOut } = props;
 
     return (
-        <div className="TraceResultsScatterPlot" ref={containerRef}>
-            {containerWidth && (
-                <XYPlot
-                    margin={{
-                        left: 50,
+        <div className="TraceResultsScatterPlot">
+            <FlexibleXYPlot
+                margin={{
+                    top: 15,
+                    left: 100,  /* Decrease this value */
+                }}
+                colorType="literal"
+                height={850}
+            >
+                <XAxis
+                    title="Time"
+                    tickTotal={4}
+                    tickFormat={t => {
+                        const formattedTime = moment(t / ONE_MILLISECOND).format('hh:mm:ss a');
+                        return formattedTime.length > 10 ? `${formattedTime.slice(0, 10)}...` : formattedTime;
                     }}
-                    width={containerWidth}
-                    colorType="literal"
-                    height={200}
-                >
-                    <XAxis
-                        title="Time"
-                        tickTotal={4}
-                        tickFormat={t => moment(t / ONE_MILLISECOND).format('hh:mm:ss a')}
-                    />
-                    <YAxis title="Duration" tickTotal={3} tickFormat={t => formatDuration(t)} />
-                    <MarkSeries
-                        sizeRange={[3, 10]}
-                        opacity={0.5}
-                        onValueClick={onValueClick}
-                        onValueMouseOver={onValueOver}
-                        onValueMouseOut={onValueOut}
-                        data={data}
-                    />
-                    {overValue && (
-                        <Hint value={overValue}>
-                            <h4 className="scatter-plot-hint">{overValue.name || '<trace-without-root-span>'}</h4>
-                        </Hint>
-                    )}
-                </XYPlot>
-            )}
+                />
+                <YAxis
+                    title="Duration"
+                    tickTotal={3}
+                    tickFormat={t => {
+                        const formattedDuration = formatDuration(t);
+                        return formattedDuration.length > 10 ? `${formattedDuration.slice(0, 10)}...` : formattedDuration;
+                    }}
+                />
+                <MarkSeries
+                    sizeRange={[3, 10]}
+                    opacity={0.5}
+                    onValueClick={onValueClick}
+                    onValueMouseOver={onValueOver}
+                    onValueMouseOut={onValueOut}
+                    data={data}
+                />
+                {overValue && (
+                    <Hint value={overValue}>
+                        <h4 className="scatter-plot-hint">{overValue.name || '<trace-without-root-span>'}</h4>
+                    </Hint>
+                )}
+            </FlexibleXYPlot>
         </div>
     );
 }
+
 
 const valueShape = PropTypes.shape({
     x: PropTypes.number,
@@ -116,13 +106,11 @@ ScatterPlotImpl.propTypes = {
     onValueClick: PropTypes.func.isRequired,
     onValueOut: PropTypes.func.isRequired,
     onValueOver: PropTypes.func.isRequired,
-    calculateContainerWidth: PropTypes.func,
 };
 
 ScatterPlotImpl.defaultProps = {
     overValue: null,
     // JSDOM does not, as of 2023, have a layout engine, so allow tests to supply a mock width as a workaround.
-    calculateContainerWidth: container => container.clientWidth,
 };
 
 const ScatterPlot = compose(
