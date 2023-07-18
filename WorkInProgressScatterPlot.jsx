@@ -48,7 +48,7 @@ function formatDuration(duration) {
 
 
 function ScatterPlotImpl(props) {
-    const { data, onValueClick, overValue, onValueOver, onValueOut } = props;
+    const { data, overValue, onValueOver, onValueOut } = props;
 
     return (
         <div className="TraceResultsScatterPlot">
@@ -64,24 +64,14 @@ function ScatterPlotImpl(props) {
                 <VerticalGridLines />
                 <XAxis
                     title="Time"
-                    tickTotal={null}
-                    tickFormat={t => {
-                        const formattedTime = moment(t / ONE_MILLISECOND).format('HH:mm:ss');
-                        return formattedTime.length > 15 ? `${formattedTime.slice(0, 15)}...` : formattedTime;
-                    }}
+                    tickFormat={t => moment(t / ONE_MILLISECOND).format('HH:mm:ss')}
                 />
                 <YAxis
                     title="Duration"
-                    tickTotal={null}
-                    tickFormat={t => {
-                        const formattedDuration = formatDuration(t);
-                        return formattedDuration.length > 15 ? `${formattedDuration.slice(0, 15)}...` : formattedDuration;
-                    }}
+                    tickFormat={t => formatDuration(t)}
                 />
                 <MarkSeries
-                    sizeRange={[3, 10]}
                     opacity={0.5}
-                    onValueClick={onValueClick}
                     onValueMouseOver={onValueOver}
                     onValueMouseOut={onValueOut}
                     data={data}
@@ -89,6 +79,8 @@ function ScatterPlotImpl(props) {
                 {overValue && (
                     <Hint value={overValue}>
                         <h4 className="scatter-plot-hint">{overValue.name || '<trace-without-root-span>'}</h4>
+                        <h4 className="scatter-plot-hint">Time: {moment(overValue.x / ONE_MILLISECOND).format('HH:mm:ss')}</h4>
+                        <h4 className="scatter-plot-hint">Duration: {formatDuration(overValue.y)}</h4>
                     </Hint>
                 )}
             </FlexibleXYPlot>
@@ -108,7 +100,6 @@ const valueShape = PropTypes.shape({
 ScatterPlotImpl.propTypes = {
     data: PropTypes.arrayOf(valueShape).isRequired,
     overValue: valueShape,
-    onValueClick: PropTypes.func.isRequired,
     onValueOut: PropTypes.func.isRequired,
     onValueOver: PropTypes.func.isRequired,
 };
