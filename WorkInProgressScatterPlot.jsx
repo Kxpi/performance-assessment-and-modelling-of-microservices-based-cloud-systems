@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { compose, withState, withProps } from 'recompose';
 import _dropWhile from 'lodash/dropWhile';
 import _round from 'lodash/round';
-import { XYPlot, XAxis, YAxis, MarkSeries, Hint, makeWidthFlexible } from 'react-vis';
+import { XYPlot, XAxis, YAxis, MarkSeries, Hint, makeWidthFlexible, HorizontalGridLines, VerticalGridLines, makeHeightFlexible } from 'react-vis';
 import './ScatterPlot.css';
+import 'react-vis/dist/style.css';
+
 
 const ONE_DAY = 25 * 60 * 60 * 1000000; // microseconds in a day
 const ONE_HOUR = 60 * 60 * 1000000; // microseconds in an hour
@@ -21,7 +23,8 @@ const UNIT_STEPS = [
     { unit: 'μs', microseconds: 1, ofPrevious: 1000 },
 ];
 
-const FlexibleXYPlot = makeWidthFlexible(XYPlot);
+const FlexibleXYPlot = makeHeightFlexible(makeWidthFlexible(XYPlot));
+
 
 
 function formatDuration(duration) {
@@ -52,25 +55,27 @@ function ScatterPlotImpl(props) {
             <FlexibleXYPlot
                 margin={{
                     top: 15,
-                    left: 100,  /* Decrease this value */
+                    left: 50,
+                    right: 25,
                 }}
                 colorType="literal"
-                height={850}
             >
+                <HorizontalGridLines />
+                <VerticalGridLines />
                 <XAxis
                     title="Time"
-                    tickTotal={4}
+                    tickTotal={null}
                     tickFormat={t => {
-                        const formattedTime = moment(t / ONE_MILLISECOND).format('hh:mm:ss a');
-                        return formattedTime.length > 10 ? `${formattedTime.slice(0, 10)}...` : formattedTime;
+                        const formattedTime = moment(t / ONE_MILLISECOND).format('HH:mm:ss');
+                        return formattedTime.length > 15 ? `${formattedTime.slice(0, 15)}...` : formattedTime;
                     }}
                 />
                 <YAxis
                     title="Duration"
-                    tickTotal={3}
+                    tickTotal={null}
                     tickFormat={t => {
                         const formattedDuration = formatDuration(t);
-                        return formattedDuration.length > 10 ? `${formattedDuration.slice(0, 10)}...` : formattedDuration;
+                        return formattedDuration.length > 15 ? `${formattedDuration.slice(0, 15)}...` : formattedDuration;
                     }}
                 />
                 <MarkSeries
