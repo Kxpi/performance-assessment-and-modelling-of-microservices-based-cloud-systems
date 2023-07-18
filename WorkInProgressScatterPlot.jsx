@@ -78,7 +78,7 @@ function ScatterPlotImpl(props) {
                 />
                 {overValue && (
                     <Hint value={overValue}>
-                        <h4 className="scatter-plot-hint">{overValue.name || '<trace-without-root-span>'}</h4>
+                        <h4 className="scatter-plot-hint">Operation name: {overValue.name || '<trace-without-root-span>'}</h4>
                         <h4 className="scatter-plot-hint">Time: {moment(overValue.x / ONE_MILLISECOND).format('HH:mm:ss')}</h4>
                         <h4 className="scatter-plot-hint">Duration: {formatDuration(overValue.y)}</h4>
                     </Hint>
