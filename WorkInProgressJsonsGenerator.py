@@ -1,12 +1,13 @@
 import random
 import time
 import jaeger_client
+import json
 
 from jaeger_client import Config
 from opentracing import Tracer
 
 SERVICE_NAME = "your-service-name"
-TRACE_COUNT = 10
+TRACE_COUNT = 100
 MAX_SPANS_PER_TRACE = 20
 MAX_DEPTH = 5
 TRACE_PREFIX = "trace_"
@@ -44,6 +45,9 @@ def generate_span(trace_id, parent_span_id, span_depth):
         "startTime": int(start_time * 1000000),
         "duration": int((end_time - start_time) * 1000000),
         "tags": [],
+        "warnings": None,
+        "logs": None,
+        "processID": SERVICE_NAME
     }
 
     if span_depth < MAX_DEPTH:
@@ -65,26 +69,38 @@ def generate_trace(trace_count):
         trace_id = f"{TRACE_PREFIX}{i}"
         span_count = random.randint(1, MAX_SPANS_PER_TRACE)
         root_span = generate_span(trace_id, 0, 0)
-        trace = [root_span]
-        traces.append(trace)
 
+        # Add processes and spans under one dictionary.
+        trace = {
+            "processes": {
+                "serviceName": SERVICE_NAME,
+                "tags": [
+                    {"key": "example_key", "type": "string",
+                        "value": "example_value"}
+                ]
+            },
+            "spans": [root_span]
+        }
+
+        traces.append(trace)
     return traces
 
 
 def generate_jaeger_json():
     traces = generate_trace(TRACE_COUNT)
-    return {"data": traces}
+    data = {"data": traces}
+    return data
 
 
 def save_json_to_file(json_data, filename):
     with open(filename, 'w') as file:
-        file.write(json_data)
+        json.dump(json_data, file)
 
 
 # Generate and save the Jaeger JSON
 jaeger_json = generate_jaeger_json()
 output_filename = "jaegerTraces.json"
-save_json_to_file(str(jaeger_json), output_filename)
+save_json_to_file(jaeger_json, output_filename)
 print(jaeger_json)
 
 

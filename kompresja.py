@@ -1,6 +1,8 @@
 import json
+import os
 
-filename = "example.json"
+print(os.getcwd())
+filename = "./performance-assessment-and-modelling-of-microservices-based-cloud-systems/jaegerTraces.json"
 
 with open(filename) as json_file:
     log = json.load(json_file)
