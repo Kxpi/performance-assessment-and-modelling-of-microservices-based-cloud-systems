@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import ScatterPlot from './ScatterPlot'; // assuming ScatterPlot is in the same directory
+import ScatterPlot from './ScatterPlot';
 
-function PlotFromFile() {
+function App() {
     const [data, setData] = useState([]);
 
-    // Function to check if a tag represents an error
     const isErrorTag = ({ key, value }) => key === 'error' && (value === true || value === 'true');
 
     useEffect(() => {
@@ -16,35 +15,32 @@ function PlotFromFile() {
                 return response.json();
             })
             .then(jsonData => {
-                // Make sure jsonData.data is an array
+                // Check if jsonData.data is an array
                 if (Array.isArray(jsonData.data)) {
                     // Process the fetched data into the correct format
-                    const processedData = jsonData.data.map(t => ({
-                        x: t.spans[0].startTime,
-                        y: t.spans[0].duration,
-                        traceID: t.traceID,
-                        size: t.spans.length,
-                        name: t.spans[0].operationName,
-                        color: (Array.isArray(t.spans) && t.spans.some(sp => Array.isArray(sp.tags) && sp.tags.some(isErrorTag))) ? 'red' : '#12939A',
-                    }));
-                    setData(processedData); // Save processed data to state
+                    const processedData = jsonData.data.reduce((acc, t) => {
+                        const spansData = t.spans.map(span => ({
+                            x: span.startTime,
+                            y: span.duration,
+                            traceID: t.traceID,
+                            size: t.spans.length,
+                            name: span.operationName,
+                            color: Array.isArray(span.tags) && span.tags.some(isErrorTag) ? 'red' : '#12939A',
+                        }));
+                        return [...acc, ...spansData]
+                    }, []);
+                    setData(processedData);
+                    console.log('length of processedData: ', processedData.length);
                 }
             })
-            .catch(error => {
-                console.log('Error in fetching data: ', error);
-            });
-    }, []); // Empty dependency array means this effect runs once on mount
-
-
-
-
-
+            .catch(error => console.log('Error in fetching data: ', error));
+    }, []); 
 
     return (
-        <div className="PlotFromFile">
+        <div className="App">
             <ScatterPlot data={data} />
         </div>
     );
 }
 
-export default PlotFromFile;
+export default App;
