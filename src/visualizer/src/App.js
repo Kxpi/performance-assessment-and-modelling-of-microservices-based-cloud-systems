@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import "./App.css";
-// import ScatterPlot from './components/ScatterPlot';
+import ScatterPlot from './components/ScatterPlot';
 
 function App() {
   const [jaegerEndpoint, setJaegerEndpoint] = useState("");
@@ -31,7 +31,8 @@ function App() {
         }
       )
       .then((response) => {
-        return response.data.json()
+        console.log(response.data)
+        return response.data
       })
       .then(jsonData => {
         // Check if jsonData.data is an array
@@ -98,7 +99,7 @@ function App() {
           </Form>
         </div>
       </header>
-      {/* <ScatterPlot data={data} /> */}
+      <ScatterPlot data={data} />
     </div>
   );
 }
