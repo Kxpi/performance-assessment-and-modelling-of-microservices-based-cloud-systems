@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  react:
+    image: react_jaeger
+    build:
+      context: ./src/visualizer
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - common
+
+  flask:
+    image: flask_jaeger
+    build:
+      context: ./src/flask
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      - common
+
+networks:
+  common:
+    driver: bridge
