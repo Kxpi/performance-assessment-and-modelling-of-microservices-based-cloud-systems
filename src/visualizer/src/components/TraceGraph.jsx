@@ -34,17 +34,17 @@ const TraceGraph = ({ traceID, traces }) => {
         });
       }
       //sortowanie wierchołków po czasie aby zachować chronologie
-      nodes.sort((a, b) => a.startTime - b.startTime);
-    });
 
-    
+    });
+    nodes.sort((a, b) => a.startTime - b.startTime);
+
     const Graph = require('react-graph-vis').default;
 
     // opcje grafu
     const options = {
       layout: {
         hierarchical: {
-          direction: 'LR', 
+          direction: 'LR',
         },
       },
       edges: {
@@ -52,13 +52,13 @@ const TraceGraph = ({ traceID, traces }) => {
         length: 300,
       },
       nodes: {
-        shape: 'box', 
+        shape: 'box',
         size: 20,
         font: {
           size: 14,
         },
       },
-      
+
       width: '1920px',
       height: '600px'
     };
@@ -69,11 +69,11 @@ const TraceGraph = ({ traceID, traces }) => {
 
 
   return (
-    <div>
+    <div key={traceID}>
       <h2>Wizualizacja Trace: {traceID}</h2>
       <p>Pierwszy spanID: {selectedTrace.spans[0].spanID}</p>
-      <div style={{display: "block",width: "100%"}}>
-      {renderTraceGraph()}
+      <div style={{ display: "block", width: "100%" }}>
+        {renderTraceGraph()}
       </div>
     </div>
   );
