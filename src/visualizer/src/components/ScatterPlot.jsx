@@ -81,6 +81,7 @@ function ScatterPlotImpl(props) {
                         <h4 className="scatter-plot-hint">Operation name: {overValue.name || '<trace-without-root-span>'}</h4>
                         <h4 className="scatter-plot-hint">Time: {moment(overValue.x / ONE_MILLISECOND).format('HH:mm:ss')}</h4>
                         <h4 className="scatter-plot-hint">Duration: {formatDuration(overValue.y)}</h4>
+                        <h4 className="scatter-plot-hint">Trace ID: {overValue.traceID}</h4>
                     </Hint>
                 )}
             </FlexibleXYPlot>

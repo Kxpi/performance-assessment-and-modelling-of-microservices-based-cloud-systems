@@ -1,4 +1,11 @@
 import React from 'react';
+import { scaleOrdinal } from 'd3-scale';
+import { schemeCategory10 } from 'd3-scale-chromatic';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+const colorScale = scaleOrdinal(schemeCategory10);
 
 const TraceGraph = ({ traceID, traces }) => {
   // Znajduje odpowiedni trace na podstawie traceID
@@ -23,6 +30,8 @@ const TraceGraph = ({ traceID, traces }) => {
         id: span.spanID,
         label: span.operationName,
         startTime: span.startTime,
+        color: colorScale(span.processID),
+        serviceName: selectedTrace.processes[span.processID].serviceName,
       });
 
       // szuka rodzica po referencji child_of i ustawia krawędzie
@@ -63,8 +72,22 @@ const TraceGraph = ({ traceID, traces }) => {
       height: '600px'
     };
 
-    // Renderujemy graf
-    return <Graph graph={{ nodes, edges }} options={options} />;
+    const events = {
+      click: function (event) {
+        const node = nodes.find((node) => node.id === event.nodes[0]);
+        if (node) {
+          toast.info(node.serviceName);
+        }
+      },
+    };
+
+
+    return (
+      <>
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
+        <Graph graph={{ nodes, edges }} options={options} events={events} />
+      </>
+    );
   };
 
 
@@ -75,6 +98,7 @@ const TraceGraph = ({ traceID, traces }) => {
       <div style={{ display: "block", width: "100%" }}>
         {renderTraceGraph()}
       </div>
+      <ToastContainer />
     </div>
   );
 };

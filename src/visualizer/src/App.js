@@ -5,6 +5,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import "./App.css";
 import ScatterPlot from './components/ScatterPlot';
+import { scaleOrdinal } from 'd3-scale';
+import { schemeCategory10 } from 'd3-scale-chromatic';
+
+// Create a color scale without red (red is used for errors)
+const colorsWithoutRed = schemeCategory10.slice(1);
+const colorScale = scaleOrdinal(colorsWithoutRed);
 
 function App() {
   const [jaegerEndpoint, setJaegerEndpoint] = useState("");
@@ -45,7 +51,7 @@ function App() {
                     traceID: t.traceID,
                     size: t.spans.length,
                     name: span.operationName,
-                    color: Array.isArray(span.tags) && span.tags.some(isErrorTag) ? 'red' : '#12939A',
+                    color: Array.isArray(span.tags) && span.tags.some(isErrorTag) ? 'red' : colorScale(t.traceID),
                 }));
                 return [...acc, ...spansData]
             }, []);
