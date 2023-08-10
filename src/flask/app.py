@@ -35,7 +35,7 @@ def visualize():
     #     'trace_id': trace_id,
     # }
     data = {}
-    with open('traces.json') as json_file:
+    with open('example.json') as json_file:
         data = json.load(json_file)
 
     return jsonify(data)
