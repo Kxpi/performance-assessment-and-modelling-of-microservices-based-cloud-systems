@@ -72,16 +72,19 @@ function ScatterPlotImpl(props) {
                 />
                 <MarkSeries
                     opacity={0.5}
+                    strokeWidth={4}
                     onValueMouseOver={onValueOver}
                     onValueMouseOut={onValueOut}
                     data={data}
                 />
                 {overValue && (
                     <Hint value={overValue}>
+                        <h4 className="scatter-plot-hint">Span ID: {overValue.spanID}</h4>
                         <h4 className="scatter-plot-hint">Operation name: {overValue.name || '<trace-without-root-span>'}</h4>
                         <h4 className="scatter-plot-hint">Time: {moment(overValue.x / ONE_MILLISECOND).format('HH:mm:ss')}</h4>
                         <h4 className="scatter-plot-hint">Duration: {formatDuration(overValue.y)}</h4>
                         <h4 className="scatter-plot-hint">Trace ID: {overValue.traceID}</h4>
+                        <h4 className="scatter-plot-hint">Service Name: {overValue.serviceName}</h4>
                     </Hint>
                 )}
             </FlexibleXYPlot>

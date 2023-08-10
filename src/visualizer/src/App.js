@@ -11,6 +11,7 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 // Create a color scale without red (red is used for errors)
 const colorsWithoutRed = schemeCategory10.slice(1);
 const colorScale = scaleOrdinal(colorsWithoutRed);
+const borderColorScale = scaleOrdinal(schemeCategory10);
 
 function App() {
   const [jaegerEndpoint, setJaegerEndpoint] = useState("");
@@ -23,19 +24,19 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     axios.post(
-        "http://localhost:5000/visualize",
-        {
-          jaeger_endpoint: jaegerEndpoint,
-          // start_date: startDate.toISOString(),
-          // end_date: endDate.toISOString(),
-          trace_id: traceID,
+      "http://localhost:5000/visualize",
+      {
+        jaeger_endpoint: jaegerEndpoint,
+        // start_date: startDate.toISOString(),
+        // end_date: endDate.toISOString(),
+        trace_id: traceID,
+      },
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          },
-        }
-      )
+      }
+    )
       .then((response) => {
         console.log(response.data)
         return response.data
@@ -43,20 +44,23 @@ function App() {
       .then(jsonData => {
         // Check if jsonData.data is an array
         if (Array.isArray(jsonData.data)) {
-            // Process the fetched data into the correct format
-            const processedData = jsonData.data.reduce((acc, t) => {
-                const spansData = t.spans.map(span => ({
-                    x: span.startTime,
-                    y: span.duration,
-                    traceID: t.traceID,
-                    size: t.spans.length,
-                    name: span.operationName,
-                    color: Array.isArray(span.tags) && span.tags.some(isErrorTag) ? 'red' : colorScale(t.traceID),
-                }));
-                return [...acc, ...spansData]
-            }, []);
-            setData(processedData);
-            console.log('length of processedData: ', processedData.length);
+          // Process the fetched data into the correct format
+          const processedData = jsonData.data.reduce((acc, t) => {
+            const spansData = t.spans.map(span => ({
+              x: span.startTime,
+              y: span.duration,
+              spanID: span.spanID,
+              traceID: t.traceID,
+              size: t.spans.length,
+              name: span.operationName,
+              color: Array.isArray(span.tags) && span.tags.some(isErrorTag) ? 'red' : colorScale(t.traceID),
+              fill: borderColorScale(t.processes[span.processID].serviceName),
+              serviceName: t.processes[span.processID].serviceName,
+            }));
+            return [...acc, ...spansData]
+          }, []);
+          setData(processedData);
+          console.log('length of processedData: ', processedData.length);
         }
       })
       .catch((error) => {
