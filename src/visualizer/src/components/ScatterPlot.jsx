@@ -6,6 +6,10 @@ import _dropWhile from 'lodash/dropWhile';
 import _round from 'lodash/round';
 import { XYPlot, XAxis, YAxis, MarkSeries, Hint, makeWidthFlexible, HorizontalGridLines, VerticalGridLines, makeHeightFlexible } from 'react-vis';
 import 'react-vis/dist/style.css';
+import { scaleOrdinal } from 'd3-scale';
+import { schemeCategory10 } from 'd3-scale-chromatic';
+
+const borderColorScale = scaleOrdinal(schemeCategory10);
 
 
 const ONE_DAY = 25 * 60 * 60 * 1000000; // microseconds in a day
@@ -71,8 +75,14 @@ function ScatterPlotImpl(props) {
                     tickFormat={t => formatDuration(t)}
                 />
                 <MarkSeries
+                    className="mark-series-border"
+                    strokeWidth={10}
+                    opacity={1}
+                    data={data.map(d => ({ ...d, color: borderColorScale(d.serviceName) }))}
+                />
+                <MarkSeries
+                    className="mark-series-fill"
                     opacity={0.5}
-                    strokeWidth={4}
                     onValueMouseOver={onValueOver}
                     onValueMouseOut={onValueOut}
                     data={data}

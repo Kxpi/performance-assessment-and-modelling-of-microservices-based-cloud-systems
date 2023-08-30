@@ -11,7 +11,6 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 // Create a color scale without red (red is used for errors)
 const colorsWithoutRed = schemeCategory10.slice(1);
 const colorScale = scaleOrdinal(colorsWithoutRed);
-const borderColorScale = scaleOrdinal(schemeCategory10);
 
 function App() {
   const [jaegerEndpoint, setJaegerEndpoint] = useState("");
@@ -54,7 +53,6 @@ function App() {
               size: t.spans.length,
               name: span.operationName,
               color: Array.isArray(span.tags) && span.tags.some(isErrorTag) ? 'red' : colorScale(t.traceID),
-              fill: borderColorScale(t.processes[span.processID].serviceName),
               serviceName: t.processes[span.processID].serviceName,
             }));
             return [...acc, ...spansData]
