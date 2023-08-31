@@ -11,7 +11,6 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 
 const borderColorScale = scaleOrdinal(schemeCategory10);
 
-
 const ONE_DAY = 25 * 60 * 60 * 1000000; // microseconds in a day
 const ONE_HOUR = 60 * 60 * 1000000; // microseconds in an hour
 const ONE_MINUTE = 60 * 1000000; // microseconds in a minute
@@ -50,9 +49,39 @@ function formatDuration(duration) {
     return secondaryValue === 0 ? primaryUnitString : `${primaryUnitString} ${secondaryUnitString}`;
 }
 
+function Modal({ isOpen, onClose, children }) {
+    if (!isOpen) {
+        return null;
+    }
+
+    return (
+        <div className='modal'>
+            <div className='modal-content'>
+                {children}
+                <button onClick={onClose}>Close</button>
+            </div>
+        </div>
+    );
+}
+
 
 function ScatterPlotImpl(props) {
     const { data, overValue, onValueOver, onValueOut } = props;
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [clickedDataPoint, setClickedDataPoint] = useState(0);
+    const [filteredData, setFilteredData] = useState(data);
+
+    const handleOptionClick = (filterBy) => {
+        let newData;
+        if (filterBy === 'trace') {
+            newData = data.filter(d => d.traceID === clickedDataPoint.traceID);
+        }
+        else if (filterBy === 'service') {
+            newData = data.filter(d => d.serviceName === clickedDataPoint.serviceName);
+        }
+        setFilteredData(newData);
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="TraceResultsScatterPlot">
@@ -78,14 +107,18 @@ function ScatterPlotImpl(props) {
                     className="mark-series-border"
                     strokeWidth={10}
                     opacity={1}
-                    data={data.map(d => ({ ...d, color: borderColorScale(d.serviceName) }))}
+                    data={filteredData.map(d => ({ ...d, color: borderColorScale(d.serviceName) }))}
                 />
                 <MarkSeries
                     className="mark-series-fill"
                     opacity={0.5}
                     onValueMouseOver={onValueOver}
                     onValueMouseOut={onValueOut}
-                    data={data}
+                    data={filteredData}
+                    onValueClick={(overValue) => {
+                        setClickedDataPoint(overValue);
+                        setIsModalOpen(true);
+                    }}
                 />
                 {overValue && (
                     <Hint value={overValue}>
@@ -98,6 +131,11 @@ function ScatterPlotImpl(props) {
                     </Hint>
                 )}
             </FlexibleXYPlot>
+            <button onClick={() => setFilteredData(data)}>View all spans</button>
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <button onClick={() => handleOptionClick('trace')}>Show all spans from trace with ID: {clickedDataPoint.traceID}</button>
+                <button onClick={() => handleOptionClick('service')}>Show all spans from microservice named: {clickedDataPoint.serviceName}</button>
+            </Modal>
         </div>
     );
 }
