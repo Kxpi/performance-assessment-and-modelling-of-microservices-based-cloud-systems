@@ -24,11 +24,15 @@ critical_trace = max(traces, key=calculate_trace_duration)
 
 critical_path_spans = critical_trace["spans"]
 max_duration=0
-print("Critical Path Spans:")
+start_time=0
+
 for span in critical_path_spans:
+    if start_time==0:
+        start_time=span['startTime']
     span_id = span["spanID"]
     operation_name = span["operationName"]
     duration = span_durations[span_id]
+    end_time=span['startTime']+duration
     max_duration+=duration
     print(f"Span ID: {span_id}, Operation: {operation_name}, Duration: {duration} ms")
-print("max duration:", max_duration)
+print("max duration:", max_duration, "time of communication",end_time-start_time)
