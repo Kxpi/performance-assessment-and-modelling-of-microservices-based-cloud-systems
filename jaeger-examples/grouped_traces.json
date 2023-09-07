@@ -1,0 +1,14 @@
+{
+    "(('compose-post-service', 'home-timeline-service', 'media-service', 'nginx-web-server', 'post-storage-service', 'social-graph-service', 'text-service', 'unique-id-service', 'url-shorten-service', 'user-mention-service', 'user-service', 'user-timeline-service'), ('/wrk2-api/post/compose', '/wrk2-api/post/compose', 'compose_creator_client', 'compose_creator_server', 'compose_media_client', 'compose_media_server', 'compose_post_client', 'compose_post_server', 'compose_text_client', 'compose_text_server', 'compose_unique_id_client', 'compose_unique_id_server', 'compose_urls_client', 'compose_urls_server', 'compose_user_mentions_client', 'compose_user_mentions_memcached_get_client', 'compose_user_mentions_server', 'get_followers_client', 'get_followers_server', 'post_storage_mongo_insert_client', 'social_graph_redis_get_client', 'store_post_client', 'store_post_server', 'url_mongo_insert_client', 'write_home_timeline_client', 'write_home_timeline_redis_update_client', 'write_home_timeline_server', 'write_user_timeline_client', 'write_user_timeline_mongo_insert_client', 'write_user_timeline_redis_update_client', 'write_user_timeline_server'))": [
+        "2fade568645f89b0",
+        "1527899ae41f0cf9",
+        "0259af3f49346c06",
+        "172712ab65c7f298",
+        "2e68449603568803",
+        "03ec8732f11e31d8",
+        "21f0877e0816d226",
+        "21e549803ceb41a3",
+        "0cf3c611f0a3ad5e",
+        "03ccb03505ebcf1f"
+    ]
+}
