@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { compose, withState, withProps } from "recompose";
 import _dropWhile from "lodash/dropWhile";
@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
   CustomSVGSeries,
+  Highlight,
   Hint,
   makeWidthFlexible,
   HorizontalGridLines,
@@ -75,11 +76,41 @@ function Modal({ isOpen, onClose, children }) {
   );
 }
 
+function useShiftPress() {
+  const [isShiftPressed, setIsShiftPressed] = useState(false);
+
+  function onKeyDown({ key }) {
+    if (key === "Shift") {
+      setIsShiftPressed(true);
+    }
+  }
+
+  function onKeyUp({ key }) {
+    if (key === "Shift") {
+      setIsShiftPressed(false);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, []);
+
+  return isShiftPressed;
+}
+
 function ScatterPlotImpl(props) {
   const { data, overValue, onValueOver, onValueOut } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedDataPoint, setClickedDataPoint] = useState(0);
   const [filteredData, setFilteredData] = useState(data);
+  const [lastDrawLocation, setLastDrawLocation] = useState(null);
+  const isShiftPressed = useShiftPress();
 
   const handleOptionClick = (filterBy) => {
     let newData;
@@ -97,10 +128,17 @@ function ScatterPlotImpl(props) {
   return (
     <div className="TraceResultsScatterPlot">
       <FlexibleXYPlot
+        xType="time"
+        xDomain={
+          lastDrawLocation && [lastDrawLocation.left, lastDrawLocation.right]
+        }
+        yDomain={
+          lastDrawLocation && [lastDrawLocation.bottom, lastDrawLocation.top]
+        }
         margin={{
           top: 15,
-          left: 50,
-          right: 25,
+          left: 60,
+          right: 60,
         }}
         colorType="literal"
       >
@@ -108,6 +146,7 @@ function ScatterPlotImpl(props) {
         <VerticalGridLines />
         <XAxis
           title="Time"
+          tickTotal={19}
           tickFormat={(t) => moment(t / ONE_MILLISECOND).format("HH:mm:ss")}
         />
         <YAxis title="Duration" tickFormat={(t) => formatDuration(t)} />
@@ -116,7 +155,6 @@ function ScatterPlotImpl(props) {
           opacity={0.5}
           customComponent={({ size, color, svg }) => {
             const Svg = svg;
-            console.log(Svg);
             return (
               <Svg
                 width={size}
@@ -152,13 +190,45 @@ function ScatterPlotImpl(props) {
             </h4>
           </Hint>
         )}
+        {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
+          <Highlight
+            onBrushEnd={(area) => {
+              setLastDrawLocation(area);
+            }}
+            onDrag={(area) => {
+              setLastDrawLocation({
+                bottom: lastDrawLocation.bottom + (area.top - area.bottom),
+                left: lastDrawLocation.left - (area.right - area.left),
+                right: lastDrawLocation.right - (area.right - area.left),
+                top: lastDrawLocation.top + (area.top - area.bottom),
+              });
+            }}
+          />
+        )}
       </FlexibleXYPlot>
-      <button onClick={() => setFilteredData(data)}>View all spans</button>
+      <button
+        onClick={() => {
+          setFilteredData(data);
+          setLastDrawLocation(null);
+        }}
+      >
+        View all spans
+      </button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <button onClick={() => handleOptionClick("trace")}>
+        <button
+          onClick={() => {
+            setLastDrawLocation(null);
+            handleOptionClick("trace");
+          }}
+        >
           Show all spans from trace with ID: {clickedDataPoint.traceID}
         </button>
-        <button onClick={() => handleOptionClick("service")}>
+        <button
+          onClick={() => {
+            setLastDrawLocation(null);
+            handleOptionClick("service");
+          }}
+        >
           Show all spans from microservice named: {clickedDataPoint.serviceName}
         </button>
       </Modal>
