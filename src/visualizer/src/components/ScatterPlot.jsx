@@ -17,6 +17,144 @@ import {
   makeHeightFlexible,
 } from "react-vis";
 import "react-vis/dist/style.css";
+import * as SVGs from "./SVGs";
+
+const svgComponents = Object.values(SVGs);
+
+const myColors = [
+  "Aqua",
+  "Aquamarine",
+  "Bisque",
+  "Black",
+  "Blue",
+  "BlueViolet",
+  "Brown",
+  "BurlyWood",
+  "CadetBlue",
+  "Chartreuse",
+  "Chocolate",
+  "Coral",
+  "CornflowerBlue",
+  "Crimson",
+  "Cyan",
+  "DarkBlue",
+  "DarkCyan",
+  "DarkGoldenRod",
+  "DarkGray",
+  "DarkGrey",
+  "DarkGreen",
+  "DarkKhaki",
+  "DarkMagenta",
+  "DarkOliveGreen",
+  "DarkOrange",
+  "DarkOrchid",
+  "DarkRed",
+  "DarkSalmon",
+  "DarkSeaGreen",
+  "DarkSlateBlue",
+  "DarkSlateGray",
+  "DarkSlateGrey",
+  "DarkTurquoise",
+  "DarkViolet",
+  "DeepPink",
+  "DeepSkyBlue",
+  "DimGray",
+  "DimGrey",
+  "DodgerBlue",
+  "FireBrick",
+  "ForestGreen",
+  "Fuchsia",
+  "Gainsboro",
+  "Gold",
+  "GoldenRod",
+  "Gray",
+  "Grey",
+  "Green",
+  "GreenYellow",
+  "HotPink",
+  "IndianRed",
+  "Indigo",
+  "Ivory",
+  "Khaki",
+  "Lavender",
+  "LawnGreen",
+  "LemonChiffon",
+  "LightBlue",
+  "LightCoral",
+  "LightCyan",
+  "LightGray",
+  "LightGrey",
+  "LightGreen",
+  "LightPink",
+  "LightSalmon",
+  "LightSeaGreen",
+  "LightSkyBlue",
+  "LightSlateGray",
+  "LightSlateGrey",
+  "LightSteelBlue",
+  "Lime",
+  "LimeGreen",
+  "Linen",
+  "Magenta",
+  "Maroon",
+  "MediumAquaMarine",
+  "MediumBlue",
+  "MediumOrchid",
+  "MediumPurple",
+  "MediumSeaGreen",
+  "MediumSlateBlue",
+  "MediumSpringGreen",
+  "MediumTurquoise",
+  "MediumVioletRed",
+  "MidnightBlue",
+  "MintCream",
+  "MistyRose",
+  "Moccasin",
+  "NavajoWhite",
+  "Navy",
+  "OldLace",
+  "Olive",
+  "OliveDrab",
+  "Orange",
+  "OrangeRed",
+  "Orchid",
+  "PaleGoldenRod",
+  "PaleGreen",
+  "PaleTurquoise",
+  "PaleVioletRed",
+  "PapayaWhip",
+  "PeachPuff",
+  "Peru",
+  "Pink",
+  "Plum",
+  "PowderBlue",
+  "Purple",
+  "RebeccaPurple",
+  "RosyBrown",
+  "RoyalBlue",
+  "SaddleBrown",
+  "Salmon",
+  "SandyBrown",
+  "SeaGreen",
+  "Sienna",
+  "Silver",
+  "SkyBlue",
+  "SlateBlue",
+  "SlateGray",
+  "SlateGrey",
+  "SpringGreen",
+  "SteelBlue",
+  "Tan",
+  "Teal",
+  "Thistle",
+  "Tomato",
+  "Turquoise",
+  "Violet",
+  "Wheat",
+  "White",
+  "WhiteSmoke",
+  "YellowGreen",
+];
 
 const ONE_DAY = 25 * 60 * 60 * 1000000; // microseconds in a day
 const ONE_HOUR = 60 * 60 * 1000000; // microseconds in an hour
@@ -104,25 +242,82 @@ function useShiftPress() {
   return isShiftPressed;
 }
 
+const getRandomSubset = (data, percentage) => {
+  if (!data || data.length === 0 || percentage === 0) {
+    return [];
+  }
+  const count = Math.max(1, Math.ceil((data.length * percentage) / 100));
+  const indices = Array.from({ length: data.length }, (_, i) => i);
+  const randomIndices = [];
+
+  let svgIndex = 0;
+  let colorIndex = 0;
+  const serviceSvgMap = new Map();
+  const serviceColorMap = new Map();
+
+  for (let i = 0; i < count; i++) {
+    const randomIndex = indices.splice(
+      Math.floor(Math.random() * indices.length),
+      1
+    )[0];
+    randomIndices.push(randomIndex);
+  }
+
+  return randomIndices.map((i) => {
+    const span = data[i];
+    const serviceName = span.serviceName;
+    let svg;
+
+    if (serviceSvgMap.has(serviceName)) {
+      svg = serviceSvgMap.get(serviceName);
+    } else {
+      svg = svgComponents[svgIndex];
+      serviceSvgMap.set(serviceName, svg);
+      svgIndex = (svgIndex + 1) % svgComponents.length;
+    }
+
+    span.svg = svg;
+    if (span.color === null) {
+      span.color = myColors[colorIndex];
+      serviceColorMap.set(serviceName, myColors[colorIndex]);
+      colorIndex = (colorIndex + 1) % myColors.length;
+    }
+    return span;
+  });
+};
+
 function ScatterPlotImpl(props) {
   const { data, overValue, onValueOver, onValueOut } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedDataPoint, setClickedDataPoint] = useState(0);
-  const [filteredData, setFilteredData] = useState(data);
+  const [percentage, setPercentage] = useState(0.001);
+
+  const [filteredData, setFilteredData] = useState(null);
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
+  const [currentSpans, setCurrentSpans] = useState(filteredData);
+
   const isShiftPressed = useShiftPress();
+
+  const handlePercentageChange = (event) => {
+    const newPercentage = Number(event.target.value);
+    if (newPercentage >= 0.001 && newPercentage <= 100) {
+      setPercentage(newPercentage);
+    }
+  };
 
   const handleOptionClick = (filterBy) => {
     let newData;
     if (filterBy === "trace") {
-      newData = data.filter((d) => d.traceID === clickedDataPoint.traceID);
+      newData = currentSpans.filter(
+        (d) => d.traceID === clickedDataPoint.traceID
+      );
     } else if (filterBy === "service") {
-      newData = data.filter(
+      newData = currentSpans.filter(
         (d) => d.serviceName === clickedDataPoint.serviceName
       );
     }
+    setCurrentSpans(filteredData);
     setFilteredData(newData);
-    setIsModalOpen(false);
   };
 
   return (
@@ -137,7 +332,7 @@ function ScatterPlotImpl(props) {
         }
         margin={{
           top: 15,
-          left: 60,
+          left: 80,
           right: 60,
         }}
         colorType="literal"
@@ -153,17 +348,19 @@ function ScatterPlotImpl(props) {
         <CustomSVGSeries
           className="mark-series-fill"
           opacity={0.5}
-          customComponent={({ size, color, svg }) => {
+          customComponent={({ color, svg }) => {
             const Svg = svg;
             return (
               <Svg
-                width={size}
-                height={size}
+                width={30}
+                height={30}
                 fill={color}
                 style={{ transform: "translate(10px, -15px)" }}
                 onClick={() => {
-                  setClickedDataPoint(overValue);
-                  setIsModalOpen(true);
+                  if (filteredData === currentSpans) {
+                    setClickedDataPoint(overValue);
+                    setIsModalOpen(true);
+                  }
                 }}
               />
             );
@@ -173,7 +370,7 @@ function ScatterPlotImpl(props) {
           data={filteredData}
         />
         {overValue && (
-          <Hint value={overValue}>
+          <Hint className="Hints" value={overValue}>
             <h4 className="scatter-plot-hint">Span ID: {overValue.spanID}</h4>
             <h4 className="scatter-plot-hint">
               Operation name: {overValue.name || "<trace-without-root-span>"}
@@ -208,17 +405,29 @@ function ScatterPlotImpl(props) {
       </FlexibleXYPlot>
       <button
         onClick={() => {
-          setFilteredData(data);
+          const visibleData = getRandomSubset(data, percentage);
+          setFilteredData(visibleData);
+          setCurrentSpans(visibleData);
           setLastDrawLocation(null);
         }}
       >
-        View all spans
+        Randomize displayed spans
+      </button>
+      <button
+        onClick={() => {
+          setFilteredData(currentSpans);
+          setLastDrawLocation(null);
+          setIsModalOpen(true);
+        }}
+      >
+        Show all current spans
       </button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <button
           onClick={() => {
             setLastDrawLocation(null);
             handleOptionClick("trace");
+            setIsModalOpen(false);
           }}
         >
           Show all spans from trace with ID: {clickedDataPoint.traceID}
@@ -227,11 +436,21 @@ function ScatterPlotImpl(props) {
           onClick={() => {
             setLastDrawLocation(null);
             handleOptionClick("service");
+            setIsModalOpen(false);
           }}
         >
           Show all spans from microservice named: {clickedDataPoint.serviceName}
         </button>
       </Modal>
+      <div>Percentage of spans to display:</div>
+      <div>{percentage}%</div>
+      <input
+        type="number"
+        min="0.001"
+        max="100"
+        value={percentage}
+        onChange={handlePercentageChange}
+      />
     </div>
   );
 }
@@ -240,7 +459,7 @@ const valueShape = PropTypes.shape({
   x: PropTypes.number,
   y: PropTypes.number,
   traceID: PropTypes.string,
-  size: PropTypes.number,
+  //size: PropTypes.number,
   name: PropTypes.string,
 });
 
