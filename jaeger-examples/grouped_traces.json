@@ -1,21 +1,5 @@
 {
     "microservice_stats": {
-        "nginx-web-server": {
-            "exec_time_min": 2629,
-            "exec_time_max": 1255560,
-            "exec_time_q1": 37308,
-            "exec_time_q2": 88412,
-            "exec_time_q3": 123127,
-            "exec_time_95_percentile": 192609,
-            "exec_time_99_percentile": 239505,
-            "start_time_min": 1667504491722000,
-            "start_time_max": 1667504551756070,
-            "start_time_q1": 1667504506896573,
-            "start_time_q2": 1667504522047170,
-            "start_time_q3": 1667504536989862,
-            "start_time_95_percentile": 1667504548951184,
-            "start_time_99_percentile": 1667504551169373
-        },
         "home-timeline-service": {
             "exec_time_min": 70,
             "exec_time_max": 1076400,
@@ -24,13 +8,15 @@
             "exec_time_q3": 5920,
             "exec_time_95_percentile": 13840,
             "exec_time_99_percentile": 33441,
+            "exec_time_average": 5074,
             "start_time_min": 1667504491722868,
             "start_time_max": 1667504551802375,
             "start_time_q1": 1667504506767513,
             "start_time_q2": 1667504522005791,
             "start_time_q3": 1667504537000667,
             "start_time_95_percentile": 1667504548852746,
-            "start_time_99_percentile": 1667504551147284
+            "start_time_99_percentile": 1667504551147284,
+            "start_time_average": 1667504521908754
         },
         "post-storage-service": {
             "exec_time_min": 305,
@@ -40,13 +26,33 @@
             "exec_time_q3": 4738,
             "exec_time_95_percentile": 14989,
             "exec_time_99_percentile": 43909,
+            "exec_time_average": 5318,
             "start_time_min": 1667504491723638,
             "start_time_max": 1667504551802414,
             "start_time_q1": 1667504506270818,
             "start_time_q2": 1667504521736950,
             "start_time_q3": 1667504536619467,
             "start_time_95_percentile": 1667504548802988,
-            "start_time_99_percentile": 1667504551135173
+            "start_time_99_percentile": 1667504551135173,
+            "start_time_average": 1667504521599223
+        },
+        "nginx-web-server": {
+            "exec_time_min": 2629,
+            "exec_time_max": 1255560,
+            "exec_time_q1": 37308,
+            "exec_time_q2": 88412,
+            "exec_time_q3": 123127,
+            "exec_time_95_percentile": 192609,
+            "exec_time_99_percentile": 239505,
+            "exec_time_average": 89837,
+            "start_time_min": 1667504491722000,
+            "start_time_max": 1667504551756070,
+            "start_time_q1": 1667504506896573,
+            "start_time_q2": 1667504522047170,
+            "start_time_q3": 1667504536989862,
+            "start_time_95_percentile": 1667504548951184,
+            "start_time_99_percentile": 1667504551169373,
+            "start_time_average": 1667504521976239
         }
     },
     "groups": {
@@ -59,13 +65,15 @@
                 "exec_time_q3": 97310,
                 "exec_time_95_percentile": 173989,
                 "exec_time_99_percentile": 223326,
+                "exec_time_average": 55305,
                 "start_time_min": 1667504491764000,
                 "start_time_max": 1667504551756104,
                 "start_time_q1": 1667504508284146,
                 "start_time_q2": 1667504522721123,
                 "start_time_q3": 1667504537493500,
                 "start_time_95_percentile": 1667504549109259,
-                "start_time_99_percentile": 1667504551194631
+                "start_time_99_percentile": 1667504551194631,
+                "start_time_average": 1667504522754506
             },
             "traceIDs": [
                 "0149bbba743b7dae",
@@ -5554,13 +5562,15 @@
                 "exec_time_q3": 5274,
                 "exec_time_95_percentile": 14007,
                 "exec_time_99_percentile": 35472,
+                "exec_time_average": 5023,
                 "start_time_min": 1667504491750226,
                 "start_time_max": 1667504551802414,
                 "start_time_q1": 1667504506363138,
                 "start_time_q2": 1667504521830702,
                 "start_time_q3": 1667504536307562,
                 "start_time_95_percentile": 1667504548630087,
-                "start_time_99_percentile": 1667504551097887
+                "start_time_99_percentile": 1667504551097887,
+                "start_time_average": 1667504521597157
             },
             "traceIDs": [
                 "016a4cb0ed801385",
@@ -10726,13 +10736,15 @@
                 "exec_time_q3": 78221,
                 "exec_time_95_percentile": 160641,
                 "exec_time_99_percentile": 216738,
+                "exec_time_average": 41768,
                 "start_time_min": 1667504491722000,
                 "start_time_max": 1667504551743323,
                 "start_time_q1": 1667504506234615,
                 "start_time_q2": 1667504521673272,
                 "start_time_q3": 1667504536676146,
                 "start_time_95_percentile": 1667504548842329,
-                "start_time_99_percentile": 1667504551154106
+                "start_time_99_percentile": 1667504551154106,
+                "start_time_average": 1667504521591732
             },
             "traceIDs": [
                 "00808abd47d9fcac",
@@ -21458,13 +21470,15 @@
                 "exec_time_q3": 5767,
                 "exec_time_95_percentile": 13916,
                 "exec_time_99_percentile": 35542,
+                "exec_time_average": 4784,
                 "start_time_min": 1667504491732107,
                 "start_time_max": 1667504551758740,
                 "start_time_q1": 1667504506715389,
                 "start_time_q2": 1667504521809386,
                 "start_time_q3": 1667504537929374,
                 "start_time_95_percentile": 1667504548503691,
-                "start_time_99_percentile": 1667504551066558
+                "start_time_99_percentile": 1667504551066558,
+                "start_time_average": 1667504522015520
             },
             "traceIDs": [
                 "0266ec07f245ce28",
@@ -24102,13 +24116,15 @@
                 "exec_time_q3": 1996,
                 "exec_time_95_percentile": 2565,
                 "exec_time_99_percentile": 2679,
+                "exec_time_average": 1449,
                 "start_time_min": 1667504500660303,
                 "start_time_max": 1667504500662733,
                 "start_time_q1": 1667504500660307,
                 "start_time_q2": 1667504500660312,
                 "start_time_q3": 1667504500661522,
                 "start_time_95_percentile": 1667504500662491,
-                "start_time_99_percentile": 1667504500662684
+                "start_time_99_percentile": 1667504500662684,
+                "start_time_average": 1667504500661116
             },
             "traceIDs": [
                 "014d61a6b5905228"

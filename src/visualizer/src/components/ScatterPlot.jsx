@@ -17,14 +17,13 @@ import {
   makeHeightFlexible,
 } from "react-vis";
 import "react-vis/dist/style.css";
-import * as SVGs from "./SVGs";
+import * as SVGs from "./components/SVGs";
 
 const svgComponents = Object.values(SVGs);
 
 const myColors = [
   "Aqua",
   "Aquamarine",
-  "Bisque",
   "Black",
   "Blue",
   "BlueViolet",
@@ -252,8 +251,6 @@ const getRandomSubset = (data, percentage) => {
 
   let svgIndex = 0;
   let colorIndex = 0;
-  const serviceSvgMap = new Map();
-  const serviceColorMap = new Map();
 
   for (let i = 0; i < count; i++) {
     const randomIndex = indices.splice(
@@ -265,21 +262,14 @@ const getRandomSubset = (data, percentage) => {
 
   return randomIndices.map((i) => {
     const span = data[i];
-    const serviceName = span.serviceName;
     let svg;
 
-    if (serviceSvgMap.has(serviceName)) {
-      svg = serviceSvgMap.get(serviceName);
-    } else {
-      svg = svgComponents[svgIndex];
-      serviceSvgMap.set(serviceName, svg);
-      svgIndex = (svgIndex + 1) % svgComponents.length;
-    }
+    svg = svgComponents[svgIndex];
+    svgIndex = (svgIndex + 1) % svgComponents.length;
 
     span.svg = svg;
     if (span.color === null) {
       span.color = myColors[colorIndex];
-      serviceColorMap.set(serviceName, myColors[colorIndex]);
       colorIndex = (colorIndex + 1) % myColors.length;
     }
     return span;

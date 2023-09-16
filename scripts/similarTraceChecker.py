@@ -27,7 +27,7 @@ def group_similar_traces(file_path):
         data = json.load(f)
 
     groups = defaultdict(list)
-    traceIDs = defaultdict(list)
+    trace_ids = defaultdict(list)
     microservices = defaultdict(list)
     microservice_exec_times = defaultdict(list)
     microservice_start_times = defaultdict(list)
@@ -38,7 +38,7 @@ def group_similar_traces(file_path):
         representation = str(get_trace_representation(trace))
         groups[representation].append(trace)
         # Append traceID to the new dictionary
-        traceIDs[representation].append(trace['traceID'])
+        trace_ids[representation].append(trace['traceID'])
 
         # Group traces by microservice
         for service_name in get_trace_representation(trace)[0]:
@@ -47,9 +47,9 @@ def group_similar_traces(file_path):
         # For each span in each trace
         for span in trace['spans']:
             # Get the serviceName using the processId of the span
-            serviceName = trace['processes'][span['processID']]['serviceName']
-            microservice_exec_times[serviceName].append(span['duration'])
-            microservice_start_times[serviceName].append(span['startTime'])
+            service_name = trace['processes'][span['processID']]['serviceName']
+            microservice_exec_times[service_name].append(span['duration'])
+            microservice_start_times[service_name].append(span['startTime'])
 
     # dictionary to hold statistics for each group
     stats = {}
@@ -67,6 +67,7 @@ def group_similar_traces(file_path):
         exec_time_q3 = int(np.percentile(exec_times, 75))
         exec_time_95_percentile = int(np.percentile(exec_times, 95))
         exec_time_99_percentile = int(np.percentile(exec_times, 99))
+        exec_time_average = int(np.average(exec_times))
 
         # Start times list for the group
         start_times = [span['startTime']
@@ -80,6 +81,7 @@ def group_similar_traces(file_path):
         start_time_q3 = int(np.percentile(start_times, 75))
         start_time_percent_95 = int(np.percentile(start_times, 95))
         start_time_percent_99 = int(np.percentile(start_times, 99))
+        start_time_average = int(np.average(start_times))
 
         # Save the stats in the dictionary
         stats[rep] = {
@@ -90,6 +92,7 @@ def group_similar_traces(file_path):
             'exec_time_q3': exec_time_q3,
             'exec_time_95_percentile': exec_time_95_percentile,
             'exec_time_99_percentile': exec_time_99_percentile,
+            'exec_time_average': exec_time_average,
             'start_time_min': start_time_min,
             'start_time_max': start_time_max,
             'start_time_q1': start_time_q1,
@@ -97,20 +100,20 @@ def group_similar_traces(file_path):
             'start_time_q3': start_time_q3,
             'start_time_95_percentile': start_time_percent_95,
             'start_time_99_percentile': start_time_percent_99,
+            'start_time_average': start_time_average,
         }
 
     # dictionaries to hold statistics for each microservice
     microservice_stats = {}
 
     # collect start times and exec times for each microservice
-    # collect start times and exec times for each microservice
-    serviceNames = set(microservice_exec_times.keys()) & set(
+    service_names = set(microservice_exec_times.keys()) & set(
         microservice_start_times.keys())
 
-    for serviceName in serviceNames:
+    for service_name in service_names:
 
-        exec_times = np.array(microservice_exec_times[serviceName])
-        start_times = np.array(microservice_start_times[serviceName])
+        exec_times = np.array(microservice_exec_times[service_name])
+        start_times = np.array(microservice_start_times[service_name])
 
         exec_time_min = int(np.min(exec_times))
         exec_time_max = int(np.max(exec_times))
@@ -119,6 +122,7 @@ def group_similar_traces(file_path):
         exec_time_q3 = int(np.percentile(exec_times, 75))
         exec_time_95_percentile = int(np.percentile(exec_times, 95))
         exec_time_99_percentile = int(np.percentile(exec_times, 99))
+        exec_time_average = int(np.average(exec_times))
         start_time_min = int(np.min(start_times))
         start_time_max = int(np.max(start_times))
         start_time_q1 = int(np.percentile(start_times, 25))
@@ -126,8 +130,9 @@ def group_similar_traces(file_path):
         start_time_q3 = int(np.percentile(start_times, 75))
         start_time_percent_95 = int(np.percentile(start_times, 95))
         start_time_percent_99 = int(np.percentile(start_times, 99))
+        start_time_average = int(np.average(start_times))
 
-        microservice_stats[serviceName] = {
+        microservice_stats[service_name] = {
             'exec_time_min': exec_time_min,
             'exec_time_max': exec_time_max,
             'exec_time_q1': exec_time_q1,
@@ -135,6 +140,7 @@ def group_similar_traces(file_path):
             'exec_time_q3': exec_time_q3,
             'exec_time_95_percentile': exec_time_95_percentile,
             'exec_time_99_percentile': exec_time_99_percentile,
+            'exec_time_average': exec_time_average,
             'start_time_min': start_time_min,
             'start_time_max': start_time_max,
             'start_time_q1': start_time_q1,
@@ -142,13 +148,14 @@ def group_similar_traces(file_path):
             'start_time_q3': start_time_q3,
             'start_time_95_percentile': start_time_percent_95,
             'start_time_99_percentile': start_time_percent_99,
+            'start_time_average': start_time_average,
         }
 
     # Adding group statistics and traceIDs to the final JSON
     for rep in groups.keys():
         groups[rep] = {
             'statistics': stats[rep],
-            'traceIDs': traceIDs[rep]
+            'traceIDs': trace_ids[rep]
         }
 
     # Save the groups and microservice statistics to a new JSON file
