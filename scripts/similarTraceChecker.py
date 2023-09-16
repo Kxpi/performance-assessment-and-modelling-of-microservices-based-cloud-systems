@@ -30,6 +30,7 @@ def group_similar_traces(file_path):
     traceIDs = defaultdict(list)
     microservices = defaultdict(list)
     microservice_exec_times = defaultdict(list)
+    microservice_start_times = defaultdict(list)
 
     for trace in data['data']:
         # Group traces by their representations
@@ -48,6 +49,7 @@ def group_similar_traces(file_path):
             # Get the serviceName using the processId of the span
             serviceName = trace['processes'][span['processID']]['serviceName']
             microservice_exec_times[serviceName].append(span['duration'])
+            microservice_start_times[serviceName].append(span['startTime'])
 
     # dictionary to hold statistics for each group
     stats = {}
@@ -58,48 +60,88 @@ def group_similar_traces(file_path):
                       for trace in traces for span in trace['spans']]
 
         # Calculate statistics
-        min_exec_time = int(np.min(exec_times))
-        max_exec_time = int(np.max(exec_times))
-        q1 = int(np.percentile(exec_times, 25))
-        q2 = int(np.percentile(exec_times, 50))
-        q3 = int(np.percentile(exec_times, 75))
-        percent_95 = int(np.percentile(exec_times, 95))
-        percent_99 = int(np.percentile(exec_times, 99))
+        exec_time_min = int(np.min(exec_times))
+        exec_time_max = int(np.max(exec_times))
+        exec_time_q1 = int(np.percentile(exec_times, 25))
+        exec_time_q2 = int(np.percentile(exec_times, 50))
+        exec_time_q3 = int(np.percentile(exec_times, 75))
+        exec_time_95_percentile = int(np.percentile(exec_times, 95))
+        exec_time_99_percentile = int(np.percentile(exec_times, 99))
+
+        # Start times list for the group
+        start_times = [span['startTime']
+                       for trace in traces for span in trace['spans']]
+
+        # Calculate statistics
+        start_time_min = int(np.min(start_times))
+        start_time_max = int(np.max(start_times))
+        start_time_q1 = int(np.percentile(start_times, 25))
+        start_time_q2 = int(np.percentile(start_times, 50))
+        start_time_q3 = int(np.percentile(start_times, 75))
+        start_time_percent_95 = int(np.percentile(start_times, 95))
+        start_time_percent_99 = int(np.percentile(start_times, 99))
 
         # Save the stats in the dictionary
         stats[rep] = {
-            'min_exec_time': min_exec_time,
-            'max_exec_time': max_exec_time,
-            'q1': q1,
-            'q2': q2,
-            'q3': q3,
-            '95_percentile': percent_95,
-            '99_percentile': percent_99,
+            'exec_time_min': exec_time_min,
+            'exec_time_max': exec_time_max,
+            'exec_time_q1': exec_time_q1,
+            'exec_time_q2': exec_time_q2,
+            'exec_time_q3': exec_time_q3,
+            'exec_time_95_percentile': exec_time_95_percentile,
+            'exec_time_99_percentile': exec_time_99_percentile,
+            'start_time_min': start_time_min,
+            'start_time_max': start_time_max,
+            'start_time_q1': start_time_q1,
+            'start_time_q2': start_time_q2,
+            'start_time_q3': start_time_q3,
+            'start_time_95_percentile': start_time_percent_95,
+            'start_time_99_percentile': start_time_percent_99,
         }
 
-    # dictionary to hold statistics for each microservice
+    # dictionaries to hold statistics for each microservice
     microservice_stats = {}
 
-    for serviceName, durations in microservice_exec_times.items():
-        
-        exec_times = np.array(durations)
-        
-        min_exec_time = int(np.min(exec_times))
-        max_exec_time = int(np.max(exec_times))
-        q1 = int(np.percentile(exec_times, 25))
-        q2 = int(np.percentile(exec_times, 50))
-        q3 = int(np.percentile(exec_times, 75))
-        percent_95 = int(np.percentile(exec_times, 95))
-        percent_99 = int(np.percentile(exec_times, 99))
+    # collect start times and exec times for each microservice
+    # collect start times and exec times for each microservice
+    serviceNames = set(microservice_exec_times.keys()) & set(
+        microservice_start_times.keys())
+
+    for serviceName in serviceNames:
+
+        exec_times = np.array(microservice_exec_times[serviceName])
+        start_times = np.array(microservice_start_times[serviceName])
+
+        exec_time_min = int(np.min(exec_times))
+        exec_time_max = int(np.max(exec_times))
+        exec_time_q1 = int(np.percentile(exec_times, 25))
+        exec_time_q2 = int(np.percentile(exec_times, 50))
+        exec_time_q3 = int(np.percentile(exec_times, 75))
+        exec_time_95_percentile = int(np.percentile(exec_times, 95))
+        exec_time_99_percentile = int(np.percentile(exec_times, 99))
+        start_time_min = int(np.min(start_times))
+        start_time_max = int(np.max(start_times))
+        start_time_q1 = int(np.percentile(start_times, 25))
+        start_time_q2 = int(np.percentile(start_times, 50))
+        start_time_q3 = int(np.percentile(start_times, 75))
+        start_time_percent_95 = int(np.percentile(start_times, 95))
+        start_time_percent_99 = int(np.percentile(start_times, 99))
 
         microservice_stats[serviceName] = {
-            'min_exec_time': min_exec_time,
-            'max_exec_time': max_exec_time,
-            'q1': q1,
-            'q2': q2,
-            'q3': q3,
-            'percent_95': percent_95,
-            'percent_99': percent_99
+            'exec_time_min': exec_time_min,
+            'exec_time_max': exec_time_max,
+            'exec_time_q1': exec_time_q1,
+            'exec_time_q2': exec_time_q2,
+            'exec_time_q3': exec_time_q3,
+            'exec_time_95_percentile': exec_time_95_percentile,
+            'exec_time_99_percentile': exec_time_99_percentile,
+            'start_time_min': start_time_min,
+            'start_time_max': start_time_max,
+            'start_time_q1': start_time_q1,
+            'start_time_q2': start_time_q2,
+            'start_time_q3': start_time_q3,
+            'start_time_95_percentile': start_time_percent_95,
+            'start_time_99_percentile': start_time_percent_99,
         }
 
     # Adding group statistics and traceIDs to the final JSON
