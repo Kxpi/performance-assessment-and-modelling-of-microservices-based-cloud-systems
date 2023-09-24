@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { compose, withState, withProps } from "recompose";
@@ -133,9 +132,9 @@ function ScatterPlotImpl(props) {
         <HorizontalGridLines />
         <VerticalGridLines />
         <XAxis
-          title="Average Time"
-          tickTotal={19}
-          tickFormat={(t) => moment(t / ONE_MILLISECOND).format("HH:mm:ss")}
+          title="Average Start Time Counted From The Earliest Span"
+          tickTotal={18}
+          tickFormat={(t) => formatDuration(t)}
         />
         <YAxis title="Average Duration" tickFormat={(t) => formatDuration(t)} />
         <CustomSVGSeries
@@ -144,16 +143,17 @@ function ScatterPlotImpl(props) {
           customComponent={({ color, svg }) => {
             const Svg = svg;
             return (
-              <Svg
-                width={30}
-                height={30}
-                fill={color}
-                style={{ transform: "translate(10px, -15px)" }}
-                onClick={() => {
-                  setClickedDataPoint(overValue);
-                  setIsModalOpen(true);
-                }}
-              />
+              <g transform="translate(-10, -15)">
+                <Svg
+                  width={30}
+                  height={30}
+                  fill={color}
+                  onClick={() => {
+                    setClickedDataPoint(overValue);
+                    setIsModalOpen(true);
+                  }}
+                />
+              </g>
             );
           }}
           onValueMouseOver={onValueOver}
@@ -168,58 +168,56 @@ function ScatterPlotImpl(props) {
             Operation Names: {clickedDataPoint.operations}
           </h4>
           <h4 className="scatter-plot-hint">
-            Average Duration:{" "}
-            {formatDuration(clickedDataPoint.exec_time_average)}
+            Average Duration: {`${clickedDataPoint.exec_time_average} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Average Time:{" "}
-            {moment(
-              clickedDataPoint.start_time_average / ONE_MILLISECOND
-            ).format("HH:mm:ss")}
+            Min Duration: {`${clickedDataPoint.exec_time_min} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Min Duration: {clickedDataPoint.exec_time_min}
+            Max Duration: {`${clickedDataPoint.exec_time_max} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Max Duration: {clickedDataPoint.exec_time_max}
+            First Quartile of Duration: {`${clickedDataPoint.exec_time_q1} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            First Quartile of Duration: {clickedDataPoint.exec_time_q1}
+            Second Quartile of Duration: {`${clickedDataPoint.exec_time_q2} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Second Quartile of Duration: {clickedDataPoint.exec_time_q2}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Third Quartile of Duration: {clickedDataPoint.exec_time_q3}
+            Third Quartile of Duration: {`${clickedDataPoint.exec_time_q3} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
             95th Percentile of Duration:{" "}
-            {clickedDataPoint.exec_time_95_percentile}
+            {`${clickedDataPoint.exec_time_95_percentile} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
             99th Percentile of Duration:{" "}
-            {clickedDataPoint.exec_time_99_percentile}
+            {`${clickedDataPoint.exec_time_99_percentile} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Min Time: {clickedDataPoint.start_time_min}
+            Average Time: {`${clickedDataPoint.start_time_average} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Max Time: {clickedDataPoint.start_time_max}
+            Min Time: {`${clickedDataPoint.start_time_min} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            First Quartile of Time: {clickedDataPoint.start_time_q1}
+            Max Time: {`${clickedDataPoint.start_time_max} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Second Quartile of Time: {clickedDataPoint.start_time_q2}
+            First Quartile of Time: {`${clickedDataPoint.start_time_q1} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Third Quartile of Time: {clickedDataPoint.start_time_q3}
+            Second Quartile of Time: {`${clickedDataPoint.start_time_q2} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            95th Percentile of Time: {clickedDataPoint.start_time_95_percentile}
+            Third Quartile of Time: {`${clickedDataPoint.start_time_q3} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            99th Percentile of Time: {clickedDataPoint.start_time_99_percentile}
+            95th Percentile of Time:{" "}
+            {`${clickedDataPoint.start_time_95_percentile} μs`}
+          </h4>
+          <h4 className="scatter-plot-hint">
+            99th Percentile of Time:{" "}
+            {`${clickedDataPoint.start_time_99_percentile} μs`}
           </h4>
         </Modal>
         {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
