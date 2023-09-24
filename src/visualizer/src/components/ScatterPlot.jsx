@@ -106,7 +106,6 @@ const myColors = [
   "MediumTurquoise",
   "MediumVioletRed",
   "MidnightBlue",
-  "MintCream",
   "MistyRose",
   "Moccasin",
   "NavajoWhite",
@@ -245,25 +244,37 @@ const getRandomSubset = (data, percentage) => {
   if (!data || data.length === 0 || percentage === 0) {
     return [];
   }
-  const count = Math.max(1, Math.ceil((data.length * percentage) / 100));
-  const indices = Array.from({ length: data.length }, (_, i) => i);
-  const randomIndices = [];
 
+  // Group spans by trace ID
+  const traces = data.reduce((acc, span) => {
+    if (!acc[span.traceID]) {
+      acc[span.traceID] = [];
+    }
+    acc[span.traceID].push(span);
+    return acc;
+  }, {});
+
+  // Convert traces object to array and calculate count
+  const tracesArray = Object.values(traces);
+  const count = Math.max(1, Math.ceil((tracesArray.length * percentage) / 100));
+
+  // Select random traces
+  const randomTraces = [];
+  for (let i = 0; i < count; i++) {
+    const randomIndex = Math.floor(Math.random() * tracesArray.length);
+    randomTraces.push(...tracesArray.splice(randomIndex, 1));
+  }
+
+  // Flatten array of traces to array of spans
+  const randomSpans = randomTraces.flat();
+
+  // Assign SVG and color to spans
   let svgIndex = 0;
   let colorIndex = 0;
   const serviceSvgMap = new Map();
   const traceColorMap = new Map();
 
-  for (let i = 0; i < count; i++) {
-    const randomIndex = indices.splice(
-      Math.floor(Math.random() * indices.length),
-      1
-    )[0];
-    randomIndices.push(randomIndex);
-  }
-
-  return randomIndices.map((i) => {
-    const span = data[i];
+  randomSpans.forEach((span) => {
     const serviceName = span.serviceName;
     const traceID = span.traceID;
     let svg;
@@ -284,8 +295,9 @@ const getRandomSubset = (data, percentage) => {
       traceColorMap.set(traceID, myColors[colorIndex]);
       colorIndex = (colorIndex + 1) % myColors.length;
     }
-    return span;
   });
+
+  return randomSpans;
 };
 
 function ScatterPlotImpl(props) {
@@ -343,7 +355,7 @@ function ScatterPlotImpl(props) {
         <VerticalGridLines />
         <XAxis
           title="Time"
-          tickTotal={19}
+          tickTotal={18}
           tickFormat={(t) => moment(t / ONE_MILLISECOND).format("HH:mm:ss")}
         />
         <YAxis title="Duration" tickFormat={(t) => formatDuration(t)} />
@@ -353,18 +365,19 @@ function ScatterPlotImpl(props) {
           customComponent={({ color, svg }) => {
             const Svg = svg;
             return (
-              <Svg
-                width={30}
-                height={30}
-                fill={color}
-                style={{ transform: "translate(10px, -15px)" }}
-                onClick={() => {
-                  if (filteredData === currentSpans) {
-                    setClickedDataPoint(overValue);
-                    setIsModalOpen(true);
-                  }
-                }}
-              />
+              <g transform="translate(-10, -15)">
+                <Svg
+                  width={30}
+                  height={30}
+                  fill={color}
+                  onClick={() => {
+                    if (filteredData === currentSpans) {
+                      setClickedDataPoint(overValue);
+                      setIsModalOpen(true);
+                    }
+                  }}
+                />
+              </g>
             );
           }}
           onValueMouseOver={onValueOver}

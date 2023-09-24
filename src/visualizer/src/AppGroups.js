@@ -90,7 +90,6 @@ const myColors = [
   "MediumTurquoise",
   "MediumVioletRed",
   "MidnightBlue",
-  "MintCream",
   "MistyRose",
   "Moccasin",
   "NavajoWhite",
