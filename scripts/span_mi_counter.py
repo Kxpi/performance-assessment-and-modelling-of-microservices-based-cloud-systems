@@ -7,12 +7,12 @@ file_path = 'jaeger-traces.json'
 
 def mi_count(file_list):
 
+    operations_data = {}
+    
     for file_path in file_list:
         with open(file_path, 'r') as f:
-            data = json.load(f)
-
-        operations_data = {}
-
+            data = json.load(f)       
+            
         for trace in data['data']:
 
             for span in trace['spans']:
