@@ -12,7 +12,11 @@ result:
                 traces: [
                     traceID,
                     ...
-                ]   
+                
+                ]
+                             
+                  
+            
             }
         ]
     }
@@ -76,7 +80,7 @@ def get_groups(traces):
     initial_trace = traces.pop(0)
 
     groups.append({"groupID": groupID, "traceNumber": 0, "traces": [
-                  initial_trace["traceID"]]})
+                  initial_trace]})
     groupID += 1
 
     for trace in traces:
@@ -84,14 +88,14 @@ def get_groups(traces):
         for group in groups:
 
             diff = DeepDiff(
-                traces_callGraph_rep[trace["traceID"]], traces_callGraph_rep[group["traces"][0]])
+                traces_callGraph_rep[trace["traceID"]], traces_callGraph_rep[group["traces"][0]["traceID"]])
 
             if not diff:
-                group["traces"].append(trace["traceID"])
+                group["traces"].append(trace)
                 break
         else:
             groups.append({"groupID": groupID, "traceNumber": 0, "traces": [
-                          trace["traceID"]]})
+                          trace]})
             groupID += 1
 
     for group in groups:
