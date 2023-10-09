@@ -37,7 +37,7 @@ def read_file(file_path):
     return data
 
 
-def isParent(parent, span):
+def is_parent(parent, span):
 
     for reference in span["references"]:
         if reference["refType"] == "CHILD_OF":
@@ -46,17 +46,17 @@ def isParent(parent, span):
         return False
 
 
-def get_callGraphRep(spans, root):
+def get_call_graph_rep(spans, root):
     # callGraph represented by nested dictionaries
     callGraph = {}
     i = 0
 
     while spans and i < len(spans):
 
-        if isParent(root, spans[i]):
+        if is_parent(root, spans[i]):
             span = spans.pop(i)
             cName = span["operationName"]
-            callGraph[cName] = get_callGraphRep(spans, span)
+            callGraph[cName] = get_call_graph_rep(spans, span)
         else:
             i += 1
 
@@ -81,7 +81,7 @@ def get_groups(traces):
 
     for trace in traces:
         trace_root = trace["spans"][0]
-        traces_callGraph_rep[trace["traceID"]] = get_callGraphRep(
+        traces_callGraph_rep[trace["traceID"]] = get_call_graph_rep(
             trace["spans"][1:], trace_root)
 
         # Collect start times
