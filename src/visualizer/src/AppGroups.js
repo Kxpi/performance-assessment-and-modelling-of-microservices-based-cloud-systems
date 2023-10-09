@@ -142,7 +142,7 @@ function AppGroups() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("/grouped_traces.json")
+    fetch("/grouped_tracesV2.json")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -154,23 +154,15 @@ function AppGroups() {
 
         const propsData = Object.keys(groupsData).map((key, index) => {
           const group = groupsData[key];
-          const statistics = group.statistics;
-          const services = key
-            .split("), (")[0]
-            .replace("((", "")
-            .replace("))", "")
-            .replace(")", "");
-          const operations = key
-            .split("), (")[1]
-            .replace("(", "")
-            .replace(")", "")
-            .replace(")", "");
+          const statistics = group.span_stats;
+          const groupID = group.groupID;
+          const numberOfTraces = group.traceNumber;
 
           const dataObj = {
             x: statistics.start_time_average,
             y: statistics.exec_time_average,
-            services: services,
-            operations: operations,
+            groupID: groupID,
+            numberOfTraces: numberOfTraces,
             color: myColors[index % myColors.length],
             svg: svgComponents[index % svgComponents.length],
             ...statistics,

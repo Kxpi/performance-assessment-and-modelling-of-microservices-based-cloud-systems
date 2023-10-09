@@ -162,10 +162,10 @@ function ScatterPlotImpl(props) {
         />
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <h4 className="scatter-plot-hint">
-            Microservice Names: {clickedDataPoint.services}
+            Group ID: {clickedDataPoint.groupID}
           </h4>
           <h4 className="scatter-plot-hint">
-            Operation Names: {clickedDataPoint.operations}
+            Number Of Traces: {clickedDataPoint.numberOfTraces}
           </h4>
           <h4 className="scatter-plot-hint">
             Average Duration: {`${clickedDataPoint.exec_time_average} μs`}
