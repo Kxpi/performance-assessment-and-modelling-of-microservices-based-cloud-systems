@@ -1,0 +1,26 @@
+{
+    "/wrk2-api/home-timeline/read": {
+        "exec_time_average": 7041,
+        "theoretical_T": "System is not stable."
+    },
+    "read_home_timeline_client": {
+        "exec_time_average": 6524,
+        "theoretical_T": "System is not stable."
+    },
+    "read_home_timeline_redis_find_client": {
+        "exec_time_average": 345,
+        "theoretical_T": "System is not stable."
+    },
+    "read_home_timeline_server": {
+        "exec_time_average": 1617,
+        "theoretical_T": "System is not stable."
+    },
+    "post_storage_read_posts_server": {
+        "exec_time_average": 975,
+        "theoretical_T": "System is not stable."
+    },
+    "post_storage_mmc_mget_client": {
+        "exec_time_average": 679,
+        "theoretical_T": "System is not stable."
+    }
+}
