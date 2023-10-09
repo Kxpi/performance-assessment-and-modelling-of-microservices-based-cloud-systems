@@ -221,7 +221,7 @@ def get_groups(traces):
         # Replace traces with traceIDs
         group["traces"] = [trace["traceID"] for trace in group["traces"]]
 
-    with open('grouped_tracesV2', 'w') as f:
+    with open('grouped_tracesV2.json', 'w') as f:
         json.dump({"microservice_stats": microservice_stats,
                   "groups": groups}, f, indent=4)
 
