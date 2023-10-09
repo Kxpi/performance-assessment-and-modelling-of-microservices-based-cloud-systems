@@ -24,7 +24,7 @@ def mi_count(file_list, lambda_val):
         z = operations_data[operation][0]/operations_data[operation][1]
         mu = 1/(z/1e6)  # convert duration from microseconds to seconds
         if mu > lambda_val:
-            T = 1/(mu - lambda_val)
+            T = 1/(mu - (1/lambda_val))
         else:
             T = 'System is not stable.'
         operations_data[operation] = {
