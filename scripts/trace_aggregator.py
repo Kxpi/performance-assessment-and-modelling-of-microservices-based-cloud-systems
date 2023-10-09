@@ -73,6 +73,8 @@ def get_groups(traces):
     # {traceid: callGraph}
     traces_callGraph_rep = {}
     groups = []
+    microservice_exec_times = defaultdict(list)
+    microservice_start_times = defaultdict(list)
     
     # Collect all start times to find the global minimum
     all_start_times = []
@@ -84,11 +86,45 @@ def get_groups(traces):
         
         # Collect start times
         for span in trace["spans"]:
+            # Add start time to the list
             all_start_times.append(span['startTime'])
+            # Get the serviceName using the processId of the span
+            service_name = trace['processes'][span['processID']]['serviceName']
+            microservice_exec_times[service_name].append(span['duration'])
+            microservice_start_times[service_name].append(span['startTime'])
             
     # Find the minimal startTime value across all spans
     min_start_time = min(all_start_times)
+    
+    # Subtract the minimal startTime value from all other startTime values
+    for service_name in microservice_start_times:
+        microservice_start_times[service_name] = [
+        start_time - min_start_time for start_time in microservice_start_times[service_name]]
 
+    # Calculate statistics for each microservice
+    microservice_stats = {}
+    for service_name in microservice_exec_times.keys():
+        exec_times = np.array(microservice_exec_times[service_name])
+        start_times = np.array(microservice_start_times[service_name])
+
+        microservice_stats[service_name] = {
+            'exec_time_min': int(np.min(exec_times)),
+            'exec_time_max': int(np.max(exec_times)),
+            'exec_time_q1': int(np.percentile(exec_times, 25)),
+            'exec_time_q2': int(np.percentile(exec_times, 50)),
+            'exec_time_q3': int(np.percentile(exec_times, 75)),
+            'exec_time_95_percentile': int(np.percentile(exec_times, 95)),
+            'exec_time_99_percentile': int(np.percentile(exec_times, 99)),
+            'exec_time_average': int(np.average(exec_times)),
+            'start_time_min': int(np.min(start_times)),
+            'start_time_max': int(np.max(start_times)),
+            'start_time_q1': int(np.percentile(start_times, 25)),
+            'start_time_q2': int(np.percentile(start_times, 50)),
+            'start_time_q3': int(np.percentile(start_times, 75)),
+            'start_time_95_percentile': int(np.percentile(start_times, 95)),
+            'start_time_99_percentile': int(np.percentile(start_times, 99)),
+            'start_time_average': int(np.average(start_times)),
+        }
 
     initial_trace = traces.pop(0)
 
@@ -156,7 +192,7 @@ def get_groups(traces):
 
 
     with open('mateusz_groups', 'w') as f:
-        json.dump({"groups": groups}, f, indent=4)
+        json.dump({"microservice_stats": microservice_stats, "groups": groups}, f, indent=4)
 
     return groups
 
