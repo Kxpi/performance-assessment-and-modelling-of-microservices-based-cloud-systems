@@ -96,7 +96,7 @@ function Modal({ isOpen, onClose, children }) {
   return (
     <div className="modal">
       <div className="modal-content">
-      <button onClick={onClose}>Close</button>
+        <button onClick={onClose}>Close</button>
         {children}
       </div>
     </div>
@@ -161,17 +161,11 @@ function ScatterPlotImpl(props) {
           data={data}
         />
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <button onClick={() => props.onGroupOperationsClick(clickedDataPoint.groupID)}>
-            See Group's {clickedDataPoint.groupID} Operations
-          </button>
-          <button onClick={() => props.onGroupSpansClick(clickedDataPoint.groupID)}>
-            See Group's {clickedDataPoint.groupID} Spans
-          </button>
           <h4 className="scatter-plot-hint">
-            Group ID: {clickedDataPoint.groupID}
+            Group ID: {`${clickedDataPoint.groupID}`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Number Of Traces: {clickedDataPoint.numberOfTraces}
+            Operation Name: {`${clickedDataPoint.operationName}`}
           </h4>
           <h4 className="scatter-plot-hint">
             Average Duration: {`${clickedDataPoint.exec_time_average} μs`}
@@ -265,7 +259,7 @@ ScatterPlotImpl.defaultProps = {
   // JSDOM does not, as of 2023, have a layout engine, so allow tests to supply a mock width as a workaround.
 };
 
-const ScatterPlotGroups = compose(
+const ScatterPlotGroupsOperations = compose(
   withState("overValue", "setOverValue", null),
   withProps(({ setOverValue }) => ({
     onValueOver: (value) => setOverValue(value),
@@ -273,6 +267,6 @@ const ScatterPlotGroups = compose(
   }))
 )(ScatterPlotImpl);
 
-export { ScatterPlotImpl as ScatterPlotGroupsImpl };
+export { ScatterPlotImpl as ScatterPlotGroupsOperations };
 
-export default ScatterPlotGroups;
+export default ScatterPlotGroupsOperations;

@@ -1,4 +1,3 @@
-import moment from "moment";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { compose, withState, withProps } from "recompose";
@@ -17,6 +16,7 @@ import {
   makeHeightFlexible,
 } from "react-vis";
 import "react-vis/dist/style.css";
+import "./ScatterPlot.css";
 import * as SVGs from "./components/SVGs";
 
 const svgComponents = Object.values(SVGs);
@@ -354,9 +354,9 @@ function ScatterPlotImpl(props) {
         <HorizontalGridLines />
         <VerticalGridLines />
         <XAxis
-          title="Time"
+          title="Time Counted From The Earliest Span"
           tickTotal={18}
-          tickFormat={(t) => moment(t / ONE_MILLISECOND).format("HH:mm:ss")}
+          tickFormat={(t) => formatDuration(t)}
         />
         <YAxis title="Duration" tickFormat={(t) => formatDuration(t)} />
         <CustomSVGSeries
@@ -391,10 +391,11 @@ function ScatterPlotImpl(props) {
               Operation name: {overValue.name || "<trace-without-root-span>"}
             </h4>
             <h4 className="scatter-plot-hint">
-              Time: {moment(overValue.x / ONE_MILLISECOND).format("HH:mm:ss")}
+              Time: {`${clickedDataPoint.x} μs`}
             </h4>
             <h4 className="scatter-plot-hint">
               Duration: {formatDuration(overValue.y)}
+              {` (${clickedDataPoint.y} μs)`}
             </h4>
             <h4 className="scatter-plot-hint">Trace ID: {overValue.traceID}</h4>
             <h4 className="scatter-plot-hint">
@@ -432,7 +433,6 @@ function ScatterPlotImpl(props) {
         onClick={() => {
           setFilteredData(currentSpans);
           setLastDrawLocation(null);
-          setIsModalOpen(true);
         }}
       >
         Show all current spans
@@ -456,6 +456,126 @@ function ScatterPlotImpl(props) {
         >
           Show all spans from microservice named: {clickedDataPoint.serviceName}
         </button>
+        {clickedDataPoint.groupID !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Group ID: {clickedDataPoint.groupID}
+          </h4>
+        ) : null}
+        <h4 className="scatter-plot-hint">
+          Span ID: {clickedDataPoint.spanID}
+        </h4>
+        <h4 className="scatter-plot-hint">
+          Operation name: {clickedDataPoint.name || "<trace-without-root-span>"}
+        </h4>
+        <h4 className="scatter-plot-hint">
+          Time: {`${clickedDataPoint.x} μs`}
+        </h4>
+        <h4 className="scatter-plot-hint">
+          Duration: {formatDuration(clickedDataPoint.y)}
+          {` (${clickedDataPoint.y} μs)`}
+        </h4>
+        <h4 className="scatter-plot-hint">
+          Trace ID: {clickedDataPoint.traceID}
+        </h4>
+        <h4 className="scatter-plot-hint">
+          Service Name: {clickedDataPoint.serviceName}
+        </h4>
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Average Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_average} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Min Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_min} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Max Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_max} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            First Quartile of Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_q1} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Second Quartile of Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_q2} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Third Quartile of Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_q3} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            95th Percentile of Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_95_percentile} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            99th Percentile of Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_99_percentile} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Average Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_average} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Min Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_min} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Max Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_max} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            First Quartile of Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_q1} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Second Quartile of Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_q2} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Third Quartile of Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_q3} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            95th Percentile of Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_95_percentile} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            99th Percentile of Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_99_percentile} μs`}
+          </h4>
+        ) : null}
       </Modal>
       <div>Percentage of spans to display:</div>
       <div>{percentage}%</div>

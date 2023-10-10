@@ -57,6 +57,7 @@
     },
     "groups": [
         {
+            "global_min_start_time": 1667504491722000,
             "groupID": 0,
             "traceNumber": 5474,
             "span_stats": {
@@ -5629,6 +5630,7 @@
             ]
         },
         {
+            "global_min_start_time": 1667504491722000,
             "groupID": 1,
             "traceNumber": 5153,
             "span_stats": {
@@ -10916,6 +10918,7 @@
             ]
         },
         {
+            "global_min_start_time": 1667504491722000,
             "groupID": 2,
             "traceNumber": 10708,
             "span_stats": {
@@ -21758,6 +21761,7 @@
             ]
         },
         {
+            "global_min_start_time": 1667504491722000,
             "groupID": 3,
             "traceNumber": 2625,
             "span_stats": {
@@ -24481,6 +24485,7 @@
             ]
         },
         {
+            "global_min_start_time": 1667504491722000,
             "groupID": 4,
             "traceNumber": 3,
             "span_stats": {
@@ -24582,6 +24587,7 @@
             ]
         },
         {
+            "global_min_start_time": 1667504491722000,
             "groupID": 5,
             "traceNumber": 1,
             "span_stats": {

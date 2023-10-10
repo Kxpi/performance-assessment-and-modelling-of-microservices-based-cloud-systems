@@ -24,7 +24,7 @@ result:
     }
 '''
 
-file_path = "visualization\public\jaeger-traces.json"
+file_path = "public\jaeger-traces.json"
 
 
 def read_file(file_path):
@@ -37,7 +37,7 @@ def read_file(file_path):
     return data
 
 
-def is_parent(parent, span):
+def isParent(parent, span):
 
     for reference in span["references"]:
         if reference["refType"] == "CHILD_OF":
@@ -46,17 +46,17 @@ def is_parent(parent, span):
         return False
 
 
-def get_call_graph_rep(spans, root):
+def get_callGraphRep(spans, root):
     # callGraph represented by nested dictionaries
     callGraph = {}
     i = 0
 
     while spans and i < len(spans):
 
-        if is_parent(root, spans[i]):
+        if isParent(root, spans[i]):
             span = spans.pop(i)
             cName = span["operationName"]
-            callGraph[cName] = get_call_graph_rep(spans, span)
+            callGraph[cName] = get_callGraphRep(spans, span)
         else:
             i += 1
 
@@ -81,7 +81,7 @@ def get_groups(traces):
 
     for trace in traces:
         trace_root = trace["spans"][0]
-        traces_callGraph_rep[trace["traceID"]] = get_call_graph_rep(
+        traces_callGraph_rep[trace["traceID"]] = get_callGraphRep(
             trace["spans"][1:], trace_root)
 
         # Collect start times
@@ -128,7 +128,7 @@ def get_groups(traces):
 
     initial_trace = traces.pop(0)
 
-    groups.append({"groupID": groupID, "traceNumber": 0, "span_stats": None, "operation_stats": None, "traces": [
+    groups.append({"global_min_start_time": 0, "groupID": groupID, "traceNumber": 0, "span_stats": None, "operation_stats": None, "traces": [
                   initial_trace]})
     groupID += 1
 
@@ -143,7 +143,7 @@ def get_groups(traces):
                 group["traces"].append(trace)
                 break
         else:
-            groups.append({"groupID": groupID, "traceNumber": 0, "span_stats": None, "operation_stats": None, "traces": [
+            groups.append({"global_min_start_time": 0, "groupID": groupID, "traceNumber": 0, "span_stats": None, "operation_stats": None, "traces": [
                           trace]})
             groupID += 1
 
@@ -220,6 +220,8 @@ def get_groups(traces):
 
         # Replace traces with traceIDs
         group["traces"] = [trace["traceID"] for trace in group["traces"]]
+
+        group["global_min_start_time"] = min_start_time
 
     with open('grouped_tracesV2.json', 'w') as f:
         json.dump({"microservice_stats": microservice_stats,
