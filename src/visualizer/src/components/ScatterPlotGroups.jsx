@@ -15,7 +15,6 @@ import {
   makeHeightFlexible,
 } from "react-vis";
 import "react-vis/dist/style.css";
-import "./ScatterPlot.css";
 
 const ONE_DAY = 25 * 60 * 60 * 1000000; // microseconds in a day
 const ONE_HOUR = 60 * 60 * 1000000; // microseconds in an hour

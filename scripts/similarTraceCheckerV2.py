@@ -24,7 +24,7 @@ result:
     }
 '''
 
-file_path = "public\jaeger-traces.json"
+file_path = "./jaeger-examples/example.json"
 
 
 def read_file(file_path):

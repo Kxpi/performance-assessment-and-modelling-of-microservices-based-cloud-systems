@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import ScatterPlotGroups from "..src/components/ScatterPlotGroups";
-import * as SVGs from "..src/components/SVGs";
-import ScatterPlotGroupsOperations from "..src/components/ScatterPlotGroupsOperations";
-import ScatterPlot from "..src/components/ScatterPlot";
+import ScatterPlotGroups from "./components/ScatterPlotGroups";
+import * as SVGs from "./components/SVGs";
+import ScatterPlotGroupsOperations from "./components/ScatterPlotGroupsOperations";
+import ScatterPlot from "./components/ScatterPlot";
+
+const originalFilePath = "../../../jaeger-examples/example.json";
+const groupedTracesFilePath =
+  "../../../jaeger-examples/grouped_tracesV2example.json";
 
 const svgComponents = Object.values(SVGs);
 
@@ -210,7 +214,7 @@ function AppGroups() {
     key === "error" && (value === true || value === "true");
 
   useEffect(() => {
-    fetch("/grouped_tracesV2.json")
+    fetch(groupedTracesFilePath)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -250,7 +254,7 @@ function AppGroups() {
       .catch((error) => {
         console.log("Error in fetching data: ", error);
       });
-    fetch("/jaeger-traces.json")
+    fetch(originalFilePath)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

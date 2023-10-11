@@ -12,7 +12,6 @@ root.render(
     {/* skrot do komentarzy ctrl+k+c, do cofania komentarzy ctrl+k+u*/}
     <AppGroups /> 
     {/* <NewApp /> */}
-    {/* <DevApp /> */}
   </React.StrictMode>
 );
 
