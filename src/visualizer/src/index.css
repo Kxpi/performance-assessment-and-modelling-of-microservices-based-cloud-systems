@@ -35,3 +35,8 @@ button {
   fill: #444;
   font-size: 0.8em;
 }
+
+.BTG {
+  position: absolute;
+  left: 0;
+}

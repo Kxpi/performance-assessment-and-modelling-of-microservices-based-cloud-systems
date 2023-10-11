@@ -16,7 +16,7 @@ import {
   makeHeightFlexible,
 } from "react-vis";
 import "react-vis/dist/style.css";
-import * as SVGs from "./components/SVGs";
+import * as SVGs from "./SVGs";
 
 const svgComponents = Object.values(SVGs);
 

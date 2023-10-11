@@ -4,9 +4,8 @@ import * as SVGs from "./components/SVGs";
 import ScatterPlotGroupsOperations from "./components/ScatterPlotGroupsOperations";
 import ScatterPlot from "./components/ScatterPlot";
 
-const originalFilePath = "../../../jaeger-examples/example.json";
-const groupedTracesFilePath =
-  "../../../jaeger-examples/grouped_tracesV2example.json";
+const originalFilePath = "/example.json";
+const groupedTracesFilePath = "/grouped_tracesV2example.json";
 
 const svgComponents = Object.values(SVGs);
 
@@ -283,7 +282,9 @@ function AppGroups() {
       )}
       {view === "spans" && <ScatterPlot data={spansData} />}
       {(view === "operation_stats" || view === "spans") && (
-        <button onClick={handleBackClick}>Back to groups</button>
+        <button className="BTG" onClick={handleBackClick}>
+          Back to groups
+        </button>
       )}
     </div>
   );
