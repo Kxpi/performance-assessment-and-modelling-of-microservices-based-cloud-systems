@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
 
 
 
-const FileUploader = ({setTraces}) => {
 
-    const [fileContent, setFileContent] = useState(null);
+const FileUploader = ({ setData }) => {
+
+  const [fileContent, setFileContent] = useState(null);
 
   // Funkcja do odczytu zawartości pliku i walidacji rozszerzenia
   const handleFileDrop = useCallback((acceptedFiles) => {
@@ -26,7 +28,7 @@ const FileUploader = ({setTraces}) => {
       setFileContent(content);
     };
     reader.readAsText(file);
-    
+
   }, []);
 
   // Konfiguracja dropzone
@@ -36,24 +38,32 @@ const FileUploader = ({setTraces}) => {
     onDrop: handleFileDrop,
   }), [handleFileDrop]);
 
-  // Używamy hooka useDropzone, który dostarcza funkcjonalność przeciągania i upuszczania plików
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone(dropzoneConfig);
 
 
   useEffect(() => {
     if (fileContent) {
-      try {
-        const parsedData = JSON.parse(fileContent);
-        // Na tym etapie możesz wyświetlić zawartość w konsoli, aby upewnić się, że została prawidłowo sparsowana.
 
-        console.log(parsedData);
-        setTraces(parsedData?.data || []);
+      const parsedData = JSON.parse(fileContent);
 
-        // Tutaj możesz dalej przetwarzać dane lub je zapisać w innym stanie, aby przekazać je do innych komponentów.
-        // Na przykład możesz utworzyć stan, który będzie przechowywał dane do wizualizacji.
-      } catch (error) {
-        alert('Error: Invalid JSON file.');
-      }
+      //console.log(parsedData);
+      axios
+        .post('http://127.0.0.1:5000/upload', parsedData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          // Set the data using the 'setData' prop
+          // console.log(response.data)
+
+          setData(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          alert('Error uploading the file to the server.');
+        });
     }
   }, [fileContent]);
 

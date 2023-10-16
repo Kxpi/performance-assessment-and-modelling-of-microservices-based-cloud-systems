@@ -13,3 +13,5 @@ requests==2.31.0
 urllib3==2.0.3
 Werkzeug==2.3.6
 zipp==3.16.2
+deepdiff==6.6.0
+numpy==1.23.5

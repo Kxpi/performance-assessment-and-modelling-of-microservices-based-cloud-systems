@@ -22,7 +22,7 @@ function OperationStatsTable({ operationStats }) {
             <tr key={headerIndex}>
               <td>{header}</td>
               {operationNames.map((operationName, operationIndex) => (
-                <td key={operationIndex}>{operationStats[operationName][header]}</td>
+                <td key={operationIndex}>{operationStats[operationName][header] + ' μs'}</td>
               ))}
             </tr>
           ))}

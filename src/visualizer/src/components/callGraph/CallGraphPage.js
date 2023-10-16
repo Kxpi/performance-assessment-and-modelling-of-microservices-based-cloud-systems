@@ -1,6 +1,5 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import './CallGraphPage.css';
-import FileUploader from './components/FileUploader';
 import GroupSelector from './components/GroupSelector'
 import TraceSelector from './components/TraceSelector';
 import TraceGraph from './components/TraceGraph';
@@ -8,9 +7,7 @@ import Legend from './components/Legend';
 import OperationStatsTable from './components/OperationStatsTable';
 
 
-import dane from './mateusz_groups.json';
-
-function CallGraphPage() {
+function CallGraphPage(data) {
 
 
 
@@ -19,7 +16,7 @@ function CallGraphPage() {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedTrace, setSelectedTrace] = useState(null);
 
-  const groups=dane.groups
+  const groups = data.data["groups"]
 
 
   const microserviceColors = {};
@@ -55,9 +52,6 @@ function CallGraphPage() {
   return (
     <div style={{ marginLeft: "50px" }}>
 
-      <h1>Trace Visualizer</h1>
-      <FileUploader setSelectedTrace={setSelectedTrace} setTraces={setTraces} />
-
       <div className='group-selector'>
         <GroupSelector setSelectedGroup={setSelectedGroup} groups={groups} selectedGroup={selectedGroup} />
         {selectedGroup && <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace} selectedTrace={selectedTrace} />}
@@ -68,8 +62,8 @@ function CallGraphPage() {
         {selectedTrace && <TraceGraph selectedTrace={selectedTrace} servicesInfo={microserviceColors} operationStats={selectedGroup["operation_stats"]} />}
       </div>}
 
-      <div style={{marginTop: "50px", marginBottom: "50px"}}>
-      {selectedGroup && < OperationStatsTable operationStats={selectedGroup["operation_stats"]} />}
+      <div style={{ marginTop: "50px", marginBottom: "50px" }}>
+        {selectedGroup && < OperationStatsTable operationStats={selectedGroup["operation_stats"]} />}
       </div>
 
 

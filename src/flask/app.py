@@ -4,6 +4,8 @@ import json
 from helpers.processing import get_data
 from flask_cors import CORS
 
+from helpers.backend_simulator import  get_groups
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
@@ -39,6 +41,20 @@ def visualize():
         data = json.load(json_file)
 
     return jsonify(data)
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    try:
+        data = request.get_json()
+
+        groups=get_groups(data)
+        
+        return jsonify({"groups": groups})
+
+
+    except Exception as e:
+        print("TO na backendzie error")
+        return jsonify({"Error": "File processing error: " + str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
