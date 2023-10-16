@@ -5,10 +5,6 @@ Follow steps in this [instruction](https://docs.docker.com/desktop/install/windo
 
 Using your WSL terminal clone this repo. Enter it's root directory and follow instructions below.
 
-## Usage
-```
-docker compose up
-```
 
 ## Rebuild images after changes
 ```
@@ -18,3 +14,15 @@ and re run to start up
 ```
 docker compose up
 ```
+
+## Usage
+```
+docker compose up
+```
+
+## Open 
+ 
+```
+http://localhost:3000/
+```
+in your web browser.
