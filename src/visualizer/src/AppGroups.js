@@ -140,7 +140,7 @@ const myColors = [
   "YellowGreen",
 ];
 
-function AppGroups(uploadedData) {
+function AppGroups({ jsonData }) {
   const [data, setData] = useState([]);
   const [spansData, setSpansData] = useState([]);
   const [view, setView] = useState("groups"); // 'groups' or 'operation_stats'
@@ -207,48 +207,36 @@ function AppGroups(uploadedData) {
     key === "error" && (value === true || value === "true");
 
   useEffect(() => {
-    fetch(uploadedData)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((jsonData) => {
-        setGroupedTraces(jsonData);
-        const groupsData = jsonData.groups;
+    setGroupedTraces(jsonData);
+    const groupsData = jsonData.groups;
 
-        const propsData = Object.keys(groupsData).map((key, index) => {
-          const group = groupsData[key];
-          const statistics = group.span_stats;
-          const groupID = group.groupID;
-          const numberOfTraces = group.traceNumber;
-          const operations = group.operation_stats;
-          const traces = group.traces;
-          const minStartTime = group.global_min_start_time;
+    const propsData = Object.keys(groupsData).map((key, index) => {
+      const group = groupsData[key];
+      const statistics = group.span_stats;
+      const groupID = group.groupID;
+      const numberOfTraces = group.traceNumber;
+      const operations = group.operation_stats;
+      const traces = group.traces;
+      const minStartTime = group.global_min_start_time;
 
-          const dataObj = {
-            x: statistics.start_time_average,
-            y: statistics.exec_time_average,
-            groupID: groupID,
-            numberOfTraces: numberOfTraces,
-            operations: operations,
-            traces: traces,
-            minStartTime: minStartTime,
-            color: myColors[index % myColors.length],
-            svg: svgComponents[index % svgComponents.length],
-            ...statistics,
-          };
+      const dataObj = {
+        x: statistics.start_time_average,
+        y: statistics.exec_time_average,
+        groupID: groupID,
+        numberOfTraces: numberOfTraces,
+        operations: operations,
+        traces: traces,
+        minStartTime: minStartTime,
+        color: myColors[index % myColors.length],
+        svg: svgComponents[index % svgComponents.length],
+        ...statistics,
+      };
 
-          return dataObj;
-        });
+      return dataObj;
+    });
 
-        setData(propsData);
-      })
-      .catch((error) => {
-        console.log("Error in fetching data: ", error);
-      });
-  }, []);
+    setData(propsData);
+  }, [jsonData]);
 
   return (
     <div className="App">

@@ -26,7 +26,7 @@ function HomePage() {
           {showCallGraph ? (
             <CallGraphPage data={data} />
           ) : (
-            <AppGroups data={data} />
+            <AppGroups jsonData={data} />
           )}
         </div>
       )}
