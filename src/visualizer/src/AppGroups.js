@@ -4,9 +4,6 @@ import * as SVGs from "./components/SVGs";
 import ScatterPlotGroupsOperations from "./components/ScatterPlotGroupsOperations";
 import ScatterPlot from "./components/ScatterPlot";
 
-const originalFilePath = "/example.json";
-const groupedTracesFilePath = "/grouped_tracesV2example.json";
-
 const svgComponents = Object.values(SVGs);
 
 const myColors = [
@@ -143,12 +140,13 @@ const myColors = [
   "YellowGreen",
 ];
 
-function AppGroups() {
+function AppGroups(uploadedData) {
   const [data, setData] = useState([]);
   const [spansData, setSpansData] = useState([]);
   const [view, setView] = useState("groups"); // 'groups' or 'operation_stats'
   const [selectedGroupOperations, setSelectedGroupOperations] = useState(null); // to store the selected group
-  const [jaegerTraces, setJaegerTraces] = useState(null);
+  const [groupedTraces, setGroupedTraces] = useState(null);
+
   const handleGroupOperationsClick = (groupID) => {
     const group = data.find((group) => group.groupID === groupID);
     const propsData = Object.entries(group.operations).map(
@@ -170,35 +168,31 @@ function AppGroups() {
   };
 
   const handleGroupSpansClick = (groupID) => {
-    if (Array.isArray(jaegerTraces.data)) {
+    if (Array.isArray(groupedTraces.groups)) {
       const selectedGroup = data.find((group) => group.groupID === groupID);
 
-      const processedData = jaegerTraces.data.reduce((acc, t) => {
-        if (selectedGroup.traces.includes(t.traceID)) {
-          const spansData = t.spans.map((span) => {
-            // Get the operation stats for the current operation name
-            const operationStats = selectedGroup.operations[span.operationName];
-            const minStartTime = selectedGroup.minStartTime;
+      const processedData = selectedGroup.traces.reduce((acc, t) => {
+        const spansData = t.spans.map((span) => {
+          // Get the operation stats for the current operation name
+          const operationStats = selectedGroup.operations[span.operationName];
+          const minStartTime = selectedGroup.minStartTime;
 
-            return {
-              x: span.startTime - minStartTime,
-              y: span.duration,
-              spanID: span.spanID,
-              traceID: t.traceID,
-              name: span.operationName,
-              color:
-                Array.isArray(span.tags) && span.tags.some(isErrorTag)
-                  ? "red"
-                  : null,
-              serviceName: t.processes[span.processID].serviceName,
-              groupID: groupID,
-              operationStats: operationStats,
-            };
-          });
-          return [...acc, ...spansData];
-        } else {
-          return acc;
-        }
+          return {
+            x: span.startTime - minStartTime,
+            y: span.duration,
+            spanID: span.spanID,
+            traceID: t.traceID,
+            name: span.operationName,
+            color:
+              Array.isArray(span.tags) && span.tags.some(isErrorTag)
+                ? "red"
+                : null,
+            serviceName: t.processes[span.processID].serviceName,
+            groupID: groupID,
+            operationStats: operationStats,
+          };
+        });
+        return [...acc, ...spansData];
       }, []);
       setSpansData(processedData);
     }
@@ -213,7 +207,7 @@ function AppGroups() {
     key === "error" && (value === true || value === "true");
 
   useEffect(() => {
-    fetch(groupedTracesFilePath)
+    fetch(uploadedData)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -221,6 +215,7 @@ function AppGroups() {
         return response.json();
       })
       .then((jsonData) => {
+        setGroupedTraces(jsonData);
         const groupsData = jsonData.groups;
 
         const propsData = Object.keys(groupsData).map((key, index) => {
@@ -252,19 +247,6 @@ function AppGroups() {
       })
       .catch((error) => {
         console.log("Error in fetching data: ", error);
-      });
-    fetch(originalFilePath)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((jsonData) => {
-        setJaegerTraces(jsonData);
-      })
-      .catch((error) => {
-        console.log("Error in fetching jaeger-traces.json: ", error);
       });
   }, []);
 
