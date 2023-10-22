@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directed Graph Visualization</title>
+    <style>
+        /* Add your CSS styles here */
+        .node {
+            fill: #66b3ff;
+            stroke: #0074d9;
+            stroke-width: 2px;
+        }
+
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+            stroke-width: 2px;
+        }
+
+        .node-text {
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+    </style>
+</head>
+<body>
+    <svg id="graph-container" width="800" height="600"></svg>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        // Define initial empty graphData
+        let graphData = {};
+
+        // Fetch graph data from the server
+        fetch('/graph_data')
+            .then(response => response.json())
+            .then(data => {
+                // Assign received data to graphData variable
+                graphData = data;
+
+                // D3.js code for creating the directed graph visualization
+                const svg = d3.select("#graph-container"),
+                    width = +svg.attr("width"),
+                    height = +svg.attr("height");
+
+                const nodes = [];
+                const links = [];
+
+                // Create links and nodes based on graphData
+                Object.keys(graphData).forEach(sourceId => {
+                    // Create source node if it doesn't exist
+                    if (!nodes.find(node => node.id === parseInt(sourceId))) {
+                        nodes.push({ id: parseInt(sourceId) });
+                    }
+
+                    graphData[sourceId].forEach(targetId => {
+                        // Create target node if it doesn't exist
+                        if (!nodes.find(node => node.id === targetId)) {
+                            nodes.push({ id: targetId });
+                        }
+
+                        // Add directed link
+                        links.push({ source: parseInt(sourceId), target: targetId });
+                    });
+                });
+
+                // D3.js simulation and visualization code continues here...
+                // ...
+
+                const simulation = d3.forceSimulation(nodes)
+                    .force("link", d3.forceLink(links).id(d => d.id))
+                    .force("charge", d3.forceManyBody().strength(-400))
+                    .force("center", d3.forceCenter(width / 2, height / 2));
+
+                const link = svg.append("g")
+                    .attr("class", "links")
+                    .selectAll("line")
+                    .data(links)
+                    .enter().append("line")
+                    .attr("class", "link")
+                    .attr("r", nodeRadius);
+
+                const node = svg.append("g")
+                    .attr("class", "nodes")
+                    .selectAll("circle")
+                    .data(nodes)
+                    .enter().append("circle")
+                    .attr("class", "node")
+                    .attr("r", 10);
+
+                // Add node IDs as text
+                const nodeText = svg.append("g")
+                    .attr("class", "node-labels")
+                    .selectAll("text")
+                    .data(nodes)
+                    .enter().append("text")
+                    .attr("class", "node-text")
+                    .text(d => d.id);
+
+                node.append("title")
+                    .text(d => d.id);
+
+                simulation.on("tick", () => {
+                    link
+                        .attr("x1", d => d.source.x)
+                        .attr("y1", d => d.source.y)
+                        .attr("x2", d => d.target.x)
+                        .attr("y2", d => d.target.y);
+
+                    node
+                        .attr("cx", d => d.x)
+                        .attr("cy", d => d.y);
+
+                    // Update node text positions
+                    nodeText
+                        .attr("x", d => d.x)
+                        .attr("y", d => d.y);
+                });
+
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
