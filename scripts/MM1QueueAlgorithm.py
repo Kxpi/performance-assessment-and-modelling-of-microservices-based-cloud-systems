@@ -12,6 +12,17 @@ DURATION = "10s"
 REQS_PER_SEC = "1000"
 JAEGER_JSON_URL = "http://localhost:16686/api/traces/2c3715314afd01f3?prettyPrint=true"
 
+"""
+def ensure_docker_running():
+    try:
+        subprocess.check_output(["docker", "info"])
+        return True
+    except subprocess.CalledProcessError:
+        print("Docker is not running. Starting Docker...")
+        subprocess.run(["sudo", "systemctl", "start", "docker"])
+        return False
+"""
+
 subprocess.run(["docker-compose", "up", "-d"])
 
 subprocess.run(["python3", "scripts/init_social_graph.py", "--graph=socfb-Reed98"])
@@ -114,4 +125,9 @@ def mi_count(file_list, lambda_val):
         json.dump(operations_data, f, indent=4)
 
 
+# was_docker_running = ensure_docker_running()
 mi_count([FILE_NAME], int(REQS_PER_SEC))
+"""if not was_docker_running:
+    print("Docker was not initially running. Stopping Docker...")
+    subprocess.run(["sudo", "systemctl", "stop", "docker"])
+    """
