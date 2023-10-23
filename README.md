@@ -9,10 +9,11 @@ Using your WSL terminal clone this repo. Enter it's root directory and follow in
 ## Download Repository
 
 In the chosen directory, use the command below to clone the git repository.
-'''shell
+
+```shell
 <!-- markdownlint-disable-next-line MD034 -->
 git clone https://github.com/Kxpi/performance-assessment-and-modelling-of-microservices-based-cloud-systems.git
-'''
+```
 
 ## Switch the branch to init_webapp
 
