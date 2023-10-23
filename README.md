@@ -16,9 +16,9 @@ git clone https://github.com/Kxpi/performance-assessment-and-modelling-of-micros
 
 ## Switch the branch to init_webapp
 
-'''shell
+```shell
 git checkout init_webapp
-'''
+```
 
 ## Rebuild images after changes
 
