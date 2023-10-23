@@ -6,21 +6,21 @@ import json
 import os
 
 FILE_NAME = "jaeger_output.json"
-FILE_PATH = f"/{FILE_NAME}"
 NUM_THREADS = "4"
 NUM_CONNS = "100"
 DURATION = "10s"
 REQS_PER_SEC = "1000"
-JAEGER_JSON_URL = "http://localhost:16686/api/traces?service=frontend-client"
+JAEGER_JSON_URL = "http://localhost:16686/api/traces/2c3715314afd01f3?prettyPrint=true"
 
 subprocess.run(["docker-compose", "up", "-d"])
+
+subprocess.run(["python3", "scripts/init_social_graph.py", "--graph=socfb-Reed98"])
 # Compile the wrk2 tool
 os.chdir("../wrk2")
 subprocess.run(["make"])
 
 # Change back to the socialNetwork directory
 os.chdir("../socialNetwork")
-subprocess.run(["python3", "scripts/init_social_graph.py", "--graph=socfb-Reed98"])
 subprocess.run(
     [
         "../wrk2/wrk",
@@ -114,4 +114,4 @@ def mi_count(file_list, lambda_val):
         json.dump(operations_data, f, indent=4)
 
 
-mi_count([FILE_PATH], int(REQS_PER_SEC))
+mi_count([FILE_NAME], int(REQS_PER_SEC))
