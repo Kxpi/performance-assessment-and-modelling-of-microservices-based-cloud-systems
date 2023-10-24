@@ -18,7 +18,13 @@ import {
 import "react-vis/dist/style.css";
 import * as SVGs from "./SVGs";
 
-const svgComponents = Object.values(SVGs);
+const svgComponents = Object.entries(SVGs)
+  .sort(([keyA], [keyB]) => {
+    const numA = Number(keyA.replace("Svg", ""));
+    const numB = Number(keyB.replace("Svg", ""));
+    return numA - numB;
+  })
+  .map(([, value]) => value);
 
 const myColors = [
   "Aqua",

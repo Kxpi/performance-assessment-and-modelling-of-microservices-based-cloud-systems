@@ -4,7 +4,13 @@ import * as SVGs from "./components/SVGs";
 import ScatterPlotGroupsOperations from "./components/ScatterPlotGroupsOperations";
 import ScatterPlot from "./components/ScatterPlot";
 
-const svgComponents = Object.values(SVGs);
+const svgComponents = Object.entries(SVGs)
+  .sort(([keyA], [keyB]) => {
+    const numA = Number(keyA.replace("Svg", ""));
+    const numB = Number(keyB.replace("Svg", ""));
+    return numA - numB;
+  })
+  .map(([, value]) => value);
 
 const myColors = [
   "Aqua",
@@ -228,7 +234,7 @@ function AppGroups({ jsonData }) {
         traces: traces,
         minStartTime: minStartTime,
         color: myColors[index % myColors.length],
-        svg: svgComponents[index % svgComponents.length],
+        svg: svgComponents[groupID % svgComponents.length],
         ...statistics,
       };
 

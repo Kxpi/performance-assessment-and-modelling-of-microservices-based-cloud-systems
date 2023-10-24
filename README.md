@@ -4,8 +4,6 @@
 
 Follow the steps in these [instructions](https://docs.docker.com/desktop/install/windows-install/) to install docker and docker compose.
 
-Using your WSL terminal, clone this repo. Enter its root directory and follow the instructions below.
-
 ## Download Repository
 
 In the chosen directory, use the command below to clone the git repository.
@@ -26,7 +24,7 @@ git checkout init_webapp
 
 Start the Docker Engine by running Docker Desktop application.
 
-To rebuild images after changes or when running for the first time run:
+If you've made changes or are running the app for the first time, you'll need to rebuild the images. Use the following command to do this:
 
 ```shell
 docker compose build --no-cache
@@ -48,6 +46,10 @@ http://localhost:3000/
 
 ## Scatter Plot
 
+There are 3 types of views: the main one is the Groups View, the second one is the Group's Operation View and the third one is the Group's Spans View.
+
+In Group's Spans View the spans with the same colour are from the same trace and the spans with the same number are from the same microservice.
+
 You can zoom in on the plot by holding down the Shift key and the left mouse button while marking the area. To zoom out, simply hold down the Shift key and click the left or right mouse button.
 
 To view the statistics of the object, right-click its center. The statistics will appear below the plot.
@@ -56,4 +58,4 @@ To display group spans, enter the desired percentage and then click the 'Randomi
 
 ## Exiting the program
 
-To end work with the program simply send the SIGINT (Signal Interrupt) [ctrl+c] to the docker compose up process.
+To stop the program, send the SIGINT (Signal Interrupt) command, which is [ctrl+c], to the process running 'docker compose up'.
