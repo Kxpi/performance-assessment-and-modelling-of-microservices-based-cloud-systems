@@ -44,6 +44,30 @@ def isParent(parent, span):
         return False
 
 
+def findRoot(spans):
+    for index, span in enumerate(spans):
+        if len(span["references"]) == 0:
+            spans.pop(index)
+            return span, spans
+    else:
+        # span with invalid parent id become root
+
+        for index, span in enumerate(spans):
+
+            if span["warnings"]:
+                for w in span["warnings"]:
+                    if "invalid parent" in w:
+                        spans.pop(index)
+                        return span, spans
+                else:
+                    print("Error: Couldn't find root! Spans: ")
+                    for s in spans:
+                        x = json.dumps(s, indent=4)
+                        print("-"*100)
+                        print(x)
+                        print("="*100)
+                    exit(1)
+
 def get_callGraphRep(spans, root):
     # callGraph represented by nested dictionaries
     callGraph = {}
@@ -77,10 +101,14 @@ def get_groups(data):
     all_start_times = []
 
     for trace in traces:
-        trace_root = trace["spans"][0]
-        traces_callGraph_rep[trace["traceID"]] = get_callGraphRep(
-            trace["spans"][1:], trace_root
-        )
+
+        trace_spans = trace["spans"][:]
+
+        trace_root, trace_spans = findRoot(trace_spans)
+
+        traces_callGraph_rep[trace["traceID"]] = {trace_root["operationName"]: get_callGraphRep(
+            trace_spans, trace_root
+        )}
 
         # Collect start times
         for span in trace["spans"]:
