@@ -10,7 +10,9 @@ NUM_THREADS = "4"
 NUM_CONNS = "100"
 DURATION = "10s"
 REQS_PER_SEC = "1000"
-JAEGER_JSON_URL = "http://localhost:16686/api/traces/1c660213369d2cde?prettyPrint=true"
+JAEGER_JSON_URL = (
+    "http://localhost:16686/api/traces?service=social-graph-service&prettyPrint=true"
+)
 
 """
 def ensure_docker_running():
@@ -133,7 +135,7 @@ def mi_count(file_list, lambda_val):
 
 # was_docker_running = ensure_docker_running()
 mi_count([FILE_NAME], int(REQS_PER_SEC))
-"""if not was_docker_running:
+"""if not ensure_docker_running:
     print("Docker was not initially running. Stopping Docker...")
     subprocess.run(["sudo", "systemctl", "stop", "docker"])
-    """
+"""
