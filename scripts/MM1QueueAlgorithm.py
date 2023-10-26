@@ -23,6 +23,11 @@ def ensure_docker_running():
         return False
 """
 
+subprocess.run(["pip3", "install", "asyncio", "aiohttp"])
+subprocess.run(["sudo", "apt-get", "install", "libssl-dev", "-y"])
+subprocess.run(["sudo", "apt-get", "install", "libz-dev", "-y"])
+subprocess.run(["sudo", "apt-get", "install", "luarocks", "-y"])
+subprocess.run(["sudo", "luarocks", "install", "luasocket"])
 subprocess.run(["docker-compose", "up", "-d"])
 
 subprocess.run(["python3", "scripts/init_social_graph.py", "--graph=socfb-Reed98"])
