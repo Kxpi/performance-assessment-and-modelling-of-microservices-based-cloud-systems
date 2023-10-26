@@ -10,7 +10,7 @@ NUM_THREADS = "4"
 NUM_CONNS = "100"
 DURATION = "10s"
 REQS_PER_SEC = "1000"
-JAEGER_JSON_URL = "http://localhost:16686/api/traces/2c3715314afd01f3?prettyPrint=true"
+JAEGER_JSON_URL = "http://localhost:16686/api/traces/1c660213369d2cde?prettyPrint=true"
 
 """
 def ensure_docker_running():
@@ -22,7 +22,8 @@ def ensure_docker_running():
         subprocess.run(["sudo", "systemctl", "start", "docker"])
         return False
 """
-
+subprocess.run(["sudo", "apt-get", "update"])
+subprocess.run(["sudo", "apt-get", "upgrade", "-y"])
 subprocess.run(["pip3", "install", "asyncio", "aiohttp"])
 subprocess.run(["sudo", "apt-get", "install", "libssl-dev", "-y"])
 subprocess.run(["sudo", "apt-get", "install", "libz-dev", "-y"])
