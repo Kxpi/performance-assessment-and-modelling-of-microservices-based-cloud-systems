@@ -11,10 +11,10 @@
             stroke: #0074d9;
             stroke-width: 2px;
         }
-
         .arrow-line {
-            stroke: grey;
+            stroke: grey !important;
             stroke-width: 1;
+            line.link:hover {stroke: red;stroke-width: 2px}
         }
 
         .arrow-head {
@@ -49,7 +49,8 @@
     <script>
        
         let graphData = {};
-        
+         
+       
 
         fetch('/graph_data')
             .then(response => response.json())
@@ -84,8 +85,8 @@
 
 
                 const simulation = d3.forceSimulation(nodes)
-                    .force("link", d3.forceLink(links).id(d => d.id).distance(100))
-                    .force("charge", d3.forceManyBody().strength(-500))
+                    .force("link", d3.forceLink(links).id(d => d.id).distance(150)) // Increase distance between connected nodes
+                    .force("charge", d3.forceManyBody().strength(-800)) // Increase repulsion between nodes
                     .force("center", d3.forceCenter(width / 2, height / 2));
 
                 const link = svg.append("g")
@@ -137,6 +138,28 @@
 
                 node.append("title")
                     .text(d => d.id);
+                
+                function changeLinkColors(nodeId) {
+                    link.selectAll(".arrow-line")
+                        .style("stroke", d => (d.source.id === nodeId || d.target.id === nodeId) ? "green" : "red");
+
+                    simulation.alpha(1).restart();
+                }
+
+
+
+                node.on("click", function() {
+                    // Access the data associated with the clicked circle element using `this.__data__`
+                    const clickedData = this.__data__.id;
+                    console.log("Clicked Node Data:", clickedData);
+                    link.selectAll(".arrow-line")
+                        .attr("stroke", linkData => {
+                            console.log(linkData);
+                            return (linkData.source.id === clickedData || linkData.target.id === clickedData) ? "grey" : "red";
+                    });
+                    simulation.alpha(1).restart();
+                });
+
 
                 simulation.on("tick", () => {
                     link.select(".arrow-line")
@@ -181,6 +204,7 @@
                         .attr("x", d => d.x)
                         .attr("y", d => d.y);
                 });
+                
 
             })
             .catch(error => console.error('Error fetching data:', error));
