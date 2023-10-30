@@ -141,7 +141,6 @@ const myColors = [
   "Turquoise",
   "Violet",
   "Wheat",
-  "White",
   "WhiteSmoke",
   "YellowGreen",
 ];
@@ -157,13 +156,32 @@ function AppGroups({ jsonData }) {
     const group = data.find((group) => group.groupID === groupID);
     const propsData = Object.entries(group.operations).map(
       ([operationName, operationStats], index) => {
+        const minStartTime = operationStats.start_time_min;
+        const maxStartTime = operationStats.start_time_max;
+        const minDuration = operationStats.exec_time_min;
+        const maxDuration = operationStats.exec_time_max;
+        const startTime95Percentile = operationStats.start_time_95_percentile;
+        const startTime99Percentile = operationStats.start_time_99_percentile;
+        const duration95Percentile = operationStats.exec_time_95_percentile;
+        const duration99Percentile = operationStats.exec_time_99_percentile;
+
         const dataObj = {
           groupID: groupID,
           operationName: operationName,
           x: operationStats.start_time_average,
           y: operationStats.exec_time_average,
+          minStartTime: minStartTime,
+          maxStartTime: maxStartTime,
+          minDuration: minDuration,
+          maxDuration: maxDuration,
+          startTimeSpread: maxStartTime - minStartTime,
+          durationSpread: maxDuration - minDuration,
+          startTime95Percentile: startTime95Percentile,
+          startTime99Percentile: startTime99Percentile,
+          duration95Percentile: duration95Percentile,
+          duration99Percentile: duration99Percentile,
           color: myColors[index % myColors.length],
-          svg: svgComponents[index % svgComponents.length],
+          svg: svgComponents[groupID % svgComponents.length],
           ...operationStats,
         };
         return dataObj;
@@ -223,7 +241,15 @@ function AppGroups({ jsonData }) {
       const numberOfTraces = group.traceNumber;
       const operations = group.operation_stats;
       const traces = group.traces;
-      const minStartTime = group.global_min_start_time;
+      const globalMinStartTime = group.global_min_start_time;
+      const minStartTime = group.span_stats.start_time_min;
+      const maxStartTime = group.span_stats.start_time_max;
+      const minDuration = group.span_stats.exec_time_min;
+      const maxDuration = group.span_stats.exec_time_max;
+      const startTime95Percentile = group.span_stats.start_time_95_percentile;
+      const startTime99Percentile = group.span_stats.start_time_99_percentile;
+      const duration95Percentile = group.span_stats.exec_time_95_percentile;
+      const duration99Percentile = group.span_stats.exec_time_99_percentile;
 
       const dataObj = {
         x: statistics.start_time_average,
@@ -232,7 +258,19 @@ function AppGroups({ jsonData }) {
         numberOfTraces: numberOfTraces,
         operations: operations,
         traces: traces,
+        globalMinStartTime: globalMinStartTime,
         minStartTime: minStartTime,
+        maxStartTime: maxStartTime,
+        minDuration: minDuration,
+        maxDuration: maxDuration,
+        startTimeSpread: maxStartTime - minStartTime,
+        durationSpread: maxDuration - minDuration,
+        startTime95Percentile: startTime95Percentile,
+        startTime99Percentile: startTime99Percentile,
+        duration95Percentile: duration95Percentile,
+        duration99Percentile: duration99Percentile,
+        startTimeQ1: group.span_stats.start_time_q1,
+        startTimeQ3: group.span_stats.start_time_q3,
         color: myColors[index % myColors.length],
         svg: svgComponents[groupID % svgComponents.length],
         ...statistics,

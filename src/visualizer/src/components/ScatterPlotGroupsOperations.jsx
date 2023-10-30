@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
   CustomSVGSeries,
+  VerticalRectSeries,
   Highlight,
   makeWidthFlexible,
   HorizontalGridLines,
@@ -136,6 +137,52 @@ function ScatterPlotImpl(props) {
           tickFormat={(t) => formatDuration(t)}
         />
         <YAxis title="Average Duration" tickFormat={(t) => formatDuration(t)} />
+        {data.map((d, i) => {
+          return [
+            <VerticalRectSeries
+              key={`${i}-box`}
+              stroke={d.color}
+              style={{ strokeWidth: 1 }}
+              data={[
+                {
+                  x: d.x + d.startTimeSpread / (2 * 100),
+                  y: d.y + d.durationSpread / (2 * 100),
+                  x0: d.x - d.startTimeSpread / (2 * 100),
+                  y0: d.y - d.durationSpread / (2 * 100),
+                  color: `rgba(255, 255, 0, 0.15)`,
+                },
+              ]}
+            />,
+            <VerticalRectSeries
+              key={`${i}-95th`}
+              stroke={d.color}
+              style={{ strokeWidth: 1 }}
+              data={[
+                {
+                  x: d.x + d.startTime95Percentile / (2 * 100),
+                  y: d.y + d.duration95Percentile / (2 * 100),
+                  x0: d.x - d.startTime95Percentile / (2 * 100),
+                  y0: d.y - d.duration95Percentile / (2 * 100),
+                  color: `rgba(255, 99, 71, 0.15)`,
+                },
+              ]}
+            />,
+            <VerticalRectSeries
+              key={`${i}-99th`}
+              stroke={d.color}
+              style={{ strokeWidth: 1 }}
+              data={[
+                {
+                  x: d.x + d.startTime99Percentile / (2 * 100),
+                  y: d.y + d.duration99Percentile / (2 * 100),
+                  x0: d.x - d.startTime99Percentile / (2 * 100),
+                  y0: d.y - d.duration99Percentile / (2 * 100),
+                  color: `rgba(128, 128, 0, 0.15)`,
+                },
+              ]}
+            />,
+          ];
+        })}
         <CustomSVGSeries
           className="mark-series-fill"
           opacity={0.5}
