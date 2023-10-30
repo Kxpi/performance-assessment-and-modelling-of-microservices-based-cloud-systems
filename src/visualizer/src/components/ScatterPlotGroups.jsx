@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
   CustomSVGSeries,
-  VerticalRectSeries,
+  HorizontalRectSeries,
   Highlight,
   makeWidthFlexible,
   HorizontalGridLines,
@@ -132,52 +132,38 @@ function ScatterPlotImpl(props) {
         <HorizontalGridLines />
         <VerticalGridLines />
         <XAxis
-          title="Average Start Time Counted From The Earliest Span"
+          title="Median Start Time Counted From The Earliest Span"
           tickTotal={18}
           tickFormat={(t) => formatDuration(t)}
         />
-        <YAxis title="Average Duration" tickFormat={(t) => formatDuration(t)} />
+        <YAxis title="Median Duration" tickFormat={(t) => formatDuration(t)} />
         {data.map((d, i) => {
           return [
-            <VerticalRectSeries
+            <HorizontalRectSeries
               key={`${i}-box`}
               stroke={d.color}
               style={{ strokeWidth: 1 }}
               data={[
                 {
-                  x: d.x + d.startTimeSpread / (2 * 100),
-                  y: d.y + d.durationSpread / (2 * 100),
-                  x0: d.x - d.startTimeSpread / (2 * 100),
-                  y0: d.y - d.durationSpread / (2 * 100),
-                  color: `rgba(255, 255, 0, 0.15)`,
-                },
-              ]}
-            />,
-            <VerticalRectSeries
-              key={`${i}-95th`}
-              stroke={d.color}
-              style={{ strokeWidth: 1 }}
-              data={[
-                {
-                  x: d.x + d.startTime95Percentile / (2 * 100),
-                  y: d.y + d.duration95Percentile / (2 * 100),
-                  x0: d.x - d.startTime95Percentile / (2 * 100),
-                  y0: d.y - d.duration95Percentile / (2 * 100),
-                  color: `rgba(255, 99, 71, 0.15)`,
-                },
-              ]}
-            />,
-            <VerticalRectSeries
-              key={`${i}-99th`}
-              stroke={d.color}
-              style={{ strokeWidth: 1 }}
-              data={[
-                {
-                  x: d.x + d.startTime99Percentile / (2 * 100),
-                  y: d.y + d.duration99Percentile / (2 * 100),
-                  x0: d.x - d.startTime99Percentile / (2 * 100),
-                  y0: d.y - d.duration99Percentile / (2 * 100),
+                  x: d.startTimeQ4,
+                  y: d.durationQ0,
+                  x0: d.startTimeQ0,
+                  y0: d.durationQ4,
                   color: `rgba(128, 128, 0, 0.15)`,
+                },
+              ]}
+            />,
+            <HorizontalRectSeries
+              key={`${i}-inner-box`}
+              stroke={d.color}
+              style={{ strokeWidth: 1 }}
+              data={[
+                {
+                  x: d.startTimeQ3,
+                  y: d.durationQ1,
+                  x0: d.startTimeQ1,
+                  y0: d.durationQ3,
+                  color: `rgba(255, 99, 71, 0.15)`,
                 },
               ]}
             />,
@@ -232,9 +218,6 @@ function ScatterPlotImpl(props) {
             Min Duration: {`${clickedDataPoint.exec_time_min} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Max Duration: {`${clickedDataPoint.exec_time_max} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
             First Quartile of Duration: {`${clickedDataPoint.exec_time_q1} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
@@ -242,6 +225,9 @@ function ScatterPlotImpl(props) {
           </h4>
           <h4 className="scatter-plot-hint">
             Third Quartile of Duration: {`${clickedDataPoint.exec_time_q3} μs`}
+          </h4>
+          <h4 className="scatter-plot-hint">
+            Max Duration: {`${clickedDataPoint.exec_time_max} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
             95th Percentile of Duration:{" "}
@@ -252,29 +238,32 @@ function ScatterPlotImpl(props) {
             {`${clickedDataPoint.exec_time_99_percentile} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Average Time: {`${clickedDataPoint.start_time_average} μs`}
+            Average Start Time: {`${clickedDataPoint.start_time_average} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Min Time: {`${clickedDataPoint.start_time_min} μs`}
+            Min Start Time: {`${clickedDataPoint.start_time_min} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Max Time: {`${clickedDataPoint.start_time_max} μs`}
+            First Quartile of Start Time:{" "}
+            {`${clickedDataPoint.start_time_q1} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            First Quartile of Time: {`${clickedDataPoint.start_time_q1} μs`}
+            Second Quartile of Start Time:{" "}
+            {`${clickedDataPoint.start_time_q2} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Second Quartile of Time: {`${clickedDataPoint.start_time_q2} μs`}
+            Third Quartile of Start Time:{" "}
+            {`${clickedDataPoint.start_time_q3} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            Third Quartile of Time: {`${clickedDataPoint.start_time_q3} μs`}
+            Max Start Time: {`${clickedDataPoint.start_time_max} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            95th Percentile of Time:{" "}
+            95th Percentile of Start Time:{" "}
             {`${clickedDataPoint.start_time_95_percentile} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
-            99th Percentile of Time:{" "}
+            99th Percentile of Start Time:{" "}
             {`${clickedDataPoint.start_time_99_percentile} μs`}
           </h4>
         </Modal>

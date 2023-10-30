@@ -56,10 +56,9 @@ To view the statistics of the object, right-click its center. The statistics wil
 
 To display group spans, enter the desired percentage and then click the 'Randomize displayed spans' button.
 
-There are 3 types of boxes:
-![Yellow](image-4.png) The one with that color (light yellow)indicates dispersion of the data from the average value.
-![Green](image-1.png) The one with that color (light green) indicates 99th percentile of the data.
-![Brown](image-2.png) The one with that color (light brown) indicates 95th percentile of the data.
+There are 2 types of boxes:
+![Green](image-1.png) The one with that color (light green) indicates Q0-Q4 of the data.
+![Brown](image-2.png) The one with that color (light brown) indicates Q1-Q3 of the data.
 
 ## Exiting the program
 

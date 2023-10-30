@@ -154,7 +154,6 @@ const myColors = [
   "Turquoise",
   "Violet",
   "Wheat",
-  "White",
   "WhiteSmoke",
   "YellowGreen",
 ];
@@ -499,12 +498,6 @@ function ScatterPlotImpl(props) {
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            Max Duration For {clickedDataPoint.name}:{" "}
-            {`${clickedDataPoint.operationStats.exec_time_max} μs`}
-          </h4>
-        ) : null}
-        {clickedDataPoint.operationStats !== undefined ? (
-          <h4 className="scatter-plot-hint">
             First Quartile of Duration For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.exec_time_q1} μs`}
           </h4>
@@ -523,6 +516,12 @@ function ScatterPlotImpl(props) {
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
+            Max Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_max} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
             95th Percentile of Duration For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.exec_time_95_percentile} μs`}
           </h4>
@@ -535,49 +534,49 @@ function ScatterPlotImpl(props) {
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            Average Time For {clickedDataPoint.name}:{" "}
+            Average Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_average} μs`}
           </h4>
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            Min Time For {clickedDataPoint.name}:{" "}
+            Min Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_min} μs`}
           </h4>
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            Max Time For {clickedDataPoint.name}:{" "}
-            {`${clickedDataPoint.operationStats.start_time_max} μs`}
-          </h4>
-        ) : null}
-        {clickedDataPoint.operationStats !== undefined ? (
-          <h4 className="scatter-plot-hint">
-            First Quartile of Time For {clickedDataPoint.name}:{" "}
+            First Quartile of Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_q1} μs`}
           </h4>
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            Second Quartile of Time For {clickedDataPoint.name}:{" "}
+            Second Quartile of Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_q2} μs`}
           </h4>
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            Third Quartile of Time For {clickedDataPoint.name}:{" "}
+            Third Quartile of Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_q3} μs`}
           </h4>
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            95th Percentile of Time For {clickedDataPoint.name}:{" "}
+            Max Start Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_max} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            95th Percentile of Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_95_percentile} μs`}
           </h4>
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
-            99th Percentile of Time For {clickedDataPoint.name}:{" "}
+            99th Percentile of Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_99_percentile} μs`}
           </h4>
         ) : null}

@@ -162,18 +162,38 @@ function AppGroups({ jsonData }) {
         const startTime99Percentile = operationStats.start_time_99_percentile;
         const duration95Percentile = operationStats.exec_time_95_percentile;
         const duration99Percentile = operationStats.exec_time_99_percentile;
+        const startTimeQ0 = operationStats.start_time_min;
+        const startTimeQ1 = operationStats.start_time_q1;
+        const startTimeQ2 = operationStats.start_time_q2;
+        const startTimeQ3 = operationStats.start_time_q3;
+        const startTimeQ4 = operationStats.start_time_max;
+        const durationQ0 = operationStats.exec_time_min;
+        const durationQ1 = operationStats.exec_time_q1;
+        const durationQ2 = operationStats.exec_time_q2;
+        const durationQ3 = operationStats.exec_time_q3;
+        const durationQ4 = operationStats.exec_time_max;
 
         const dataObj = {
           groupID: groupID,
           operationName: operationName,
-          x: operationStats.start_time_average,
-          y: operationStats.exec_time_average,
+          x: operationStats.start_time_q2,
+          y: operationStats.exec_time_q2,
           minStartTime: minStartTime,
           maxStartTime: maxStartTime,
           minDuration: minDuration,
           maxDuration: maxDuration,
           startTimeSpread: maxStartTime - minStartTime,
           durationSpread: maxDuration - minDuration,
+          startTimeQ0: startTimeQ0,
+          startTimeQ1: startTimeQ1,
+          startTimeQ2: startTimeQ2,
+          startTimeQ3: startTimeQ3,
+          startTimeQ4: startTimeQ4,
+          durationQ0: durationQ0,
+          durationQ1: durationQ1,
+          durationQ2: durationQ2,
+          durationQ3: durationQ3,
+          durationQ4: durationQ4,
           startTime95Percentile: startTime95Percentile,
           startTime99Percentile: startTime99Percentile,
           duration95Percentile: duration95Percentile,
@@ -248,10 +268,20 @@ function AppGroups({ jsonData }) {
       const startTime99Percentile = group.span_stats.start_time_99_percentile;
       const duration95Percentile = group.span_stats.exec_time_95_percentile;
       const duration99Percentile = group.span_stats.exec_time_99_percentile;
+      const startTimeQ0 = group.span_stats.start_time_min;
+      const startTimeQ1 = group.span_stats.start_time_q1;
+      const startTimeQ2 = group.span_stats.start_time_q2;
+      const startTimeQ3 = group.span_stats.start_time_q3;
+      const startTimeQ4 = group.span_stats.start_time_max;
+      const durationQ0 = group.span_stats.exec_time_min;
+      const durationQ1 = group.span_stats.exec_time_q1;
+      const durationQ2 = group.span_stats.exec_time_q2;
+      const durationQ3 = group.span_stats.exec_time_q3;
+      const durationQ4 = group.span_stats.exec_time_max;
 
       const dataObj = {
-        x: statistics.start_time_average,
-        y: statistics.exec_time_average,
+        x: statistics.start_time_q2,
+        y: statistics.exec_time_q2,
         groupID: groupID,
         numberOfTraces: numberOfTraces,
         operations: operations,
@@ -267,8 +297,16 @@ function AppGroups({ jsonData }) {
         startTime99Percentile: startTime99Percentile,
         duration95Percentile: duration95Percentile,
         duration99Percentile: duration99Percentile,
-        startTimeQ1: group.span_stats.start_time_q1,
-        startTimeQ3: group.span_stats.start_time_q3,
+        startTimeQ0: startTimeQ0,
+        startTimeQ1: startTimeQ1,
+        startTimeQ2: startTimeQ2,
+        startTimeQ3: startTimeQ3,
+        startTimeQ4: startTimeQ4,
+        durationQ0: durationQ0,
+        durationQ1: durationQ1,
+        durationQ2: durationQ2,
+        durationQ3: durationQ3,
+        durationQ4: durationQ4,
         color: myColors[index % myColors.length],
         svg: svgComponents[groupID % svgComponents.length],
         ...statistics,
