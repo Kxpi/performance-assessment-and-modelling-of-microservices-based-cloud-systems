@@ -14,7 +14,7 @@ git clone https://github.com/Kxpi/performance-assessment-and-modelling-of-micros
 
 ## Switch the branch to init_webapp
 
-In the repository's directory, insert the command below to change the branch to the init_webapp.
+In the repository's directory, use the command below to change the branch to the init_webapp.
 
 ```shell
 git checkout init_webapp
@@ -55,6 +55,11 @@ You can zoom in on the plot by holding down the Shift key and the left mouse but
 To view the statistics of the object, right-click its center. The statistics will appear below the plot.
 
 To display group spans, enter the desired percentage and then click the 'Randomize displayed spans' button.
+
+There are 3 types of boxes:
+![Yellow](image-4.png) The one with that color indicates dispersion of the data from the average value.
+![Green](image-1.png) The one with that color indicates 99th percentile of the data.
+![Brown](image-2.png) The one with that color indicates 95th percentile of the data.
 
 ## Exiting the program
 

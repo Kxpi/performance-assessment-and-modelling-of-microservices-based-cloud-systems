@@ -14,12 +14,10 @@ const svgComponents = Object.entries(SVGs)
 
 const myColors = [
   "Aqua",
-  "Aquamarine",
   "Black",
   "Blue",
   "BlueViolet",
   "Brown",
-  "Red",
   "BurlyWood",
   "CadetBlue",
   "Chartreuse",
