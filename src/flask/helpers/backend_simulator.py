@@ -53,7 +53,6 @@ def findRoot(spans):
         # span with invalid parent id become root
 
         for index, span in enumerate(spans):
-
             if span["warnings"]:
                 for w in span["warnings"]:
                     if "invalid parent" in w:
@@ -63,10 +62,11 @@ def findRoot(spans):
                     print("Error: Couldn't find root! Spans: ")
                     for s in spans:
                         x = json.dumps(s, indent=4)
-                        print("-"*100)
+                        print("-" * 100)
                         print(x)
-                        print("="*100)
+                        print("=" * 100)
                     exit(1)
+
 
 def get_callGraphRep(spans, root):
     # callGraph represented by nested dictionaries
@@ -101,14 +101,13 @@ def get_groups(data):
     all_start_times = []
 
     for trace in traces:
-
         trace_spans = trace["spans"][:]
 
         trace_root, trace_spans = findRoot(trace_spans)
 
-        traces_callGraph_rep[trace["traceID"]] = {trace_root["operationName"]: get_callGraphRep(
-            trace_spans, trace_root
-        )}
+        traces_callGraph_rep[trace["traceID"]] = {
+            trace_root["operationName"]: get_callGraphRep(trace_spans, trace_root)
+        }
 
         # Collect start times
         for span in trace["spans"]:
@@ -189,6 +188,8 @@ def get_groups(data):
             "exec_time_95_percentile": int(np.percentile(exec_times, 95)),
             "exec_time_99_percentile": int(np.percentile(exec_times, 99)),
             "exec_time_average": int(np.average(exec_times)),
+            "exec_time_stddev": int(np.std(exec_times)),
+            "exec_time_IQR": int(np.subtract(*np.percentile(exec_times, [75, 25]))),
             "start_time_min": int(np.min(start_times)),
             "start_time_max": int(np.max(start_times)),
             "start_time_q1": int(np.percentile(start_times, 25)),
@@ -197,6 +198,8 @@ def get_groups(data):
             "start_time_95_percentile": int(np.percentile(start_times, 95)),
             "start_time_99_percentile": int(np.percentile(start_times, 99)),
             "start_time_average": int(np.average(start_times)),
+            "start_time_stddev": int(np.std(start_times)),
+            "start_time_IQR": int(np.subtract(*np.percentile(start_times, [75, 25]))),
         }
 
         # Calculate statistics for each operation within the group
@@ -213,6 +216,8 @@ def get_groups(data):
                 "exec_time_95_percentile": int(np.percentile(exec_times, 95)),
                 "exec_time_99_percentile": int(np.percentile(exec_times, 99)),
                 "exec_time_average": int(np.average(exec_times)),
+                "exec_time_stddev": int(np.std(exec_times)),
+                "exec_time_IQR": int(np.subtract(*np.percentile(exec_times, [75, 25]))),
                 "start_time_min": int(np.min(start_times)),
                 "start_time_max": int(np.max(start_times)),
                 "start_time_q1": int(np.percentile(start_times, 25)),
@@ -221,6 +226,10 @@ def get_groups(data):
                 "start_time_95_percentile": int(np.percentile(start_times, 95)),
                 "start_time_99_percentile": int(np.percentile(start_times, 99)),
                 "start_time_average": int(np.average(start_times)),
+                "start_time_stddev": int(np.std(start_times)),
+                "start_time_IQR": int(
+                    np.subtract(*np.percentile(start_times, [75, 25]))
+                ),
             }
 
         # Add operation stats to the group
@@ -281,6 +290,8 @@ def get_microservice_stats(data):
             "exec_time_95_percentile": int(np.percentile(exec_times, 95)),
             "exec_time_99_percentile": int(np.percentile(exec_times, 99)),
             "exec_time_average": int(np.average(exec_times)),
+            "exec_time_stddev": int(np.std(exec_times)),
+            "exec_time_IQR": int(np.subtract(*np.percentile(exec_times, [75, 25]))),
             "start_time_min": int(np.min(start_times)),
             "start_time_max": int(np.max(start_times)),
             "start_time_q1": int(np.percentile(start_times, 25)),
@@ -289,6 +300,8 @@ def get_microservice_stats(data):
             "start_time_95_percentile": int(np.percentile(start_times, 95)),
             "start_time_99_percentile": int(np.percentile(start_times, 99)),
             "start_time_average": int(np.average(start_times)),
+            "start_time_stddev": int(np.std(start_times)),
+            "start_time_IQR": int(np.subtract(*np.percentile(start_times, [75, 25]))),
         }
 
     return microservice_stats

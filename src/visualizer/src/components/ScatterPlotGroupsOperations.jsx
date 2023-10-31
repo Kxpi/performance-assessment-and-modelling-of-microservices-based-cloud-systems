@@ -226,6 +226,14 @@ function ScatterPlotImpl(props) {
             {`${clickedDataPoint.exec_time_99_percentile} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
+            Standard Deviation of Duration:{" "}
+            {`${clickedDataPoint.exec_time_stddev} μs`}
+          </h4>
+          <h4 className="scatter-plot-hint">
+            Interquartile Range of Duration:{" "}
+            {`${clickedDataPoint.exec_time_IQR} μs`}
+          </h4>
+          <h4 className="scatter-plot-hint">
             Average Start Time: {`${clickedDataPoint.start_time_average} μs`}
           </h4>
           <h4 className="scatter-plot-hint">
@@ -253,6 +261,14 @@ function ScatterPlotImpl(props) {
           <h4 className="scatter-plot-hint">
             99th Percentile of Start Time:{" "}
             {`${clickedDataPoint.start_time_99_percentile} μs`}
+          </h4>
+          <h4 className="scatter-plot-hint">
+            Standard Deviation of Start Time:{" "}
+            {`${clickedDataPoint.start_time_stddev} μs`}
+          </h4>
+          <h4 className="scatter-plot-hint">
+            Interquartile Range of Start Time:{" "}
+            {`${clickedDataPoint.start_time_IQR} μs`}
           </h4>
         </Modal>
         {isShiftPressed && ( // render the Highlight component only when the shift key is pressed

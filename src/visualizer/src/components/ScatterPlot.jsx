@@ -534,6 +534,18 @@ function ScatterPlotImpl(props) {
         ) : null}
         {clickedDataPoint.operationStats !== undefined ? (
           <h4 className="scatter-plot-hint">
+            Standard Deviation of Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_stddev} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Interquartile Range of Duration For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.exec_time_IQR} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
             Average Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_average} μs`}
           </h4>
@@ -578,6 +590,18 @@ function ScatterPlotImpl(props) {
           <h4 className="scatter-plot-hint">
             99th Percentile of Start Time For {clickedDataPoint.name}:{" "}
             {`${clickedDataPoint.operationStats.start_time_99_percentile} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Standard Deviation of Start Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_stddev} μs`}
+          </h4>
+        ) : null}
+        {clickedDataPoint.operationStats !== undefined ? (
+          <h4 className="scatter-plot-hint">
+            Interquartile Range of Start Time For {clickedDataPoint.name}:{" "}
+            {`${clickedDataPoint.operationStats.start_time_IQR} μs`}
           </h4>
         ) : null}
       </Modal>
