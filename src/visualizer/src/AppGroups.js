@@ -63,7 +63,6 @@ const myColors = [
   "HotPink",
   "IndianRed",
   "Indigo",
-  "Ivory",
   "Khaki",
   "Lavender",
   "LawnGreen",
@@ -320,6 +319,11 @@ function AppGroups({ jsonData }) {
 
   return (
     <div className="App">
+      {(view === "operation_stats" || view === "spans") && (
+        <button className="BTG" onClick={handleBackClick}>
+          Back to groups
+        </button>
+      )}
       {view === "groups" && (
         <ScatterPlotGroups
           data={data}
@@ -331,11 +335,6 @@ function AppGroups({ jsonData }) {
         <ScatterPlotGroupsOperations data={selectedGroupOperations} />
       )}
       {view === "spans" && <ScatterPlot data={spansData} />}
-      {(view === "operation_stats" || view === "spans") && (
-        <button className="BTG" onClick={handleBackClick}>
-          Back to groups
-        </button>
-      )}
     </div>
   );
 }

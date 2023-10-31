@@ -96,8 +96,10 @@ function Modal({ isOpen, onClose, children }) {
   return (
     <div className="modal">
       <div className="modal-content">
-        <button onClick={onClose}>Close</button>
         {children}
+        <div>
+          <button onClick={onClose}>Close</button>
+        </div>
       </div>
     </div>
   );
@@ -114,6 +116,18 @@ function ScatterPlotImpl(props) {
 
   return (
     <div className="TraceResultsScatterPlot">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <button
+          onClick={() => props.onGroupOperationsClick(clickedDataPoint.groupID)}
+        >
+          See Group's {clickedDataPoint.groupID} Operations
+        </button>
+        <button
+          onClick={() => props.onGroupSpansClick(clickedDataPoint.groupID)}
+        >
+          See Group's {clickedDataPoint.groupID} Spans
+        </button>
+      </Modal>
       <FlexibleXYPlot
         xType="time"
         xDomain={
@@ -193,18 +207,6 @@ function ScatterPlotImpl(props) {
           data={data}
         />
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <button
-            onClick={() =>
-              props.onGroupOperationsClick(clickedDataPoint.groupID)
-            }
-          >
-            See Group's {clickedDataPoint.groupID} Operations
-          </button>
-          <button
-            onClick={() => props.onGroupSpansClick(clickedDataPoint.groupID)}
-          >
-            See Group's {clickedDataPoint.groupID} Spans
-          </button>
           <h4 className="scatter-plot-hint">
             Group ID: {clickedDataPoint.groupID}
           </h4>

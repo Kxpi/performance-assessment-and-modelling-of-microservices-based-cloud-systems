@@ -78,7 +78,6 @@ const myColors = [
   "HotPink",
   "IndianRed",
   "Indigo",
-  "Ivory",
   "Khaki",
   "Lavender",
   "LawnGreen",
@@ -210,7 +209,9 @@ function Modal({ isOpen, onClose, children }) {
     <div className="modal">
       <div className="modal-content">
         {children}
-        <button onClick={onClose}>Close</button>
+        <div>
+          <button onClick={onClose}>Close</button>
+        </div>
       </div>
     </div>
   );
@@ -340,6 +341,55 @@ function ScatterPlotImpl(props) {
 
   return (
     <div className="TraceResultsScatterPlot">
+      <div>Percentage of spans to display:</div>
+      <div>{percentage}%</div>
+      <div>
+        <input
+          type="number"
+          min="0.001"
+          max="100"
+          value={percentage}
+          onChange={handlePercentageChange}
+        />
+      </div>
+      <button
+        onClick={() => {
+          const visibleData = getRandomSubset(data, percentage);
+          setFilteredData(visibleData);
+          setCurrentSpans(visibleData);
+          setLastDrawLocation(null);
+        }}
+      >
+        Randomize displayed spans
+      </button>
+      <button
+        onClick={() => {
+          setFilteredData(currentSpans);
+          setLastDrawLocation(null);
+        }}
+      >
+        Show all current spans
+      </button>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <button
+          onClick={() => {
+            setLastDrawLocation(null);
+            handleOptionClick("trace");
+            setIsModalOpen(false);
+          }}
+        >
+          Show all spans from trace with ID: {clickedDataPoint.traceID}
+        </button>
+        <button
+          onClick={() => {
+            setLastDrawLocation(null);
+            handleOptionClick("service");
+            setIsModalOpen(false);
+          }}
+        >
+          Show all spans from microservice named: {clickedDataPoint.serviceName}
+        </button>
+      </Modal>
       <FlexibleXYPlot
         xType="time"
         xDomain={
@@ -423,43 +473,7 @@ function ScatterPlotImpl(props) {
           />
         )}
       </FlexibleXYPlot>
-      <button
-        onClick={() => {
-          const visibleData = getRandomSubset(data, percentage);
-          setFilteredData(visibleData);
-          setCurrentSpans(visibleData);
-          setLastDrawLocation(null);
-        }}
-      >
-        Randomize displayed spans
-      </button>
-      <button
-        onClick={() => {
-          setFilteredData(currentSpans);
-          setLastDrawLocation(null);
-        }}
-      >
-        Show all current spans
-      </button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <button
-          onClick={() => {
-            setLastDrawLocation(null);
-            handleOptionClick("trace");
-            setIsModalOpen(false);
-          }}
-        >
-          Show all spans from trace with ID: {clickedDataPoint.traceID}
-        </button>
-        <button
-          onClick={() => {
-            setLastDrawLocation(null);
-            handleOptionClick("service");
-            setIsModalOpen(false);
-          }}
-        >
-          Show all spans from microservice named: {clickedDataPoint.serviceName}
-        </button>
         {clickedDataPoint.groupID !== undefined ? (
           <h4 className="scatter-plot-hint">
             Group ID: {clickedDataPoint.groupID}
@@ -605,15 +619,6 @@ function ScatterPlotImpl(props) {
           </h4>
         ) : null}
       </Modal>
-      <div>Percentage of spans to display:</div>
-      <div>{percentage}%</div>
-      <input
-        type="number"
-        min="0.001"
-        max="100"
-        value={percentage}
-        onChange={handlePercentageChange}
-      />
     </div>
   );
 }
