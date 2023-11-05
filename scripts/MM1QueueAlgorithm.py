@@ -120,6 +120,7 @@ with open(REQS_PER_SEC + FILE_NAME, "w") as f:
 def mi_count(file_list, reqs_per_sec, reqs_per_sec_test_array):
     operations_data = {}
     operations_data["model"] = {}
+    mu_operations_dict = {}
 
     for file_path in file_list:
         with open(file_path, "r") as f:
@@ -139,6 +140,8 @@ def mi_count(file_list, reqs_per_sec, reqs_per_sec_test_array):
             / operations_data["model"][operation][1]
         )
         mu = 1 / (z / 1e6)  # convert duration from microseconds to seconds
+        mu_operations_dict[operation] = mu
+        print(f"Added {operation} to mu_operations_dict")
 
         T = 1 / (mu - (1 / reqs_per_sec))
         operations_data["model"][operation] = {
@@ -229,13 +232,7 @@ def mi_count(file_list, reqs_per_sec, reqs_per_sec_test_array):
 
         for operation in operations_data[reqs_per_sec_test].keys():
             if operation != "model" or operation != reqs_per_sec_test:
-                z = (
-                    operations_data[reqs_per_sec_test][operation][0]
-                    / operations_data[reqs_per_sec_test][operation][1]
-                )
-                mu = 1 / (z / 1e6)  # convert duration from microseconds to seconds
-
-                t = 1 / (mu - (1 / reqs_per_sec))
+                t = 1 / (mu_operations_dict[operation] - (1 / reqs_per_sec))
                 operations_data[reqs_per_sec_test][operation] = {
                     "exec_time_average": int(z),
                     "theoretical_T": T,
