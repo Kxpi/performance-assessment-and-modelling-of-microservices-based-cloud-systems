@@ -12,9 +12,17 @@ In the chosen directory, use the command below to clone the git repository.
 git clone https://github.com/Kxpi/performance-assessment-and-modelling-of-microservices-based-cloud-systems.git
 ```
 
+## Update Repository
+
+Use the command below to update the git repository.
+
+```shell
+git pull
+```
+
 ## Switch the branch to init_webapp
 
-In the repository's directory, use the command below to change the branch to the init_webapp.
+In the repository's directory, use the command below to change to the 'init_webapp' branch.
 
 ```shell
 git checkout init_webapp
