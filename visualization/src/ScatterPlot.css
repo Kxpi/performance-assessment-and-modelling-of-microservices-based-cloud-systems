@@ -1,0 +1,25 @@
+.TraceResultsScatterPlot {
+  height: 100vh;
+}
+
+.TraceResultsScatterPlot .rv-xy-plot__series.rv-xy-plot__series--mark {
+  cursor: pointer;
+}
+
+.scatter-plot-hint {
+  color: #444;
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 0.5em;
+  margin: 0.5em;
+}
+
+.TraceResultsScatterPlot .rv-xy-plot__axis__tick__line {
+  stroke: #ddd;
+}
+
+.TraceResultsScatterPlot .rv-xy-plot__axis__tick__text {
+  fill: #444;
+  font-size: 0.8em;
+}
