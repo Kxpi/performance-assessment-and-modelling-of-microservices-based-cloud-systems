@@ -40,3 +40,12 @@ button {
   position: absolute;
   left: 0;
 }
+
+.axis text {
+  font-size: 12px;
+}
+
+.centered-text {
+  text-align: center;
+  font-weight: bold;
+}

@@ -3,6 +3,10 @@ import ScatterPlotGroups from "./components/ScatterPlotGroups";
 import * as SVGs from "./components/SVGs";
 import ScatterPlotGroupsOperations from "./components/ScatterPlotGroupsOperations";
 import ScatterPlot from "./components/ScatterPlot";
+import DurationHistogramGroups from "./components/DurationHistogramGroups";
+import DurationHistogramGroupsOperations from "./components/DurationHistogramGroupsOperations";
+import StartTimeHistogramGroups from "./components/StartTimeHistogramGroups";
+import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramGroupsOperations";
 
 const svgComponents = Object.entries(SVGs)
   .sort(([keyA], [keyB]) => {
@@ -148,8 +152,10 @@ function AppGroups({ jsonData }) {
   const [view, setView] = useState("groups"); // 'groups' or 'operation_stats'
   const [selectedGroupOperations, setSelectedGroupOperations] = useState(null); // to store the selected group
   const [groupedTraces, setGroupedTraces] = useState(null);
+  const [selectedGroupNumber, setSelectedGroupNumber] = useState(null); // to store the selected group number
 
   const handleGroupOperationsClick = (groupID) => {
+    setSelectedGroupNumber(groupID);
     const group = data.find((group) => group.groupID === groupID);
     const propsData = Object.entries(group.operations).map(
       ([operationName, operationStats], index) => {
@@ -209,6 +215,7 @@ function AppGroups({ jsonData }) {
   };
 
   const handleGroupSpansClick = (groupID) => {
+    setSelectedGroupNumber(groupID);
     if (Array.isArray(groupedTraces.groups)) {
       const selectedGroup = data.find((group) => group.groupID === groupID);
 
@@ -325,16 +332,43 @@ function AppGroups({ jsonData }) {
         </button>
       )}
       {view === "groups" && (
-        <ScatterPlotGroups
-          data={data}
-          onGroupOperationsClick={handleGroupOperationsClick}
-          onGroupSpansClick={handleGroupSpansClick}
-        />
+        <div>
+          <div className="centered-text">Duration Histogram of Groups</div>
+          <DurationHistogramGroups data={data} />
+          <div className="centered-text">Start Time Histogram of Groups</div>
+          <StartTimeHistogramGroups data={data} />
+          <div className="centered-text">Scatter Plot of Groups</div>
+          <ScatterPlotGroups
+            data={data}
+            onGroupOperationsClick={handleGroupOperationsClick}
+            onGroupSpansClick={handleGroupSpansClick}
+          />
+        </div>
       )}
       {view === "operation_stats" && (
-        <ScatterPlotGroupsOperations data={selectedGroupOperations} />
+        <div>
+          <div className="centered-text">
+            Duration Histogram of Group {selectedGroupNumber}'s Operations
+          </div>
+          <DurationHistogramGroupsOperations data={selectedGroupOperations} />
+          <div className="centered-text">
+            Start Time Histogram of Group {selectedGroupNumber}'s Operations
+          </div>
+          <StartTimeHistogramGroupsOperations data={selectedGroupOperations} />
+          <div className="centered-text">
+            Scatter Plot of Group {selectedGroupNumber}'s Operations
+          </div>
+          <ScatterPlotGroupsOperations data={selectedGroupOperations} />
+        </div>
       )}
-      {view === "spans" && <ScatterPlot data={spansData} />}
+      {view === "spans" && (
+        <div>
+          <div className="centered-text">
+            Scatter Plot of Group {selectedGroupNumber}'s Spans
+          </div>
+          <ScatterPlot data={spansData} />
+        </div>
+      )}
     </div>
   );
 }
