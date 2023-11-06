@@ -71,7 +71,7 @@ function StartTimeHistogramGroups({ data }) {
           dy="1em"
           style={{ textAnchor: "middle" }}
         >
-          Start Time [μs]
+          Median Start Time [μs]
         </text>
         <text
           x={width / 2}

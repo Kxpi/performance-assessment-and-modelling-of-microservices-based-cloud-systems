@@ -153,6 +153,26 @@ function AppGroups({ jsonData }) {
   const [selectedGroupOperations, setSelectedGroupOperations] = useState(null); // to store the selected group
   const [groupedTraces, setGroupedTraces] = useState(null);
   const [selectedGroupNumber, setSelectedGroupNumber] = useState(null); // to store the selected group number
+  const [isDurationHistogramGroupVisible, setDurationHistogramGroupVisibility] =
+    useState(false);
+  const [
+    isStartTimeHistogramGroupVisible,
+    setStartTimeHistogramGroupVisibility,
+  ] = useState(false);
+  const [isScatterPlotGroupVisible, setScatterPlotGroupVisibility] =
+    useState(false);
+  const [
+    isDurationHistogramGroupsOperationsVisible,
+    setDurationHistogramGroupsOperationsVisibility,
+  ] = useState(false);
+  const [
+    isStartTimeHistogramGroupsOperationsVisible,
+    setStartTimeHistogramGroupsOperationsVisibility,
+  ] = useState(false);
+  const [
+    isScatterPlotGroupsOperationsVisible,
+    setScatterPlotGroupsOperationsVisibility,
+  ] = useState(false);
 
   const handleGroupOperationsClick = (groupID) => {
     setSelectedGroupNumber(groupID);
@@ -333,32 +353,114 @@ function AppGroups({ jsonData }) {
       )}
       {view === "groups" && (
         <div>
-          <div className="centered-text">Duration Histogram of Groups</div>
-          <DurationHistogramGroups data={data} />
-          <div className="centered-text">Start Time Histogram of Groups</div>
-          <StartTimeHistogramGroups data={data} />
-          <div className="centered-text">Scatter Plot of Groups</div>
-          <ScatterPlotGroups
-            data={data}
-            onGroupOperationsClick={handleGroupOperationsClick}
-            onGroupSpansClick={handleGroupSpansClick}
-          />
+          <div className="show-button">
+            <button
+              className={`centered-text ${
+                isDurationHistogramGroupVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setDurationHistogramGroupVisibility(
+                  !isDurationHistogramGroupVisible
+                )
+              }
+            >
+              Duration Histogram of Groups
+            </button>
+            <button
+              className={`centered-text ${
+                isStartTimeHistogramGroupVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setStartTimeHistogramGroupVisibility(
+                  !isStartTimeHistogramGroupVisible
+                )
+              }
+            >
+              Start Time Histogram of Groups
+            </button>
+            <button
+              className={`centered-text ${
+                isScatterPlotGroupVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setScatterPlotGroupVisibility(!isScatterPlotGroupVisible)
+              }
+            >
+              Scatter Plot of Groups
+            </button>
+          </div>
+          {isDurationHistogramGroupVisible && (
+            <DurationHistogramGroups data={data} />
+          )}
+
+          {isStartTimeHistogramGroupVisible && (
+            <StartTimeHistogramGroups data={data} />
+          )}
+
+          {isScatterPlotGroupVisible && (
+            <ScatterPlotGroups
+              data={data}
+              onGroupOperationsClick={handleGroupOperationsClick}
+              onGroupSpansClick={handleGroupSpansClick}
+            />
+          )}
         </div>
       )}
       {view === "operation_stats" && (
         <div>
-          <div className="centered-text">
-            Duration Histogram of Group {selectedGroupNumber}'s Operations
+          <div className="show-button">
+            <button
+              className={`centered-text ${
+                isDurationHistogramGroupsOperationsVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setDurationHistogramGroupsOperationsVisibility(
+                  !isDurationHistogramGroupsOperationsVisible
+                )
+              }
+            >
+              Duration Histogram of Group {selectedGroupNumber}'s Operations
+            </button>
+
+            <button
+              className={`centered-text ${
+                isStartTimeHistogramGroupsOperationsVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setStartTimeHistogramGroupsOperationsVisibility(
+                  !isStartTimeHistogramGroupsOperationsVisible
+                )
+              }
+            >
+              Start Time Histogram of Group {selectedGroupNumber}'s Operations
+            </button>
+
+            <button
+              className={`centered-text ${
+                isScatterPlotGroupsOperationsVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setScatterPlotGroupsOperationsVisibility(
+                  !isScatterPlotGroupsOperationsVisible
+                )
+              }
+            >
+              Scatter Plot of Group {selectedGroupNumber}'s Operations
+            </button>
           </div>
-          <DurationHistogramGroupsOperations data={selectedGroupOperations} />
-          <div className="centered-text">
-            Start Time Histogram of Group {selectedGroupNumber}'s Operations
-          </div>
-          <StartTimeHistogramGroupsOperations data={selectedGroupOperations} />
-          <div className="centered-text">
-            Scatter Plot of Group {selectedGroupNumber}'s Operations
-          </div>
-          <ScatterPlotGroupsOperations data={selectedGroupOperations} />
+          {isDurationHistogramGroupsOperationsVisible && (
+            <DurationHistogramGroupsOperations data={selectedGroupOperations} />
+          )}
+
+          {isStartTimeHistogramGroupsOperationsVisible && (
+            <StartTimeHistogramGroupsOperations
+              data={selectedGroupOperations}
+            />
+          )}
+
+          {isScatterPlotGroupsOperationsVisible && (
+            <ScatterPlotGroupsOperations data={selectedGroupOperations} />
+          )}
         </div>
       )}
       {view === "spans" && (

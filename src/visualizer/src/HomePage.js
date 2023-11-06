@@ -20,7 +20,7 @@ function HomePage() {
               Show CallGraph
             </button>
             <button onClick={() => setShowCallGraph(false)}>
-              Show ScatterPlot
+              Show ScatterPlot And Histograms
             </button>
           </div>
           {showCallGraph ? (

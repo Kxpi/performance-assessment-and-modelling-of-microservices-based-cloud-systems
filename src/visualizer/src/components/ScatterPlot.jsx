@@ -210,7 +210,7 @@ function Modal({ isOpen, onClose, children }) {
       <div className="modal-content">
         {children}
         <div>
-          <button onClick={onClose}>Close</button>
+          <button onClick={onClose}>Cancel Chosen Span Selection</button>
         </div>
       </div>
     </div>

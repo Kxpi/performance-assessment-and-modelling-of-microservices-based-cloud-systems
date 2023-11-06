@@ -49,3 +49,13 @@ button {
   text-align: center;
   font-weight: bold;
 }
+
+.show-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.green {
+  background-color: Chartreuse;
+}
