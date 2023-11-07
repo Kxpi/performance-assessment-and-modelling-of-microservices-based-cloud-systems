@@ -39,6 +39,35 @@ function DurationHistogramGroups({ data }) {
   const xAxis = d3.axisBottom(x).tickFormat((i) => data[i].groupID);
   const yAxis = d3.axisLeft(y);
 
+  // Function to update the y-axis units
+  function updateUnits(data) {
+    // Determine the maximum value in the data
+    const maxValue = d3.max(data, (d) => d.y);
+
+    // Determine the appropriate units based on the maximum value
+    let units;
+    if (maxValue < 1000) {
+      units = "μs"; // microseconds
+    } else if (maxValue < 1000000) {
+      units = "ms"; // milliseconds
+    } else {
+      units = "s"; // seconds
+    }
+
+    // Update the y-axis with the appropriate tick format
+    yAxis
+      .scale(y)
+      .tickFormat(
+        (d) =>
+          `${
+            d / (units === "s" ? 1000000 : units === "ms" ? 1000 : 1)
+          } ${units}`
+      );
+  }
+
+  // Call updateUnits with your data
+  updateUnits(data);
+
   // Render the histogram
   return (
     <svg
@@ -71,7 +100,7 @@ function DurationHistogramGroups({ data }) {
           dy="1em"
           style={{ textAnchor: "middle" }}
         >
-          Median Duration [μs]
+          Median Duration
         </text>
         <text
           x={width / 2}

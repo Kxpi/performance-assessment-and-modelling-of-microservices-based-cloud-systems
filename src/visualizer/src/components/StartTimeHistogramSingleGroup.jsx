@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 
-function StartTimeHistogramGroupsOperations({ data }) {
+function StartTimeHistogramSingleGroup({ data }) {
   // Define dimensions
   const margin = { top: 30, right: 30, bottom: 80, left: 100 };
   const [width, setWidth] = useState(
@@ -21,28 +21,30 @@ function StartTimeHistogramGroupsOperations({ data }) {
     return () => window.removeEventListener("resize", handleResize);
   }, [margin.left, margin.right, margin.top, margin.bottom]);
 
-  // sort data from highest to lowest
-  data.sort((a, b) => b.y - a.y);
+  // Create bins
+  const bins = d3
+    .bin()
+    .value((d) => d.startTime)
+    .domain(d3.extent(data, (d) => d.startTime))
+    .thresholds(Math.ceil(Math.log2(data.length) + 1))(data);
 
   // Create scales
-  const x = d3
-    .scaleBand()
-    .domain(data.map((_, i) => i)) // use index as domain
-    .range([0, width])
-    .padding(0.1);
+  // Define a scale for the x-axis
+  const x = d3.scaleLinear().range([0, width]);
+
   const y = d3
-    .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.x)]) // Use d.x for y scale
+    .scaleLog()
+    .domain([1, d3.max(bins, (d) => d.length)])
     .range([height, 0]);
 
   // Create axes
-  const xAxis = d3.axisBottom(x).tickFormat((i) => data[i].operationName);
+  const xAxis = d3.axisBottom(x);
   const yAxis = d3.axisLeft(y);
 
-  // Function to update the y-axis units
+  // Function to update the x-axis units
   function updateUnits(data) {
     // Determine the maximum value in the data
-    const maxValue = d3.max(data, (d) => d.x);
+    const maxValue = d3.max(data, (d) => d.startTime);
 
     // Determine the appropriate units based on the maximum value
     let units;
@@ -54,9 +56,12 @@ function StartTimeHistogramGroupsOperations({ data }) {
       units = "s"; // seconds
     }
 
-    // Update the y-axis with the appropriate tick format
-    yAxis
-      .scale(y)
+    // Update the scale's domain
+    x.domain(d3.extent(data, (d) => d.startTime));
+
+    // Update the x-axis with the appropriate tick format
+    xAxis
+      .scale(x)
       .tickFormat(
         (d) =>
           `${
@@ -77,15 +82,18 @@ function StartTimeHistogramGroupsOperations({ data }) {
       style={{ width: "100%", height: "auto" }}
     >
       <g transform={`translate(${margin.left},${margin.top})`}>
-        {data.map((d, i) => (
-          <rect
-            key={i}
-            x={x(i)}
-            y={y(d.x)} // Use d.x for y value
-            width={x.bandwidth()}
-            height={height - y(d.x)} // Use d.x for height
-            fill={d.color}
-          />
+        {bins.map((bin, i) => (
+          <g key={i}>
+            <rect
+              x={x(bin.x0)}
+              y={y(bin.length)}
+              width={Math.max(0, x(bin.x1) - x(bin.x0) - 1)} // Ensure width is never less than 0
+              height={height - y(bin.length)}
+              fill="steelblue"
+              stroke="white"
+              strokeWidth="1"
+            />
+          </g>
         ))}
         <g
           ref={(node) => d3.select(node).call(xAxis)}
@@ -100,26 +108,26 @@ function StartTimeHistogramGroupsOperations({ data }) {
           dy="1em"
           style={{ textAnchor: "middle" }}
         >
-          Median Start Time
+          Count (Logarithmic Scale)
         </text>
         <text
           x={width / 2}
           y={height + margin.bottom / 2}
           style={{ textAnchor: "middle" }}
         >
-          Operation Name
+          Start Time
         </text>
       </g>
     </svg>
   );
 }
 
-StartTimeHistogramGroupsOperations.propTypes = {
+StartTimeHistogramSingleGroup.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      x: PropTypes.number.isRequired,
+      startTime: PropTypes.number.isRequired,
     })
   ).isRequired,
 };
 
-export default StartTimeHistogramGroupsOperations;
+export default StartTimeHistogramSingleGroup;

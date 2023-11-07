@@ -7,6 +7,8 @@ import DurationHistogramGroups from "./components/DurationHistogramGroups";
 import DurationHistogramGroupsOperations from "./components/DurationHistogramGroupsOperations";
 import StartTimeHistogramGroups from "./components/StartTimeHistogramGroups";
 import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramGroupsOperations";
+import DurationHistogramSingleGroup from "./components/DurationHistogramSingleGroup";
+import StartTimeHistogramSingleGroup from "./components/StartTimeHistogramSingleGroup";
 
 const svgComponents = Object.entries(SVGs)
   .sort(([keyA], [keyB]) => {
@@ -173,11 +175,29 @@ function AppGroups({ jsonData }) {
     isScatterPlotGroupsOperationsVisible,
     setScatterPlotGroupsOperationsVisibility,
   ] = useState(false);
+  const [
+    isDurationHistogramSingleGroupVisible,
+    setDurationHistogramSingleGroupVisibility,
+  ] = useState(false);
+  const [
+    isStartTimeHistogramSingleGroupVisible,
+    setStartTimeHistogramSingleGroupVisibility,
+  ] = useState(false);
+  const [histogramSingleGroupData, setHistogramSingleGroupData] = useState([]);
 
   const handleGroupOperationsClick = (groupID) => {
     setSelectedGroupNumber(groupID);
-    const group = data.find((group) => group.groupID === groupID);
-    const propsData = Object.entries(group.operations).map(
+    const selectedGroup = data.find((group) => group.groupID === groupID);
+    const globalMinStartTime = selectedGroup.globalMinStartTime;
+    const processedHistogramSingleGroupData = selectedGroup.traces.flatMap(
+      (trace) =>
+        trace.spans.map((span) => ({
+          ...span,
+          startTime: span.startTime - globalMinStartTime,
+        }))
+    );
+    setHistogramSingleGroupData(processedHistogramSingleGroupData);
+    const propsData = Object.entries(selectedGroup.operations).map(
       ([operationName, operationStats], index) => {
         const minStartTime = operationStats.start_time_min;
         const maxStartTime = operationStats.start_time_max;
@@ -437,6 +457,32 @@ function AppGroups({ jsonData }) {
 
             <button
               className={`centered-text ${
+                isDurationHistogramSingleGroupVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setDurationHistogramSingleGroupVisibility(
+                  !isDurationHistogramSingleGroupVisible
+                )
+              }
+            >
+              Duration Histogram of a {selectedGroupNumber}'s Group
+            </button>
+
+            <button
+              className={`centered-text ${
+                isStartTimeHistogramSingleGroupVisible ? "green" : ""
+              }`}
+              onClick={() =>
+                setStartTimeHistogramSingleGroupVisibility(
+                  !isStartTimeHistogramSingleGroupVisible
+                )
+              }
+            >
+              Start Time Histogram of a {selectedGroupNumber}'s Group
+            </button>
+
+            <button
+              className={`centered-text ${
                 isScatterPlotGroupsOperationsVisible ? "green" : ""
               }`}
               onClick={() =>
@@ -456,6 +502,14 @@ function AppGroups({ jsonData }) {
             <StartTimeHistogramGroupsOperations
               data={selectedGroupOperations}
             />
+          )}
+
+          {isDurationHistogramSingleGroupVisible && data.length > 0 && (
+            <DurationHistogramSingleGroup data={histogramSingleGroupData} />
+          )}
+
+          {isStartTimeHistogramSingleGroupVisible && data.length > 0 && (
+            <StartTimeHistogramSingleGroup data={histogramSingleGroupData} />
           )}
 
           {isScatterPlotGroupsOperationsVisible && (

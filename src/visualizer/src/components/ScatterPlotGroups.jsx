@@ -120,7 +120,7 @@ function ScatterPlotImpl(props) {
         <button
           onClick={() => props.onGroupOperationsClick(clickedDataPoint.groupID)}
         >
-          See Group's {clickedDataPoint.groupID} Operations
+          See Group's {clickedDataPoint.groupID} Operations And Histograms
         </button>
         <button
           onClick={() => props.onGroupSpansClick(clickedDataPoint.groupID)}
