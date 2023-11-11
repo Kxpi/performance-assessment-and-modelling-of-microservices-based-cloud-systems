@@ -6,7 +6,9 @@ import binascii
 from pprint import pprint
 from datetime import datetime
 from itertools import combinations
-
+import numpy as np
+from flask import Flask, render_template, jsonify
+app = Flask(__name__)
 
 def cli_parser() -> dict:
     """
@@ -233,6 +235,70 @@ def debug_result(communication_times: dict) -> None:
         Number of negative times: {negatives}
         Percentage of negegatives: {(negatives / num_of_pairs) * 100} %
         ''')
+        
+
+def get_number_of_percendance(output_of_commo_times):
+    '''
+    Here count if percendance is in every trace or if it is  
+    '''
+    count_of_percendence = {}
+    number_of_traces=0
+    for trace in output_of_commo_times:
+        number_of_traces+=1
+        for single_percendence in output_of_commo_times[trace]:
+            key = (single_percendence["initOperationName"], single_percendence["targetOperationName"])
+            
+            if key not in count_of_percendence:
+                count_of_percendence[key] = [1, [single_percendence['time']]]
+            else:
+                count_of_percendence[key][0] += 1
+                count_of_percendence[key][1].append(single_percendence['time'])
+
+    return count_of_percendence, number_of_traces
+
+
+def get_statistic_of_traces(comm_time):
+    count_of_percendence, number_of_traces = get_number_of_percendance(comm_time)
+    statistic_to_graph = {}
+    
+    for pair_of_spans in count_of_percendence:
+        if count_of_percendence[pair_of_spans][0] == number_of_traces:
+            times = count_of_percendence[pair_of_spans][1]
+            np_array = np.array(times)
+            
+            if not any(pair_of_spans[0] in value[0] for value in statistic_to_graph.keys()):
+                statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+            else:
+                for i in list(statistic_to_graph.keys()):
+                    if i[0] == pair_of_spans[0]:
+                        if statistic_to_graph[i][3] > np.percentile(np_array, 95):
+                            del statistic_to_graph[i]
+                statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+    
+    return statistic_to_graph
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/data')
+def graph():
+    args = cli_parser()
+    traces = read_traces(args['file'])
+
+    non_child = find_non_child(traces)
+    # pprint(non_child)
+
+    traces_reformatted = reformat_dict(traces)
+    #pprint(traces_reformatted)
+
+    # include negative
+    communication_times = calculate_comm_times(traces_reformatted, False)
+
+    graph = get_statistic_of_traces(communication_times)
+    graph_list = [(str(pair), stats) for pair, stats in graph.items()]
+
+    return jsonify(graph_list)
 
 
 def main():
@@ -251,6 +317,9 @@ def main():
     # include negative
     communication_times = calculate_comm_times(traces_reformatted, False)
 
+    graph = get_statistic_of_traces(communication_times)
+    for i in graph:
+        print(i, graph[i])
     # exclude negative
     # communication_times = calculate_comm_times(traces_reformatted, False)
 
@@ -259,4 +328,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    app.run(debug=True)

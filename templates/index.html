@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Directed Graph Visualization</title>
+  <style type="text/css">
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #graph {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #statistics {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+  </style>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+  <div id="graph"></div>
+  <div id="statistics"></div>
+
+  <script>
+ // Fetch data from the endpoint
+// Fetch data from the endpoint
+fetch('/data')
+  .then(response => response.json())
+  .then(data => {
+    // Create a new network instance
+    const container = document.getElementById('graph');
+    const options = {
+      layout: {
+        hierarchical: {
+          direction: 'LR',
+          sortMethod: 'directed',
+          levelSeparation: getLevelSeparation(data), // Set the level separation dynamically based on the first value of the label
+          nodeSpacing: 20
+        },
+        randomSeed: Math.round(Math.random() * 1000) // Set a random seed to disperse the nodes
+      },
+      edges: {
+        arrows: {
+          to: {
+            enabled: true,
+            scaleFactor: 1
+          }
+        },
+        font: {
+          size: 0, // Set the font size to 0 to hide the default labels
+          color: '#ffffff' // Set the font color to match the background color
+        },
+        smooth: {
+          type: 'horizontal' // Set the edge smoothing type to horizontal
+        }
+      },
+      interaction: {
+        hover: true
+      }
+    };
+    const network = new vis.Network(container);
+
+    // Create nodes and edges from the data
+    const nodes = new vis.DataSet();
+    const edges = new vis.DataSet();
+
+    data.forEach((item, index) => {
+      const source = item[0].split(',')[0].trim();
+      const target = item[0].split(',')[1].trim();
+      const values = item[1];
+
+      // Check if node with the same ID already exists
+      if (!nodes.get(source)) {
+        nodes.add({ id: source, label: source });
+      }
+      if (!nodes.get(target)) {
+        nodes.add({ id: target, label: target });
+      }
+
+      edges.add({ from: source, to: target, label: values.join(', ') });
+    });
+
+    // Set the nodes and edges to the network
+    const graphData = { nodes: nodes, edges: edges };
+    network.setOptions(options);
+    network.setData(graphData);
+
+    // Display values as a popup window next to the mouse on hover
+    const statisticsContainer = document.getElementById('statistics');
+    network.on('hoverNode', (event) => {
+      const nodeId = event.node;
+      const nodeLabel = nodes.get(nodeId).label;
+      const nodeValues = edges.get({ filter: (item) => item.from === nodeId }).map((item) => item.label).join(', ');
+
+      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
+      statisticsContainer.style.display = 'block';
+    });
+
+    network.on('blurNode', () => {
+      statisticsContainer.innerHTML = '';
+      statisticsContainer.style.display = 'none';
+    });
+
+    network.on('hover', (event) => {
+      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
+      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
+      statisticsContainer.style.left = `${event.pointer.canvas.x}px`;
+      statisticsContainer.style.top = `${event.pointer.canvas.y}px`;
+      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
+    });
+
+    network.on('blur', () => {
+      //statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
+      statisticsContainer.style.display = 'none';
+    });
+
+    network.on('hoverEdge', (event) => {
+      const edgeId = event.edge;
+      const edgeLabel = edges.get(edgeId).label;
+
+      statisticsContainer.innerHTML = `<p>${edgeLabel}</p>`;
+      statisticsContainer.style.display = 'block';
+    });
+
+    // Function to calculate the level separation based on the first value of the label
+    function getLevelSeparation(data) {
+      const firstValue = data[0][1][0];
+      // Calculate the level separation based on the first value
+      // You can adjust the formula to fit your desired distance
+      const levelSeparation = firstValue * 2;
+      return levelSeparation;
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+  </script>
+</body>
+</html>
