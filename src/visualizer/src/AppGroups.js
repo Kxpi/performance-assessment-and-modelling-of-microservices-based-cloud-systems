@@ -184,6 +184,18 @@ function AppGroups({ jsonData }) {
     setStartTimeHistogramSingleGroupVisibility,
   ] = useState(false);
   const [histogramSingleGroupData, setHistogramSingleGroupData] = useState([]);
+  const [
+    isDurationHistogramSingleGroupOperationVisible,
+    setIsDurationHistogramSingleGroupOperationVisible,
+  ] = useState(null);
+  const [
+    isStartTimeHistogramSingleGroupOperationVisible,
+    setIsStartTimeHistogramSingleGroupOperationVisible,
+  ] = useState(null);
+  const [
+    HistogramSingleGroupOperationData,
+    setHistogramSingleGroupOperationData,
+  ] = useState([]);
 
   const handleGroupOperationsClick = (groupID) => {
     setSelectedGroupNumber(groupID);
@@ -252,6 +264,51 @@ function AppGroups({ jsonData }) {
     );
     setSelectedGroupOperations(propsData);
     setView("operation_stats");
+  };
+
+  const handleGroupOperationHistogramClick = (
+    operationName,
+    durationOrStartTime
+  ) => {
+    if (
+      isDurationHistogramSingleGroupOperationVisible === null &&
+      isStartTimeHistogramSingleGroupOperationVisible === null
+    ) {
+      const selectedGroup = data.find(
+        (group) => group.groupID === selectedGroupNumber
+      );
+      const processedHistogramSingleGroupData = selectedGroup.traces.reduce(
+        (acc, t) => {
+          const spansData = t.spans
+            .filter((span) => span.operationName === operationName)
+            .map((span) => {
+              const globalMinStartTime = selectedGroup.globalMinStartTime;
+
+              return {
+                startTime: span.startTime - globalMinStartTime,
+                duration: span.duration,
+              };
+            });
+          return [...acc, ...spansData];
+        },
+        []
+      );
+      if (durationOrStartTime === "duration") {
+        setHistogramSingleGroupOperationData(processedHistogramSingleGroupData);
+        setIsDurationHistogramSingleGroupOperationVisible(true);
+      } else {
+        setHistogramSingleGroupOperationData(processedHistogramSingleGroupData);
+        setIsStartTimeHistogramSingleGroupOperationVisible(true);
+      }
+    } else if (durationOrStartTime === "duration") {
+      setIsDurationHistogramSingleGroupOperationVisible(
+        !isDurationHistogramSingleGroupOperationVisible
+      );
+    } else {
+      setIsStartTimeHistogramSingleGroupOperationVisible(
+        !isStartTimeHistogramSingleGroupOperationVisible
+      );
+    }
   };
 
   const handleGroupSpansClick = (groupID) => {
@@ -494,6 +551,7 @@ function AppGroups({ jsonData }) {
               Scatter Plot of Group {selectedGroupNumber}'s Operations
             </button>
           </div>
+
           {isDurationHistogramGroupsOperationsVisible && (
             <DurationHistogramGroupsOperations data={selectedGroupOperations} />
           )}
@@ -513,7 +571,27 @@ function AppGroups({ jsonData }) {
           )}
 
           {isScatterPlotGroupsOperationsVisible && (
-            <ScatterPlotGroupsOperations data={selectedGroupOperations} />
+            <ScatterPlotGroupsOperations
+              data={selectedGroupOperations}
+              onGroupOperationHistogramClick={
+                handleGroupOperationHistogramClick
+              }
+              onGroupOperationCloseClick={() => {
+                setIsDurationHistogramSingleGroupOperationVisible(null);
+                setIsStartTimeHistogramSingleGroupOperationVisible(null);
+              }}
+            >
+              {isDurationHistogramSingleGroupOperationVisible && (
+                <DurationHistogramSingleGroup
+                  data={HistogramSingleGroupOperationData}
+                />
+              )}
+              {isStartTimeHistogramSingleGroupOperationVisible && (
+                <StartTimeHistogramSingleGroup
+                  data={HistogramSingleGroupOperationData}
+                />
+              )}
+            </ScatterPlotGroupsOperations>
           )}
         </div>
       )}

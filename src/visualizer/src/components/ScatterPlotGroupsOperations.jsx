@@ -98,7 +98,9 @@ function Modal({ isOpen, onClose, children }) {
       <div className="modal-content">
         {children}
         <div>
-          <button onClick={onClose}>Cancel Chosen Group's Operation Selection</button>
+          <button onClick={onClose}>
+            Cancel Chosen Group's Operation Selection
+          </button>
         </div>
       </div>
     </div>
@@ -106,17 +108,65 @@ function Modal({ isOpen, onClose, children }) {
 }
 
 function ScatterPlotImpl(props) {
-  const { data, overValue, onValueOver, onValueOut } = props;
+  const { data, overValue, onValueOver, onValueOut, children } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedDataPoint, setClickedDataPoint] = useState(0);
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
+  const [
+    isDurationHistogramSingleGroupOperationVisible,
+    setIsDurationHistogramSingleGroupOperationVisible,
+  ] = useState(false);
+  const [
+    isStartTimeHistogramSingleGroupOperationVisible,
+    setIsStartTimeHistogramSingleGroupOperationVisible,
+  ] = useState(false);
 
   const isShiftPressed = useShiftPress();
 
   return (
     <div className="TraceResultsScatterPlot">
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setIsDurationHistogramSingleGroupOperationVisible(false);
+          setIsStartTimeHistogramSingleGroupOperationVisible(false);
+          props.onGroupOperationCloseClick();
+        }}
+      >
+        <button
+          className={`centered-text ${
+            isDurationHistogramSingleGroupOperationVisible ? "green" : ""
+          }`}
+          onClick={() => {
+            props.onGroupOperationHistogramClick(
+              clickedDataPoint.operationName,
+              "duration"
+            );
+            setIsDurationHistogramSingleGroupOperationVisible(
+              !isDurationHistogramSingleGroupOperationVisible
+            );
+          }}
+        >
+          View {clickedDataPoint.operationName} Operation's Duration Histogram
+        </button>
+        <button
+          className={`centered-text ${
+            isStartTimeHistogramSingleGroupOperationVisible ? "green" : ""
+          }`}
+          onClick={() => {
+            props.onGroupOperationHistogramClick(
+              clickedDataPoint.operationName,
+              "startTime"
+            );
+            setIsStartTimeHistogramSingleGroupOperationVisible(
+              !isStartTimeHistogramSingleGroupOperationVisible
+            );
+          }}
+        >
+          View {clickedDataPoint.operationName} Operation's Start Time Histogram
+        </button>
         <div></div>
       </Modal>
       <FlexibleXYPlot
@@ -188,6 +238,9 @@ function ScatterPlotImpl(props) {
                   onClick={() => {
                     setClickedDataPoint(overValue);
                     setIsModalOpen(true);
+                    setIsDurationHistogramSingleGroupOperationVisible(false);
+                    setIsStartTimeHistogramSingleGroupOperationVisible(false);
+                    props.onGroupOperationCloseClick();
                   }}
                 />
               </g>
@@ -197,7 +250,15 @@ function ScatterPlotImpl(props) {
           onValueMouseOut={onValueOut}
           data={data}
         />
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setIsDurationHistogramSingleGroupOperationVisible(false);
+            setIsStartTimeHistogramSingleGroupOperationVisible(false);
+            props.onGroupOperationCloseClick();
+          }}
+        >
           <h4 className="scatter-plot-hint">
             Group ID: {`${clickedDataPoint.groupID}`}
           </h4>
@@ -275,6 +336,7 @@ function ScatterPlotImpl(props) {
             Interquartile Range of Start Time:{" "}
             {`${clickedDataPoint.start_time_IQR} μs`}
           </h4>
+          {children}
         </Modal>
         {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
           <Highlight
