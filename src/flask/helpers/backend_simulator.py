@@ -45,10 +45,14 @@ def isParent(parent, span):
 
 
 def findRoot(spans):
+
+    if len(spans)==1:
+        return spans.pop(0)
+    
     for index, span in enumerate(spans):
         if len(span["references"]) == 0:
             spans.pop(index)
-            return span, spans
+            return span
     else:
         # span with invalid parent id become root
 
@@ -57,15 +61,15 @@ def findRoot(spans):
                 for w in span["warnings"]:
                     if "invalid parent" in w:
                         spans.pop(index)
-                        return span, spans
-                else:
-                    print("Error: Couldn't find root! Spans: ")
-                    for s in spans:
-                        x = json.dumps(s, indent=4)
-                        print("-" * 100)
-                        print(x)
-                        print("=" * 100)
-                    exit(1)
+                        return span
+        else:
+            print("Error: Couldn't find root! Spans: ")
+            for s in spans:
+                x = json.dumps(s, indent=4)
+                print("-" * 100)
+                print(x)
+                print("=" * 100)
+            exit(1)
 
 
 def get_callGraphRep(spans, root):
@@ -103,11 +107,16 @@ def get_groups(data):
     for trace in traces:
         trace_spans = trace["spans"][:]
 
-        trace_root, trace_spans = findRoot(trace_spans)
+        trace_root= findRoot(trace_spans)
 
         traces_callGraph_rep[trace["traceID"]] = {
             trace_root["operationName"]: get_callGraphRep(trace_spans, trace_root)
         }
+
+        #if any span left, trace have more than one root
+        while(len(trace_spans)!=0):
+            trace_root = findRoot(trace_spans)
+            traces_callGraph_rep[trace["traceID"]][trace_root["operationName"]] =get_callGraphRep(trace_spans, trace_root)
 
         # Collect start times
         for span in trace["spans"]:
