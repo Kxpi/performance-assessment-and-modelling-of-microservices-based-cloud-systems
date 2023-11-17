@@ -22,7 +22,11 @@ function HomePage() {
 
         {data && (
           <div>
-            <DropdownButton id="dropdown-basic-button" title="View Menu">
+            <DropdownButton
+              id="dropdown-basic-button"
+              title="View Menu"
+              style={{ zIndex: 9999 }}
+            >
               <Dropdown.Item onClick={() => setShowCallGraph(true)}>
                 Show CallGraph
               </Dropdown.Item>

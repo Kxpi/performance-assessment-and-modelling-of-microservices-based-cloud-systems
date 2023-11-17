@@ -443,7 +443,11 @@ function AppGroups({ jsonData }) {
 
         {view === "groups" && (
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
-            <DropdownButton id="dropdown-basic-button" title="Histograms">
+            <DropdownButton
+              id="dropdown-basic-button"
+              title="Histograms"
+              style={{ zIndex: 9999 }}
+            >
               <Dropdown.Item
                 style={{
                   backgroundColor: isDurationHistogramGroupVisible
@@ -474,7 +478,11 @@ function AppGroups({ jsonData }) {
               </Dropdown.Item>
             </DropdownButton>
 
-            <DropdownButton id="dropdown-basic-button" title="Scatter Plots">
+            <DropdownButton
+              id="dropdown-basic-button"
+              title="Scatter Plots"
+              style={{ zIndex: 9999 }}
+            >
               <Dropdown.Item
                 style={{
                   backgroundColor: isScatterPlotGroupVisible
@@ -493,7 +501,11 @@ function AppGroups({ jsonData }) {
 
         {view === "operation_stats" && (
           <div style={{ display: "flex", justifyContent: "flex-start" }}>
-            <DropdownButton id="dropdown-basic-button" title="Histograms">
+            <DropdownButton
+              id="dropdown-basic-button"
+              title="Histograms"
+              style={{ zIndex: 9999 }}
+            >
               <Dropdown.Item
                 style={{
                   backgroundColor: isDurationHistogramGroupsOperationsVisible
@@ -555,7 +567,11 @@ function AppGroups({ jsonData }) {
               </Dropdown.Item>
             </DropdownButton>
 
-            <DropdownButton id="dropdown-basic-button" title="Scatter Plots">
+            <DropdownButton
+              id="dropdown-basic-button"
+              title="Scatter Plots"
+              style={{ zIndex: 9999 }}
+            >
               <Dropdown.Item
                 style={{
                   backgroundColor: isScatterPlotGroupsOperationsVisible
