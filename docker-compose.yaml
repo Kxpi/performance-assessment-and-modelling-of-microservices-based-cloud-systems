@@ -1,5 +1,4 @@
-version: '3.8'
-
+version: "3.8"
 services:
   react:
     image: react_jaeger
@@ -10,7 +9,8 @@ services:
       - 3000:3000
     networks:
       - common
-
+    volumes:
+      - ./src/visualizer/src:/react-app/src
   flask:
     image: flask_jaeger
     build:
@@ -20,7 +20,6 @@ services:
       - 5000:5000
     networks:
       - common
-
 networks:
   common:
     driver: bridge

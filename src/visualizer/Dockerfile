@@ -4,6 +4,7 @@ FROM node:alpine AS development
 # Declaring env
 ENV NODE_ENV development
 ENV NODE_OPTIONS --openssl-legacy-provider
+ENV CHOKIDAR_USEPOLLING=true
 
 # Setting up the work directory
 WORKDIR /react-app
