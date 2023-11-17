@@ -88,46 +88,36 @@ function useShiftPress() {
   return isShiftPressed;
 }
 
-function Modal({ isOpen, onClose, children }) {
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        {children}
-        <div>
-          <button onClick={onClose}>Cancel Chosen Group Selection</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ScatterPlotImpl(props) {
+function ScatterPlotGroupsImpl(props) {
   const { data, overValue, onValueOver, onValueOut } = props;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [clickedDataPoint, setClickedDataPoint] = useState(0);
+  const [clickedDataPoint, setClickedDataPoint] = useState(null);
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
 
   const isShiftPressed = useShiftPress();
 
   return (
     <div className="TraceResultsScatterPlot">
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <button
-          onClick={() => props.onGroupOperationsClick(clickedDataPoint.groupID)}
-        >
-          See Group's {clickedDataPoint.groupID} Operations And Histograms
-        </button>
-        <button
-          onClick={() => props.onGroupSpansClick(clickedDataPoint.groupID)}
-        >
-          See Group's {clickedDataPoint.groupID} Spans
-        </button>
-      </Modal>
+      {clickedDataPoint && (
+        <div>
+          <button onClick={() => setClickedDataPoint(null)}>
+            Cancel Selection
+          </button>
+          <button
+            onClick={() =>
+              props.onGroupOperationsClick(clickedDataPoint.groupID)
+            }
+          >
+            See Group's {clickedDataPoint.groupID} Operations And Histograms
+          </button>
+          <button
+            onClick={() => props.onGroupSpansClick(clickedDataPoint.groupID)}
+          >
+            See Group's {clickedDataPoint.groupID} Spans
+          </button>
+        </div>
+      )}
+
       <FlexibleXYPlot
         xType="time"
         xDomain={
@@ -194,9 +184,9 @@ function ScatterPlotImpl(props) {
                   width={30}
                   height={30}
                   fill={color}
+                  style={{ pointerEvents: "all" }}
                   onClick={() => {
                     setClickedDataPoint(overValue);
-                    setIsModalOpen(true);
                   }}
                 />
               </g>
@@ -206,7 +196,25 @@ function ScatterPlotImpl(props) {
           onValueMouseOut={onValueOut}
           data={data}
         />
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+
+        {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
+          <Highlight
+            onBrushEnd={(area) => {
+              setLastDrawLocation(area);
+            }}
+            onDrag={(area) => {
+              setLastDrawLocation({
+                bottom: lastDrawLocation.bottom + (area.top - area.bottom),
+                left: lastDrawLocation.left - (area.right - area.left),
+                right: lastDrawLocation.right - (area.right - area.left),
+                top: lastDrawLocation.top + (area.top - area.bottom),
+              });
+            }}
+          />
+        )}
+      </FlexibleXYPlot>
+      {clickedDataPoint && (
+        <div>
           <h4 className="scatter-plot-hint">
             Group ID: {clickedDataPoint.groupID}
           </h4>
@@ -284,23 +292,8 @@ function ScatterPlotImpl(props) {
             Interquartile Range of Start Time:{" "}
             {`${clickedDataPoint.start_time_IQR} μs`}
           </h4>
-        </Modal>
-        {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
-          <Highlight
-            onBrushEnd={(area) => {
-              setLastDrawLocation(area);
-            }}
-            onDrag={(area) => {
-              setLastDrawLocation({
-                bottom: lastDrawLocation.bottom + (area.top - area.bottom),
-                left: lastDrawLocation.left - (area.right - area.left),
-                right: lastDrawLocation.right - (area.right - area.left),
-                top: lastDrawLocation.top + (area.top - area.bottom),
-              });
-            }}
-          />
-        )}
-      </FlexibleXYPlot>
+        </div>
+      )}
     </div>
   );
 }
@@ -312,14 +305,14 @@ const valueShape = PropTypes.shape({
   name: PropTypes.string,
 });
 
-ScatterPlotImpl.propTypes = {
+ScatterPlotGroupsImpl.propTypes = {
   data: PropTypes.arrayOf(valueShape).isRequired,
   overValue: valueShape,
   onValueOut: PropTypes.func.isRequired,
   onValueOver: PropTypes.func.isRequired,
 };
 
-ScatterPlotImpl.defaultProps = {
+ScatterPlotGroupsImpl.defaultProps = {
   overValue: null,
   // JSDOM does not, as of 2023, have a layout engine, so allow tests to supply a mock width as a workaround.
 };
@@ -330,8 +323,8 @@ const ScatterPlotGroups = compose(
     onValueOver: (value) => setOverValue(value),
     onValueOut: () => setOverValue(null),
   }))
-)(ScatterPlotImpl);
+)(ScatterPlotGroupsImpl);
 
-export { ScatterPlotImpl as ScatterPlotGroupsImpl };
+export { ScatterPlotGroupsImpl as ScatterPlotGroupsImpl };
 
 export default ScatterPlotGroups;

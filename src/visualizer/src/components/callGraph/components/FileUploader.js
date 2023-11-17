@@ -95,7 +95,6 @@ const FileUploader = ({ setData }) => {
   );
 };
 
-// Styl dropzone, możesz dostosować go według własnych preferencji
 const dropzoneStyle = {
   width: "200px",
   height: "38px",
@@ -105,9 +104,10 @@ const dropzoneStyle = {
   alignItems: "center",
   justifyContent: "center",
   cursor: "pointer",
+  fontSize: "0.9rem",
+  padding: "0.375rem 1rem",
 };
 
-// Styl przycisku, możesz dostosować go według własnych preferencji
 const buttonStyle = {
   fontSize: "0.9rem",
   padding: "0.375rem 1rem",

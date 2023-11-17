@@ -9,6 +9,7 @@ import StartTimeHistogramGroups from "./components/StartTimeHistogramGroups";
 import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramGroupsOperations";
 import DurationHistogramSingleGroup from "./components/DurationHistogramSingleGroup";
 import StartTimeHistogramSingleGroup from "./components/StartTimeHistogramSingleGroup";
+import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 
 const svgComponents = Object.entries(SVGs)
   .sort(([keyA], [keyB]) => {
@@ -422,181 +423,275 @@ function AppGroups({ jsonData }) {
   }, [jsonData]);
 
   return (
-    <div className="App">
-      {(view === "operation_stats" || view === "spans") && (
-        <button className="BTG" onClick={handleBackClick}>
-          Back to groups
-        </button>
-      )}
-      {view === "groups" && (
-        <div>
-          <div className="show-button">
-            <button
-              className={`centered-text ${
-                isDurationHistogramGroupVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setDurationHistogramGroupVisibility(
-                  !isDurationHistogramGroupVisible
-                )
-              }
-            >
-              Duration Histogram of Groups
-            </button>
-            <button
-              className={`centered-text ${
-                isStartTimeHistogramGroupVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setStartTimeHistogramGroupVisibility(
-                  !isStartTimeHistogramGroupVisible
-                )
-              }
-            >
-              Start Time Histogram of Groups
-            </button>
-            <button
-              className={`centered-text ${
-                isScatterPlotGroupVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setScatterPlotGroupVisibility(!isScatterPlotGroupVisible)
-              }
-            >
-              Scatter Plot of Groups
-            </button>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+        }}
+      >
+        {(view === "operation_stats" || view === "spans") && (
+          <Button
+            variant="primary"
+            onClick={handleBackClick}
+            style={buttonStyle}
+          >
+            Back to groups
+          </Button>
+        )}
+
+        {view === "groups" && (
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            <DropdownButton id="dropdown-basic-button" title="Histograms">
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isDurationHistogramGroupVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setDurationHistogramGroupVisibility(
+                    !isDurationHistogramGroupVisible
+                  )
+                }
+              >
+                Duration Histogram of Groups
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isStartTimeHistogramGroupVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setStartTimeHistogramGroupVisibility(
+                    !isStartTimeHistogramGroupVisible
+                  )
+                }
+              >
+                Start Time Histogram of Groups
+              </Dropdown.Item>
+            </DropdownButton>
+
+            <DropdownButton id="dropdown-basic-button" title="Scatter Plots">
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isScatterPlotGroupVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setScatterPlotGroupVisibility(!isScatterPlotGroupVisible)
+                }
+              >
+                Scatter Plot of Groups
+              </Dropdown.Item>
+            </DropdownButton>
           </div>
-          {isDurationHistogramGroupVisible && (
-            <DurationHistogramGroups data={data} />
-          )}
+        )}
 
-          {isStartTimeHistogramGroupVisible && (
-            <StartTimeHistogramGroups data={data} />
-          )}
+        {view === "operation_stats" && (
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            <DropdownButton id="dropdown-basic-button" title="Histograms">
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isDurationHistogramGroupsOperationsVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setDurationHistogramGroupsOperationsVisibility(
+                    !isDurationHistogramGroupsOperationsVisible
+                  )
+                }
+              >
+                Duration Histogram of Group {selectedGroupNumber}'s Operations
+              </Dropdown.Item>
 
-          {isScatterPlotGroupVisible && (
-            <ScatterPlotGroups
-              data={data}
-              onGroupOperationsClick={handleGroupOperationsClick}
-              onGroupSpansClick={handleGroupSpansClick}
-            />
-          )}
-        </div>
-      )}
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isStartTimeHistogramGroupsOperationsVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setStartTimeHistogramGroupsOperationsVisibility(
+                    !isStartTimeHistogramGroupsOperationsVisible
+                  )
+                }
+              >
+                Start Time Histogram of Group {selectedGroupNumber}'s Operations
+              </Dropdown.Item>
+
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isDurationHistogramSingleGroupVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setDurationHistogramSingleGroupVisibility(
+                    !isDurationHistogramSingleGroupVisible
+                  )
+                }
+              >
+                Duration Histogram of a {selectedGroupNumber}'s Group
+              </Dropdown.Item>
+
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isStartTimeHistogramSingleGroupVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setStartTimeHistogramSingleGroupVisibility(
+                    !isStartTimeHistogramSingleGroupVisible
+                  )
+                }
+              >
+                Start Time Histogram of a {selectedGroupNumber}'s Group
+              </Dropdown.Item>
+            </DropdownButton>
+
+            <DropdownButton id="dropdown-basic-button" title="Scatter Plots">
+              <Dropdown.Item
+                style={{
+                  backgroundColor: isScatterPlotGroupsOperationsVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() =>
+                  setScatterPlotGroupsOperationsVisibility(
+                    !isScatterPlotGroupsOperationsVisible
+                  )
+                }
+              >
+                Scatter Plot of Group {selectedGroupNumber}'s Operations
+              </Dropdown.Item>
+            </DropdownButton>
+          </div>
+        )}
+      </div>
+
       {view === "operation_stats" && (
-        <div>
-          <div className="show-button">
-            <button
-              className={`centered-text ${
-                isDurationHistogramGroupsOperationsVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setDurationHistogramGroupsOperationsVisibility(
-                  !isDurationHistogramGroupsOperationsVisible
-                )
-              }
-            >
-              Duration Histogram of Group {selectedGroupNumber}'s Operations
-            </button>
-
-            <button
-              className={`centered-text ${
-                isStartTimeHistogramGroupsOperationsVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setStartTimeHistogramGroupsOperationsVisibility(
-                  !isStartTimeHistogramGroupsOperationsVisible
-                )
-              }
-            >
-              Start Time Histogram of Group {selectedGroupNumber}'s Operations
-            </button>
-
-            <button
-              className={`centered-text ${
-                isDurationHistogramSingleGroupVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setDurationHistogramSingleGroupVisibility(
-                  !isDurationHistogramSingleGroupVisible
-                )
-              }
-            >
-              Duration Histogram of a {selectedGroupNumber}'s Group
-            </button>
-
-            <button
-              className={`centered-text ${
-                isStartTimeHistogramSingleGroupVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setStartTimeHistogramSingleGroupVisibility(
-                  !isStartTimeHistogramSingleGroupVisible
-                )
-              }
-            >
-              Start Time Histogram of a {selectedGroupNumber}'s Group
-            </button>
-
-            <button
-              className={`centered-text ${
-                isScatterPlotGroupsOperationsVisible ? "green" : ""
-              }`}
-              onClick={() =>
-                setScatterPlotGroupsOperationsVisibility(
-                  !isScatterPlotGroupsOperationsVisible
-                )
-              }
-            >
-              Scatter Plot of Group {selectedGroupNumber}'s Operations
-            </button>
-          </div>
-
+        <div className="App">
           {isDurationHistogramGroupsOperationsVisible && (
-            <DurationHistogramGroupsOperations data={selectedGroupOperations} />
+            <div>
+              <div className="centered-text">
+                Duration Histogram of Group {selectedGroupNumber}'s Operations
+              </div>
+              <DurationHistogramGroupsOperations
+                data={selectedGroupOperations}
+              />
+            </div>
           )}
-
           {isStartTimeHistogramGroupsOperationsVisible && (
-            <StartTimeHistogramGroupsOperations
-              data={selectedGroupOperations}
-            />
+            <div>
+              <div className="centered-text">
+                Start Time Histogram of Group {selectedGroupNumber}'s Operations
+              </div>
+              <StartTimeHistogramGroupsOperations
+                data={selectedGroupOperations}
+              />
+            </div>
           )}
-
           {isDurationHistogramSingleGroupVisible && data.length > 0 && (
-            <DurationHistogramSingleGroup data={histogramSingleGroupData} />
+            <div>
+              <div className="centered-text">
+                Duration Histogram of Group {selectedGroupNumber}
+              </div>
+              <DurationHistogramSingleGroup data={histogramSingleGroupData} />
+            </div>
           )}
-
           {isStartTimeHistogramSingleGroupVisible && data.length > 0 && (
-            <StartTimeHistogramSingleGroup data={histogramSingleGroupData} />
+            <div>
+              <div className="centered-text">
+                Start Time Histogram of Group {selectedGroupNumber}
+              </div>
+              <StartTimeHistogramSingleGroup data={histogramSingleGroupData} />
+            </div>
           )}
 
           {isScatterPlotGroupsOperationsVisible && (
-            <ScatterPlotGroupsOperations
-              data={selectedGroupOperations}
-              onGroupOperationHistogramClick={
-                handleGroupOperationHistogramClick
-              }
-              onGroupOperationCloseClick={() => {
-                setIsDurationHistogramSingleGroupOperationVisible(null);
-                setIsStartTimeHistogramSingleGroupOperationVisible(null);
-              }}
-            >
-              {isDurationHistogramSingleGroupOperationVisible && (
-                <DurationHistogramSingleGroup
-                  data={HistogramSingleGroupOperationData}
-                />
-              )}
-              {isStartTimeHistogramSingleGroupOperationVisible && (
-                <StartTimeHistogramSingleGroup
-                  data={HistogramSingleGroupOperationData}
-                />
-              )}
-            </ScatterPlotGroupsOperations>
+            <div>
+              <div className="centered-text">
+                Scatter Plot of Group {selectedGroupNumber}'s Operations
+              </div>
+              <ScatterPlotGroupsOperations
+                data={selectedGroupOperations}
+                onGroupOperationHistogramClick={
+                  handleGroupOperationHistogramClick
+                }
+                onGroupOperationCloseClick={() => {
+                  setIsDurationHistogramSingleGroupOperationVisible(null);
+                  setIsStartTimeHistogramSingleGroupOperationVisible(null);
+                }}
+              >
+                {isDurationHistogramSingleGroupOperationVisible && (
+                  <div>
+                    <div className="centered-text">
+                      Duration Histogram of Group {selectedGroupNumber}'s
+                      Operation
+                    </div>
+                    <DurationHistogramSingleGroup
+                      data={HistogramSingleGroupOperationData}
+                    />
+                  </div>
+                )}
+                {isStartTimeHistogramSingleGroupOperationVisible && (
+                  <div>
+                    <div className="centered-text">
+                      Start Time Histogram of Group {selectedGroupNumber}'s
+                      Operation
+                    </div>
+                    <StartTimeHistogramSingleGroup
+                      data={HistogramSingleGroupOperationData}
+                    />
+                  </div>
+                )}
+              </ScatterPlotGroupsOperations>
+            </div>
           )}
         </div>
       )}
+
+      {view === "groups" && (
+        <div className="App">
+          {isDurationHistogramGroupVisible && (
+            <div>
+              <div className="centered-text">
+                Duration Histogram of Group {selectedGroupNumber}'s Spans
+              </div>
+              <DurationHistogramGroups data={data} />
+            </div>
+          )}
+
+          {isStartTimeHistogramGroupVisible && (
+            <div>
+              <div className="centered-text">
+                Start Time Histogram of Group {selectedGroupNumber}'s Spans
+              </div>
+              <StartTimeHistogramGroups data={data} />
+            </div>
+          )}
+
+          {isScatterPlotGroupVisible && (
+            <div>
+              <div className="centered-text">Scatter Plot of Groups</div>
+              <ScatterPlotGroups
+                data={data}
+                onGroupOperationsClick={handleGroupOperationsClick}
+                onGroupSpansClick={handleGroupSpansClick}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
       {view === "spans" && (
-        <div>
+        <div className="App">
           <div className="centered-text">
             Scatter Plot of Group {selectedGroupNumber}'s Spans
           </div>
@@ -606,5 +701,11 @@ function AppGroups({ jsonData }) {
     </div>
   );
 }
+
+const buttonStyle = {
+  fontSize: "0.9rem",
+  padding: "0.375rem 1rem",
+  height: "38px",
+};
 
 export default AppGroups;

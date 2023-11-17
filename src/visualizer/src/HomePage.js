@@ -10,10 +10,14 @@ function HomePage() {
   const [showCallGraph, setShowCallGraph] = useState(true);
 
   return (
-    <div>
-      <h1>Trace Visualizer</h1>
-
-      <div style={{ display: "flex", justifyContent: "flex-start" }}>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+        }}
+      >
         <FileUploader setData={setData} />
 
         {data && (
@@ -31,7 +35,7 @@ function HomePage() {
       </div>
 
       {data && (
-        <div>
+        <div style={{ width: "100%" }}>
           {showCallGraph ? (
             <CallGraphPage data={data} />
           ) : (
