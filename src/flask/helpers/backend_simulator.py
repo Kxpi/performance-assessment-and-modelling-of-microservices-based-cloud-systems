@@ -69,26 +69,30 @@ def findRoot(spans):
                 print("-" * 100)
                 print(x)
                 print("=" * 100)
-            exit(1)
+
+            return -1
+            #exit(1)
 
 
 def get_callGraphRep(spans, root):
     # callGraph represented by nested dictionaries
-    callGraph = {}
-    i = 0
 
-    while spans and i < len(spans):
-        if isParent(root, spans[i]):
-            span = spans.pop(i)
+    callGraph = {}
+    c=0
+    
+    for i, span in enumerate(spans[:]):
+        if isParent(root, span):
+            c+=1
             cName = span["operationName"]
-            callGraph[cName] = get_callGraphRep(spans, span)
-        else:
-            i += 1
+            result = get_callGraphRep(spans[:i] + spans[i+1:], span)
+            callGraph[cName] = result[0]
+            c+= result[1]
+            
 
     if callGraph:
-        return callGraph
+        return callGraph,c
     else:
-        return None
+        return None,0
 
 
 def get_groups(data):
@@ -109,13 +113,19 @@ def get_groups(data):
 
         trace_root= findRoot(trace_spans)
 
-        traces_callGraph_rep[trace["traceID"]] = {
-            trace_root["operationName"]: get_callGraphRep(trace_spans, trace_root)
-        }
+        callG,used_spans=get_callGraphRep(trace_spans, trace_root)
+
+        traces_callGraph_rep[trace["traceID"]] = {trace_root["operationName"]: callG}
 
         #if any span left, trace have more than one root
-        while(len(trace_spans)!=0):
+        while (len(trace_spans)-used_spans)!=0:
+            
             trace_root = findRoot(trace_spans)
+            if(trace_root==-1):
+                for s in trace_spans:
+                    traces_callGraph_rep[trace["traceID"]][s["operationName"]]=None
+                break
+                
             traces_callGraph_rep[trace["traceID"]][trace_root["operationName"]] =get_callGraphRep(trace_spans, trace_root)
 
         # Collect start times
