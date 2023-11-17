@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
+import { Button } from "react-bootstrap";
 
 const FileUploader = ({ setData }) => {
   const [fileContent, setFileContent] = useState(null);
@@ -68,29 +69,49 @@ const FileUploader = ({ setData }) => {
   }, [fileContent]);
 
   return (
-    <div {...getRootProps()} style={dropzoneStyle}>
-      <input {...getInputProps()} />
-      {isLoading ? (
-        <ThreeDots type="ThreeDots" color="#00BFFF" height={80} width={80} />
-      ) : isDragActive ? (
-        <p>Drop JSON file here...</p>
-      ) : (
-        <p>Drag & drop file here, or click to select json file</p>
-      )}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "flex-start",
+        alignItems: "center",
+      }}
+    >
+      <div {...getRootProps()} style={isDragActive ? dropzoneStyle : {}}>
+        <input {...getInputProps()} />
+        {isLoading ? (
+          <ThreeDots type="ThreeDots" color="#00BFFF" height={80} width={80} />
+        ) : (
+          <Button
+            variant="primary"
+            as="label"
+            htmlFor="file-upload"
+            style={buttonStyle}
+          >
+            Upload JSON
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
 
 // Styl dropzone, możesz dostosować go według własnych preferencji
 const dropzoneStyle = {
-  width: "75%",
-  minHeight: "150px",
+  width: "200px",
+  height: "38px",
   border: "2px dashed #cccccc",
   borderRadius: "4px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   cursor: "pointer",
+};
+
+// Styl przycisku, możesz dostosować go według własnych preferencji
+const buttonStyle = {
+  fontSize: "0.9rem",
+  padding: "0.375rem 1rem",
+  height: "38px",
 };
 
 export default FileUploader;
