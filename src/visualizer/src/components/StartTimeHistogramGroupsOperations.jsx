@@ -22,7 +22,7 @@ function StartTimeHistogramGroupsOperations({ data }) {
   }, [margin.left, margin.right, margin.top, margin.bottom]);
 
   // sort data from highest to lowest
-  data.sort((a, b) => b.y - a.y);
+  data.sort((a, b) => b.startTime99Percentile - a.startTime99Percentile);
 
   // Create scales
   const x = d3
@@ -32,7 +32,7 @@ function StartTimeHistogramGroupsOperations({ data }) {
     .padding(0.1);
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.x)]) // Use d.x for y scale
+    .domain([0, d3.max(data, (d) => d.startTime99Percentile)]) // Use d.startTime99Percentile for y scale
     .range([height, 0]);
 
   // Create axes
@@ -42,27 +42,20 @@ function StartTimeHistogramGroupsOperations({ data }) {
   // Function to update the y-axis units
   function updateUnits(data) {
     // Determine the maximum value in the data
-    const maxValue = d3.max(data, (d) => d.x);
+    const maxValue = d3.max(data, (d) => d.startTime99Percentile);
 
     // Determine the appropriate units based on the maximum value
     let units;
     if (maxValue < 1000) {
       units = "μs"; // microseconds
-    } else if (maxValue < 1000000) {
-      units = "ms"; // milliseconds
     } else {
-      units = "s"; // seconds
+      units = "ms"; // milliseconds
     }
 
     // Update the y-axis with the appropriate tick format
     yAxis
       .scale(y)
-      .tickFormat(
-        (d) =>
-          `${
-            d / (units === "s" ? 1000000 : units === "ms" ? 1000 : 1)
-          } ${units}`
-      );
+      .tickFormat((d) => `${d / (units === "ms" ? 1000 : 1)} ${units}`);
   }
 
   // Call updateUnits with your data
@@ -70,47 +63,49 @@ function StartTimeHistogramGroupsOperations({ data }) {
 
   // Render the histogram
   return (
-    <svg
-      viewBox={`0 0 ${width + margin.left + margin.right} ${
-        height + margin.top + margin.bottom
-      }`}
-      style={{ width: "100%", height: "auto" }}
-    >
-      <g transform={`translate(${margin.left},${margin.top})`}>
-        {data.map((d, i) => (
-          <rect
-            key={i}
-            x={x(i)}
-            y={y(d.x)} // Use d.x for y value
-            width={x.bandwidth()}
-            height={height - y(d.x)} // Use d.x for height
-            fill={d.color}
+    <div className="App">
+      <svg
+        viewBox={`0 0 ${width + margin.left + margin.right} ${
+          height + margin.top + margin.bottom
+        }`}
+        style={{ width: "100%", height: "auto" }}
+      >
+        <g transform={`translate(${margin.left},${margin.top})`}>
+          {data.map((d, i) => (
+            <rect
+              key={i}
+              x={x(i)}
+              y={y(d.startTime99Percentile)} // Use d.startTime99Percentile for y value
+              width={x.bandwidth()}
+              height={height - y(d.startTime99Percentile)} // Use d.startTime99Percentile for height
+              fill={d.color}
+            />
+          ))}
+          <g
+            ref={(node) => d3.select(node).call(xAxis)}
+            style={{ transform: `translateY(${height}px)` }}
+            className="axis"
           />
-        ))}
-        <g
-          ref={(node) => d3.select(node).call(xAxis)}
-          style={{ transform: `translateY(${height}px)` }}
-          className="axis"
-        />
-        <g ref={(node) => d3.select(node).call(yAxis)} className="axis" />
-        <text
-          transform="rotate(-90)"
-          y={0 - margin.left}
-          x={0 - height / 2}
-          dy="1em"
-          style={{ textAnchor: "middle" }}
-        >
-          Median Start Time
-        </text>
-        <text
-          x={width / 2}
-          y={height + margin.bottom / 2}
-          style={{ textAnchor: "middle" }}
-        >
-          Operation Name
-        </text>
-      </g>
-    </svg>
+          <g ref={(node) => d3.select(node).call(yAxis)} className="axis" />
+          <text
+            transform="rotate(-90)"
+            y={0 - margin.left}
+            x={0 - height / 2}
+            dy="1em"
+            style={{ textAnchor: "middle" }}
+          >
+            99th Percentile of Start Time
+          </text>
+          <text
+            x={width / 2}
+            y={height + margin.bottom / 2}
+            style={{ textAnchor: "middle" }}
+          >
+            Operation Name
+          </text>
+        </g>
+      </svg>
+    </div>
   );
 }
 

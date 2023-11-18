@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { compose, withState, withProps } from "recompose";
-import _dropWhile from "lodash/dropWhile";
-import _round from "lodash/round";
+
 import {
   XYPlot,
   XAxis,
@@ -16,48 +15,14 @@ import {
   makeHeightFlexible,
 } from "react-vis";
 import "react-vis/dist/style.css";
-
-const ONE_DAY = 25 * 60 * 60 * 1000000; // microseconds in a day
-const ONE_HOUR = 60 * 60 * 1000000; // microseconds in an hour
-const ONE_MINUTE = 60 * 1000000; // microseconds in a minute
-const ONE_SECOND = 1000000; // microseconds in a second
-const ONE_MILLISECOND = 1000; // microseconds in a millisecond
-
-const UNIT_STEPS = [
-  { unit: "d", microseconds: ONE_DAY, ofPrevious: 24 },
-  { unit: "h", microseconds: ONE_HOUR, ofPrevious: 60 },
-  { unit: "m", microseconds: ONE_MINUTE, ofPrevious: 60 },
-  { unit: "s", microseconds: ONE_SECOND, ofPrevious: 1000 },
-  { unit: "ms", microseconds: ONE_MILLISECOND, ofPrevious: 1000 },
-  { unit: "μs", microseconds: 1, ofPrevious: 1000 },
-];
+import { Dropdown } from "react-bootstrap";
 
 const FlexibleXYPlot = makeHeightFlexible(makeWidthFlexible(XYPlot));
 
 function formatDuration(duration) {
-  // Drop all units that are too large except the last one
-  const [primaryUnit, secondaryUnit] = _dropWhile(
-    UNIT_STEPS,
-    ({ microseconds }, index) =>
-      index < UNIT_STEPS.length - 1 && microseconds > duration
-  );
-
-  if (primaryUnit.ofPrevious === 1000) {
-    // If the unit is decimal based, display as a decimal
-    return `${_round(duration / primaryUnit.microseconds, 2)}${
-      primaryUnit.unit
-    }`;
-  }
-
-  const primaryValue = Math.floor(duration / primaryUnit.microseconds);
-  const primaryUnitString = `${primaryValue}${primaryUnit.unit}`;
-  const secondaryValue = Math.round(
-    (duration / secondaryUnit.microseconds) % primaryUnit.ofPrevious
-  );
-  const secondaryUnitString = `${secondaryValue}${secondaryUnit.unit}`;
-  return secondaryValue === 0
-    ? primaryUnitString
-    : `${primaryUnitString} ${secondaryUnitString}`;
+  // Convert microseconds to milliseconds
+  const durationInMilliseconds = duration / 1000;
+  return `${durationInMilliseconds} ms`;
 }
 
 function useShiftPress() {
@@ -89,7 +54,15 @@ function useShiftPress() {
 }
 
 function ScatterPlotImpl(props) {
-  const { data, overValue, onValueOver, onValueOut, children } = props;
+  const {
+    data,
+    overValue,
+    onValueOver,
+    onValueOut,
+    children,
+    selectedGroupNumber,
+    showMenu,
+  } = props;
 
   const [clickedDataPoint, setClickedDataPoint] = useState(null);
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
@@ -105,232 +78,285 @@ function ScatterPlotImpl(props) {
   const isShiftPressed = useShiftPress();
 
   return (
-    <div className="TraceResultsScatterPlot">
-      {clickedDataPoint && (
-        <div>
-          <button
-            onClick={() => {
-              setClickedDataPoint(null);
-              setIsDurationHistogramSingleGroupOperationVisible(false);
-              setIsStartTimeHistogramSingleGroupOperationVisible(false);
-              props.onGroupOperationCloseClick();
-            }}
-          >
-            Cancel Selection
-          </button>
-          <button
-            className={`centered-text ${
-              isDurationHistogramSingleGroupOperationVisible ? "green" : ""
-            }`}
-            onClick={() => {
-              props.onGroupOperationHistogramClick(
-                clickedDataPoint.operationName,
-                "duration"
-              );
-              setIsDurationHistogramSingleGroupOperationVisible(
-                !isDurationHistogramSingleGroupOperationVisible
-              );
-            }}
-          >
-            View {clickedDataPoint.operationName} Operation's Duration Histogram
-          </button>
-          <button
-            className={`centered-text ${
-              isStartTimeHistogramSingleGroupOperationVisible ? "green" : ""
-            }`}
-            onClick={() => {
-              props.onGroupOperationHistogramClick(
-                clickedDataPoint.operationName,
-                "startTime"
-              );
-              setIsStartTimeHistogramSingleGroupOperationVisible(
-                !isStartTimeHistogramSingleGroupOperationVisible
-              );
-            }}
-          >
-            View {clickedDataPoint.operationName} Operation's Start Time
-            Histogram
-          </button>
-        </div>
-      )}
-      <FlexibleXYPlot
-        xType="time"
-        xDomain={
-          lastDrawLocation && [lastDrawLocation.left, lastDrawLocation.right]
-        }
-        yDomain={
-          lastDrawLocation && [lastDrawLocation.bottom, lastDrawLocation.top]
-        }
-        margin={{
-          top: 25,
-          left: 80,
-          right: 60,
-        }}
-        colorType="literal"
-      >
-        <HorizontalGridLines />
-        <VerticalGridLines />
-        <XAxis
-          title="Median Start Time Counted From The Earliest Span"
-          tickTotal={18}
-          tickFormat={(t) => formatDuration(t)}
-        />
-        <YAxis title="Median Duration" tickFormat={(t) => formatDuration(t)} />
-        {data.map((d, i) => {
-          return [
-            <HorizontalRectSeries
-              key={`${i}-box`}
-              stroke={d.color}
-              style={{ strokeWidth: 1 }}
-              data={[
-                {
-                  x: d.startTimeQ4,
-                  y: d.durationQ0,
-                  x0: d.startTimeQ0,
-                  y0: d.durationQ4,
-                  color: `rgba(128, 128, 0, 0.15)`,
-                },
-              ]}
-            />,
-            <HorizontalRectSeries
-              key={`${i}-inner-box`}
-              stroke={d.color}
-              style={{ strokeWidth: 1 }}
-              data={[
-                {
-                  x: d.startTimeQ3,
-                  y: d.durationQ1,
-                  x0: d.startTimeQ1,
-                  y0: d.durationQ3,
-                  color: `rgba(255, 99, 71, 0.15)`,
-                },
-              ]}
-            />,
-          ];
-        })}
-        <CustomSVGSeries
-          className="mark-series-fill"
-          opacity={0.5}
-          customComponent={({ color, svg }) => {
-            const Svg = svg;
-            return (
-              <g transform="translate(-10, -15)">
-                <Svg
-                  width={30}
-                  height={30}
-                  fill={color}
-                  onClick={() => {
-                    setClickedDataPoint(overValue);
-                    setIsDurationHistogramSingleGroupOperationVisible(false);
-                    setIsStartTimeHistogramSingleGroupOperationVisible(false);
-                    props.onGroupOperationCloseClick();
-                  }}
-                />
-              </g>
-            );
+    <div>
+      {clickedDataPoint && showMenu && (
+        <div
+          style={{
+            position: "fixed",
+            top: 80,
+            zIndex: 9998,
+            display: "flex",
+            alignItems: "center",
           }}
-          onValueMouseOver={onValueOver}
-          onValueMouseOut={onValueOut}
-          data={data}
-        />
-        {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
-          <Highlight
-            onBrushEnd={(area) => {
-              setLastDrawLocation(area);
-            }}
-            onDrag={(area) => {
-              setLastDrawLocation({
-                bottom: lastDrawLocation.bottom + (area.top - area.bottom),
-                left: lastDrawLocation.left - (area.right - area.left),
-                right: lastDrawLocation.right - (area.right - area.left),
-                top: lastDrawLocation.top + (area.top - area.bottom),
-              });
-            }}
-          />
-        )}
-      </FlexibleXYPlot>
-      {clickedDataPoint && (
-        <div>
-          <h4 className="scatter-plot-hint">
-            Group ID: {`${clickedDataPoint.groupID}`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Operation Name: {`${clickedDataPoint.operationName}`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Average Duration: {`${clickedDataPoint.exec_time_average} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Min Duration: {`${clickedDataPoint.exec_time_min} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            First Quartile of Duration: {`${clickedDataPoint.exec_time_q1} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Second Quartile of Duration: {`${clickedDataPoint.exec_time_q2} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Third Quartile of Duration: {`${clickedDataPoint.exec_time_q3} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Max Duration: {`${clickedDataPoint.exec_time_max} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            95th Percentile of Duration:{" "}
-            {`${clickedDataPoint.exec_time_95_percentile} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            99th Percentile of Duration:{" "}
-            {`${clickedDataPoint.exec_time_99_percentile} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Standard Deviation of Duration:{" "}
-            {`${clickedDataPoint.exec_time_stddev} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Interquartile Range of Duration:{" "}
-            {`${clickedDataPoint.exec_time_IQR} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Average Start Time: {`${clickedDataPoint.start_time_average} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Min Start Time: {`${clickedDataPoint.start_time_min} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            First Quartile of Start Time:{" "}
-            {`${clickedDataPoint.start_time_q1} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Second Quartile of Start Time:{" "}
-            {`${clickedDataPoint.start_time_q2} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Third Quartile of Start Time:{" "}
-            {`${clickedDataPoint.start_time_q3} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Max Start Time: {`${clickedDataPoint.start_time_max} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            95th Percentile of Start Time:{" "}
-            {`${clickedDataPoint.start_time_95_percentile} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            99th Percentile of Start Time:{" "}
-            {`${clickedDataPoint.start_time_99_percentile} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Standard Deviation of Start Time:{" "}
-            {`${clickedDataPoint.start_time_stddev} μs`}
-          </h4>
-          <h4 className="scatter-plot-hint">
-            Interquartile Range of Start Time:{" "}
-            {`${clickedDataPoint.start_time_IQR} μs`}
-          </h4>
+        >
+          <Dropdown>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+              Selection Options
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => {
+                  setClickedDataPoint(null);
+                  setIsDurationHistogramSingleGroupOperationVisible(false);
+                  setIsStartTimeHistogramSingleGroupOperationVisible(false);
+                  props.onGroupOperationCloseClick();
+                }}
+              >
+                Cancel Selection
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  backgroundColor:
+                    isDurationHistogramSingleGroupOperationVisible
+                      ? "chartreuse"
+                      : "white",
+                }}
+                onClick={() => {
+                  props.onGroupOperationHistogramClick(
+                    clickedDataPoint.operationName,
+                    "duration"
+                  );
+                  setIsDurationHistogramSingleGroupOperationVisible(
+                    !isDurationHistogramSingleGroupOperationVisible
+                  );
+                }}
+              >
+                View {clickedDataPoint.operationName} Operation's Duration
+                Histogram
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  backgroundColor:
+                    isStartTimeHistogramSingleGroupOperationVisible
+                      ? "chartreuse"
+                      : "white",
+                }}
+                onClick={() => {
+                  props.onGroupOperationHistogramClick(
+                    clickedDataPoint.operationName,
+                    "startTime"
+                  );
+                  setIsStartTimeHistogramSingleGroupOperationVisible(
+                    !isStartTimeHistogramSingleGroupOperationVisible
+                  );
+                }}
+              >
+                View {clickedDataPoint.operationName} Operation's Start Time
+                Histogram
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       )}
-      {children}
+
+      <div className="App">
+        <div className="TraceResultsScatterPlot">
+          <div className="centered-text">
+            Scatter Plot of Group {selectedGroupNumber}'s Operations
+          </div>
+          <FlexibleXYPlot
+            xType="time"
+            xDomain={
+              lastDrawLocation && [
+                lastDrawLocation.left,
+                lastDrawLocation.right,
+              ]
+            }
+            yDomain={
+              lastDrawLocation && [
+                lastDrawLocation.bottom,
+                lastDrawLocation.top,
+              ]
+            }
+            margin={{
+              top: 25,
+              left: 80,
+              right: 60,
+            }}
+            colorType="literal"
+          >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            <XAxis
+              title="Median Start Time Counted From The Earliest Span"
+              tickTotal={18}
+              tickFormat={(t) => formatDuration(t)}
+            />
+            <YAxis
+              title="Median Duration"
+              tickFormat={(t) => formatDuration(t)}
+            />
+            {data.map((d, i) => {
+              return [
+                <HorizontalRectSeries
+                  key={`${i}-box`}
+                  stroke={d.color}
+                  style={{ strokeWidth: 1 }}
+                  data={[
+                    {
+                      x: d.startTimeQ4,
+                      y: d.durationQ0,
+                      x0: d.startTimeQ0,
+                      y0: d.durationQ4,
+                      color: `rgba(128, 128, 0, 0.15)`,
+                    },
+                  ]}
+                />,
+                <HorizontalRectSeries
+                  key={`${i}-inner-box`}
+                  stroke={d.color}
+                  style={{ strokeWidth: 1 }}
+                  data={[
+                    {
+                      x: d.startTimeQ3,
+                      y: d.durationQ1,
+                      x0: d.startTimeQ1,
+                      y0: d.durationQ3,
+                      color: `rgba(255, 99, 71, 0.15)`,
+                    },
+                  ]}
+                />,
+              ];
+            })}
+            <CustomSVGSeries
+              className="mark-series-fill"
+              opacity={0.5}
+              customComponent={({ color, svg }) => {
+                const Svg = svg;
+                return (
+                  <g transform="translate(-10, -15)">
+                    <Svg
+                      width={30}
+                      height={30}
+                      fill={color}
+                      onClick={() => {
+                        setClickedDataPoint(overValue);
+                        setIsDurationHistogramSingleGroupOperationVisible(
+                          false
+                        );
+                        setIsStartTimeHistogramSingleGroupOperationVisible(
+                          false
+                        );
+                        props.onGroupOperationCloseClick();
+                      }}
+                    />
+                  </g>
+                );
+              }}
+              onValueMouseOver={onValueOver}
+              onValueMouseOut={onValueOut}
+              data={data}
+            />
+            {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
+              <Highlight
+                onBrushEnd={(area) => {
+                  setLastDrawLocation(area);
+                }}
+                onDrag={(area) => {
+                  setLastDrawLocation({
+                    bottom: lastDrawLocation.bottom + (area.top - area.bottom),
+                    left: lastDrawLocation.left - (area.right - area.left),
+                    right: lastDrawLocation.right - (area.right - area.left),
+                    top: lastDrawLocation.top + (area.top - area.bottom),
+                  });
+                }}
+              />
+            )}
+          </FlexibleXYPlot>
+          <div style={{ position: "relative" }}>
+            {clickedDataPoint && (
+              <div>
+                <h4 className="scatter-plot-hint">
+                  Group ID: {`${clickedDataPoint.groupID}`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Operation Name: {`${clickedDataPoint.operationName}`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Average Duration:{" "}
+                  {`${clickedDataPoint.exec_time_average / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Min Duration: {`${clickedDataPoint.exec_time_min / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  First Quartile of Duration:{" "}
+                  {`${clickedDataPoint.exec_time_q1 / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Second Quartile of Duration:{" "}
+                  {`${clickedDataPoint.exec_time_q2 / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Third Quartile of Duration:{" "}
+                  {`${clickedDataPoint.exec_time_q3 / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Max Duration: {`${clickedDataPoint.exec_time_max / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  95th Percentile of Duration:{" "}
+                  {`${clickedDataPoint.exec_time_95_percentile / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  99th Percentile of Duration:{" "}
+                  {`${clickedDataPoint.exec_time_99_percentile / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Standard Deviation of Duration:{" "}
+                  {`${clickedDataPoint.exec_time_stddev / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Interquartile Range of Duration:{" "}
+                  {`${clickedDataPoint.exec_time_IQR / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Average Start Time:{" "}
+                  {`${clickedDataPoint.start_time_average / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Min Start Time:{" "}
+                  {`${clickedDataPoint.start_time_min / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  First Quartile of Start Time:{" "}
+                  {`${clickedDataPoint.start_time_q1 / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Second Quartile of Start Time:{" "}
+                  {`${clickedDataPoint.start_time_q2 / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Third Quartile of Start Time:{" "}
+                  {`${clickedDataPoint.start_time_q3 / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Max Start Time:{" "}
+                  {`${clickedDataPoint.start_time_max / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  95th Percentile of Start Time:{" "}
+                  {`${clickedDataPoint.start_time_95_percentile / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  99th Percentile of Start Time:{" "}
+                  {`${clickedDataPoint.start_time_99_percentile / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Standard Deviation of Start Time:{" "}
+                  {`${clickedDataPoint.start_time_stddev / 1000} ms`}
+                </h4>
+                <h4 className="scatter-plot-hint">
+                  Interquartile Range of Start Time:{" "}
+                  {`${clickedDataPoint.start_time_IQR / 1000} ms`}
+                </h4>
+              </div>
+            )}
+            {children}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

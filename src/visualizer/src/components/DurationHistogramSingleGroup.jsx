@@ -50,10 +50,8 @@ function DurationHistogramGroups({ data }) {
     let units;
     if (maxValue < 1000) {
       units = "μs"; // microseconds
-    } else if (maxValue < 1000000) {
-      units = "ms"; // milliseconds
     } else {
-      units = "s"; // seconds
+      units = "ms"; // milliseconds
     }
 
     x.domain(d3.extent(data, (d) => d.duration));
@@ -61,12 +59,7 @@ function DurationHistogramGroups({ data }) {
     // Update the x-axis with the appropriate tick format
     xAxis
       .scale(x)
-      .tickFormat(
-        (d) =>
-          `${
-            d / (units === "s" ? 1000000 : units === "ms" ? 1000 : 1)
-          } ${units}`
-      );
+      .tickFormat((d) => `${d / (units === "ms" ? 1000 : 1)} ${units}`);
   }
 
   // Call updateUnits with your data
@@ -74,50 +67,52 @@ function DurationHistogramGroups({ data }) {
 
   // Render the histogram
   return (
-    <svg
-      viewBox={`0 0 ${width + margin.left + margin.right} ${
-        height + margin.top + margin.bottom
-      }`}
-      style={{ width: "100%", height: "auto" }}
-    >
-      <g transform={`translate(${margin.left},${margin.top})`}>
-        {bins.map((bin, i) => (
-          <g key={i}>
-            <rect
-              x={x(bin.x0)}
-              y={y(bin.length + 0.1)}
-              width={x(bin.x1) - x(bin.x0) - 1}
-              height={Math.max(0, height - y(bin.length + 0.1))}
-              fill="steelblue"
-              stroke="white"
-              strokeWidth="1"
-            />
-          </g>
-        ))}
-        <g
-          ref={(node) => d3.select(node).call(xAxis)}
-          style={{ transform: `translateY(${height}px)` }}
-          className="axis"
-        />
-        <g ref={(node) => d3.select(node).call(yAxis)} className="axis" />
-        <text
-          transform="rotate(-90)"
-          y={0 - margin.left}
-          x={0 - height / 2}
-          dy="1em"
-          style={{ textAnchor: "middle" }}
-        >
-          Count (Logarithmic Scale)
-        </text>
-        <text
-          x={width / 2}
-          y={height + margin.bottom / 2}
-          style={{ textAnchor: "middle" }}
-        >
-          Duration
-        </text>
-      </g>
-    </svg>
+    <div className="App">
+      <svg
+        viewBox={`0 0 ${width + margin.left + margin.right} ${
+          height + margin.top + margin.bottom
+        }`}
+        style={{ width: "100%", height: "auto" }}
+      >
+        <g transform={`translate(${margin.left},${margin.top})`}>
+          {bins.map((bin, i) => (
+            <g key={i}>
+              <rect
+                x={x(bin.x0)}
+                y={y(bin.length + 0.1)}
+                width={x(bin.x1) - x(bin.x0) - 1}
+                height={Math.max(0, height - y(bin.length + 0.1))}
+                fill="steelblue"
+                stroke="white"
+                strokeWidth="1"
+              />
+            </g>
+          ))}
+          <g
+            ref={(node) => d3.select(node).call(xAxis)}
+            style={{ transform: `translateY(${height}px)` }}
+            className="axis"
+          />
+          <g ref={(node) => d3.select(node).call(yAxis)} className="axis" />
+          <text
+            transform="rotate(-90)"
+            y={0 - margin.left}
+            x={0 - height / 2}
+            dy="1em"
+            style={{ textAnchor: "middle" }}
+          >
+            Count (Logarithmic Scale)
+          </text>
+          <text
+            x={width / 2}
+            y={height + margin.bottom / 2}
+            style={{ textAnchor: "middle" }}
+          >
+            Duration
+          </text>
+        </g>
+      </svg>
+    </div>
   );
 }
 

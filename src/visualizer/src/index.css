@@ -12,11 +12,6 @@ code {
     monospace;
 }
 
-button {
-  position: relative;
-  z-index: 1000;
-}
-
 .TraceResultsScatterPlot {
   height: 100vh;
   text-align: center;
@@ -36,14 +31,6 @@ button {
   font-size: 0.8em;
 }
 
-.BTG {
-  position: absolute;
-  left: 0;
-  text-align: center;
-  font-weight: bold;
-  z-index: 2000;
-}
-
 .axis text {
   font-size: 13px;
   fill: black;
@@ -52,14 +39,11 @@ button {
 .centered-text {
   text-align: center;
   font-weight: bold;
+  font-size: large;
 }
 
 .show-button {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-}
-
-.green {
-  background-color: Chartreuse;
 }

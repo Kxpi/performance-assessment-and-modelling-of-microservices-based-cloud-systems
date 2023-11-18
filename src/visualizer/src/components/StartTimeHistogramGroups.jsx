@@ -22,7 +22,7 @@ function StartTimeHistogramGroups({ data }) {
   }, [margin.left, margin.right, margin.top, margin.bottom]);
 
   // sort data from highest to lowest
-  data.sort((a, b) => b.y - a.y);
+  data.sort((a, b) => b.startTime99Percentile - a.startTime99Percentile);
 
   // Create scales
   const x = d3
@@ -32,7 +32,7 @@ function StartTimeHistogramGroups({ data }) {
     .padding(0.1);
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.x)]) // Use d.x for y scale
+    .domain([0, d3.max(data, (d) => d.startTime99Percentile)]) // Use d.startTime99Percentile for y scale
     .range([height, 0]);
 
   // Create axes
@@ -42,27 +42,20 @@ function StartTimeHistogramGroups({ data }) {
   // Function to update the y-axis units
   function updateUnits(data) {
     // Determine the maximum value in the data
-    const maxValue = d3.max(data, (d) => d.x);
+    const maxValue = d3.max(data, (d) => d.startTime99Percentile);
 
     // Determine the appropriate units based on the maximum value
     let units;
     if (maxValue < 1000) {
       units = "μs"; // microseconds
-    } else if (maxValue < 1000000) {
-      units = "ms"; // milliseconds
     } else {
-      units = "s"; // seconds
+      units = "ms"; // milliseconds
     }
 
     // Update the y-axis with the appropriate tick format
     yAxis
       .scale(y)
-      .tickFormat(
-        (d) =>
-          `${
-            d / (units === "s" ? 1000000 : units === "ms" ? 1000 : 1)
-          } ${units}`
-      );
+      .tickFormat((d) => `${d / (units === "ms" ? 1000 : 1)} ${units}`);
   }
 
   // Call updateUnits with your data
@@ -81,9 +74,9 @@ function StartTimeHistogramGroups({ data }) {
           <rect
             key={i}
             x={x(i)}
-            y={y(d.x)} // Use d.x for y value
+            y={y(d.startTime99Percentile)} // Use d.startTime99Percentile for y value
             width={x.bandwidth()}
-            height={height - y(d.x)} // Use d.x for height
+            height={height - y(d.startTime99Percentile)} // Use d.startTime99Percentile for height
             fill={d.color}
           />
         ))}
@@ -100,7 +93,7 @@ function StartTimeHistogramGroups({ data }) {
           dy="1em"
           style={{ textAnchor: "middle" }}
         >
-          Median Start Time
+          99th Percentile of Start Time
         </text>
         <text
           x={width / 2}

@@ -22,7 +22,7 @@ function DurationHistogramGroups({ data }) {
   }, [margin.left, margin.right, margin.top, margin.bottom]);
 
   // sort data from highest to lowest
-  data.sort((a, b) => b.y - a.y);
+  data.sort((a, b) => b.duration99Percentile - a.duration99Percentile);
 
   // Create scales
   const x = d3
@@ -32,7 +32,7 @@ function DurationHistogramGroups({ data }) {
     .padding(0.1); // add some padding between bars
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.y)])
+    .domain([0, d3.max(data, (d) => d.duration99Percentile)])
     .range([height, 0]);
 
   // Create axes
@@ -42,27 +42,20 @@ function DurationHistogramGroups({ data }) {
   // Function to update the y-axis units
   function updateUnits(data) {
     // Determine the maximum value in the data
-    const maxValue = d3.max(data, (d) => d.y);
+    const maxValue = d3.max(data, (d) => d.duration99Percentile);
 
     // Determine the appropriate units based on the maximum value
     let units;
     if (maxValue < 1000) {
       units = "μs"; // microseconds
-    } else if (maxValue < 1000000) {
-      units = "ms"; // milliseconds
     } else {
-      units = "s"; // seconds
+      units = "ms"; // milliseconds
     }
 
     // Update the y-axis with the appropriate tick format
     yAxis
       .scale(y)
-      .tickFormat(
-        (d) =>
-          `${
-            d / (units === "s" ? 1000000 : units === "ms" ? 1000 : 1)
-          } ${units}`
-      );
+      .tickFormat((d) => `${d / (units === "ms" ? 1000 : 1)} ${units}`);
   }
 
   // Call updateUnits with your data
@@ -81,9 +74,9 @@ function DurationHistogramGroups({ data }) {
           <rect
             key={i}
             x={x(i)}
-            y={y(d.y)}
+            y={y(d.duration99Percentile)}
             width={x.bandwidth()} // use bandwidth to set width
-            height={height - y(d.y)}
+            height={height - y(d.duration99Percentile)}
             fill={d.color}
           />
         ))}
@@ -100,7 +93,7 @@ function DurationHistogramGroups({ data }) {
           dy="1em"
           style={{ textAnchor: "middle" }}
         >
-          Median Duration
+          99th Percentile of Duration
         </text>
         <text
           x={width / 2}

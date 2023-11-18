@@ -4,7 +4,7 @@ import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import { Button } from "react-bootstrap";
 
-const FileUploader = ({ setData }) => {
+const FileUploader = ({ setData, showMenu }) => {
   const [fileContent, setFileContent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -69,28 +69,29 @@ const FileUploader = ({ setData }) => {
   }, [fileContent]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "center",
-      }}
-    >
-      <div {...getRootProps()} style={isDragActive ? dropzoneStyle : {}}>
-        <input {...getInputProps()} />
-        {isLoading ? (
-          <ThreeDots type="ThreeDots" color="#00BFFF" height={80} width={80} />
-        ) : (
-          <Button
-            variant="primary"
-            as="label"
-            htmlFor="file-upload"
-            style={buttonStyle}
-          >
-            Upload JSON
-          </Button>
-        )}
-      </div>
+    <div>
+      {showMenu && (
+        <div {...getRootProps()} style={isDragActive ? dropzoneStyle : {}}>
+          <input {...getInputProps()} />
+          {isLoading ? (
+            <ThreeDots
+              type="ThreeDots"
+              color="#00BFFF"
+              height={80}
+              width={80}
+            />
+          ) : (
+            <Button
+              variant="primary"
+              as="label"
+              htmlFor="file-upload"
+              style={buttonStyle}
+            >
+              Upload JSON
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
