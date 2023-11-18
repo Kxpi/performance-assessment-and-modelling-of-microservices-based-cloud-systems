@@ -65,7 +65,7 @@ const FileUploader = ({setTraces}) => {
   );
 };
 
-// Styl dropzone, możesz dostosować go według własnych preferencji
+
 const dropzoneStyle = {
   width: '75%',
   minHeight: '150px',

@@ -72,7 +72,7 @@ function DurationHistogramGroups({ data }) {
       <g transform={`translate(${margin.left},${margin.top})`}>
         {data.map((d, i) => (
           <rect
-            key={i}
+            key={d.groupID}
             x={x(i)}
             y={y(d.duration99Percentile)}
             width={x.bandwidth()} // use bandwidth to set width
@@ -111,6 +111,7 @@ DurationHistogramGroups.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       y: PropTypes.number.isRequired,
+      groupID: PropTypes.string.isRequired, // Add this line
     })
   ).isRequired,
 };

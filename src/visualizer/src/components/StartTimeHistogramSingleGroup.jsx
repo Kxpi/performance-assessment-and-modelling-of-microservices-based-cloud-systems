@@ -77,7 +77,7 @@ function StartTimeHistogramSingleGroup({ data }) {
       >
         <g transform={`translate(${margin.left},${margin.top})`}>
           {bins.map((bin, i) => (
-            <g key={i}>
+            <g key={`${bin.x0}-${bin.x1}`}>
               <rect
                 x={x(bin.x0)}
                 y={y(bin.length)}

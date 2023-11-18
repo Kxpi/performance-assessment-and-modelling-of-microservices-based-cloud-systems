@@ -104,6 +104,11 @@ function ScatterPlotGroupsImpl(props) {
       <div className="App">
         <div className="TraceResultsScatterPlot">
           <div className="centered-text">Scatter Plot of Groups</div>
+          {clickedDataPoint && (
+            <div className="centered-text">
+              Selected Group: {clickedDataPoint.groupID}
+            </div>
+          )}
           <FlexibleXYPlot
             xType="time"
             xDomain={
@@ -139,7 +144,7 @@ function ScatterPlotGroupsImpl(props) {
             {data.map((d, i) => {
               return [
                 <HorizontalRectSeries
-                  key={`${i}-box`}
+                  key={`${d.groupID}-box`}
                   stroke={d.color}
                   style={{ strokeWidth: 1 }}
                   data={[
@@ -153,7 +158,7 @@ function ScatterPlotGroupsImpl(props) {
                   ]}
                 />,
                 <HorizontalRectSeries
-                  key={`${i}-inner-box`}
+                  key={`${d.groupID}-inner-box`}
                   stroke={d.color}
                   style={{ strokeWidth: 1 }}
                   data={[
@@ -312,8 +317,11 @@ const valueShape = PropTypes.shape({
 ScatterPlotGroupsImpl.propTypes = {
   data: PropTypes.arrayOf(valueShape).isRequired,
   overValue: valueShape,
-  onValueOut: PropTypes.func.isRequired,
   onValueOver: PropTypes.func.isRequired,
+  onValueOut: PropTypes.func.isRequired,
+  showMenu: PropTypes.bool,
+  onGroupOperationsClick: PropTypes.func,
+  onGroupSpansClick: PropTypes.func,
 };
 
 ScatterPlotGroupsImpl.defaultProps = {

@@ -3,32 +3,36 @@ import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import { Button } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-const FileUploader = ({ setData, showMenu }) => {
+const FileUploader = ({ setData, showMenu, setFileName }) => {
   const [fileContent, setFileContent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Funkcja do odczytu zawartości pliku i walidacji rozszerzenia
-  const handleFileDrop = useCallback((acceptedFiles) => {
-    setIsLoading(true);
-    if (acceptedFiles.length === 0) {
-      alert("Błąd: Załaduj plik JSON.");
-      return;
-    }
+  const handleFileDrop = useCallback(
+    (acceptedFiles) => {
+      setIsLoading(true);
+      if (acceptedFiles.length === 0) {
+        alert("Błąd: Załaduj plik JSON.");
+        return;
+      }
 
-    const file = acceptedFiles[0];
-    if (file.type !== "application/json") {
-      alert("Błąd: Plik musi mieć rozszerzenie JSON.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target.result;
-      setFileContent(content);
-    };
-    reader.readAsText(file);
-  }, []);
+      const file = acceptedFiles[0];
+      if (file.type !== "application/json") {
+        alert("Błąd: Plik musi mieć rozszerzenie JSON.");
+        return;
+      }
+      setFileName(file.name);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target.result;
+        setFileContent(content);
+      };
+      reader.readAsText(file);
+    },
+    [setFileName]
+  );
 
   // Konfiguracja dropzone
   const dropzoneConfig = useMemo(
@@ -47,7 +51,6 @@ const FileUploader = ({ setData, showMenu }) => {
     if (fileContent) {
       const parsedData = JSON.parse(fileContent);
 
-      //console.log(parsedData);
       axios
         .post("http://127.0.0.1:5000/upload", parsedData, {
           headers: {
@@ -66,7 +69,7 @@ const FileUploader = ({ setData, showMenu }) => {
           alert("Error uploading the file to the server.");
         });
     }
-  }, [fileContent]);
+  }, [fileContent, setData]);
 
   return (
     <div>
@@ -113,6 +116,12 @@ const buttonStyle = {
   fontSize: "0.9rem",
   padding: "0.375rem 1rem",
   height: "38px",
+};
+
+FileUploader.propTypes = {
+  setData: PropTypes.func.isRequired,
+  showMenu: PropTypes.bool.isRequired,
+  setFileName: PropTypes.func.isRequired,
 };
 
 export default FileUploader;

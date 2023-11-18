@@ -9,6 +9,7 @@ function HomePage() {
   const [data, setData] = useState(null);
   const [showCallGraph, setShowCallGraph] = useState(true);
   const [showMenu, setShowMenu] = useState(true);
+  const [fileName, setFileName] = useState("Null");
 
   return (
     <div>
@@ -35,6 +36,7 @@ function HomePage() {
         >
           <FileUploader
             setData={setData}
+            setFileName={setFileName}
             showMenu={showMenu}
             style={{ margin: 0, padding: 0 }}
           />
@@ -76,6 +78,7 @@ function HomePage() {
           {showMenu ? "Hide Menu" : "Show Menu"}
         </Button>
       </div>
+      <div className="centered-text">Uploaded JSON: {fileName}</div>
 
       {data && (
         <div>

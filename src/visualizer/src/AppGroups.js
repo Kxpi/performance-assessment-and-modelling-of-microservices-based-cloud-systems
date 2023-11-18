@@ -10,6 +10,7 @@ import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramG
 import DurationHistogramSingleGroup from "./components/DurationHistogramSingleGroup";
 import StartTimeHistogramSingleGroup from "./components/StartTimeHistogramSingleGroup";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
+import PropTypes from "prop-types";
 
 const svgComponents = Object.entries(SVGs)
   .sort(([keyA], [keyB]) => {
@@ -152,7 +153,7 @@ const myColors = [
 function AppGroups({ jsonData, showMenu }) {
   const [data, setData] = useState([]);
   const [spansData, setSpansData] = useState([]);
-  const [view, setView] = useState("groups"); // 'groups' or 'operation_stats'
+  const [view, setView] = useState("Groups");
   const [selectedGroupOperations, setSelectedGroupOperations] = useState(null); // to store the selected group
   const [groupedTraces, setGroupedTraces] = useState(null);
   const [selectedGroupNumber, setSelectedGroupNumber] = useState(null); // to store the selected group number
@@ -264,7 +265,7 @@ function AppGroups({ jsonData, showMenu }) {
       }
     );
     setSelectedGroupOperations(propsData);
-    setView("operation_stats");
+    setView("Group's Operations");
   };
 
   const handleGroupOperationHistogramClick = (
@@ -288,6 +289,7 @@ function AppGroups({ jsonData, showMenu }) {
               return {
                 startTime: span.startTime - globalMinStartTime,
                 duration: span.duration,
+                spanID: span.spanID,
               };
             });
           return [...acc, ...spansData];
@@ -342,11 +344,11 @@ function AppGroups({ jsonData, showMenu }) {
       }, []);
       setSpansData(processedData);
     }
-    setView("spans");
+    setView("Group's Spans");
   };
 
   const handleBackClick = () => {
-    setView("groups");
+    setView("Groups");
   };
 
   const isErrorTag = ({ key, value }) =>
@@ -424,6 +426,7 @@ function AppGroups({ jsonData, showMenu }) {
 
   return (
     <div>
+      <div className="centered-text">Current View: {view}</div>
       {showMenu && (
         <div
           style={{
@@ -434,17 +437,17 @@ function AppGroups({ jsonData, showMenu }) {
             alignItems: "center",
           }}
         >
-          {(view === "operation_stats" || view === "spans") && (
+          {(view === "Group's Operations" || view === "Group's Spans") && (
             <Button
               variant="primary"
               onClick={handleBackClick}
               style={buttonStyle}
             >
-              Back to groups
+              Back to Groups
             </Button>
           )}
 
-          {view === "groups" && (
+          {view === "Groups" && (
             <div
               style={{
                 zIndex: 10005,
@@ -511,7 +514,7 @@ function AppGroups({ jsonData, showMenu }) {
             </div>
           )}
 
-          {view === "operation_stats" && (
+          {view === "Group's Operations" && (
             <div style={{ display: "flex", justifyContent: "flex-start" }}>
               <DropdownButton
                 id="dropdown-basic-button"
@@ -605,7 +608,7 @@ function AppGroups({ jsonData, showMenu }) {
         </div>
       )}
 
-      {view === "operation_stats" && (
+      {view === "Group's Operations" && (
         <div>
           {isDurationHistogramGroupsOperationsVisible && (
             <div>
@@ -686,7 +689,7 @@ function AppGroups({ jsonData, showMenu }) {
         </div>
       )}
 
-      {view === "groups" && (
+      {view === "Groups" && (
         <div>
           {isDurationHistogramGroupVisible && (
             <div>
@@ -719,7 +722,7 @@ function AppGroups({ jsonData, showMenu }) {
         </div>
       )}
 
-      {view === "spans" && (
+      {view === "Group's Spans" && (
         <div>
           <ScatterPlot
             data={spansData}
@@ -736,6 +739,11 @@ const buttonStyle = {
   fontSize: "0.9rem",
   padding: "0.375rem 1rem",
   height: "38px",
+};
+
+AppGroups.propTypes = {
+  jsonData: PropTypes.object.isRequired,
+  showMenu: PropTypes.bool.isRequired,
 };
 
 export default AppGroups;

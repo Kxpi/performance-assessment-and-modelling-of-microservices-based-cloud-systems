@@ -304,56 +304,75 @@ function ScatterPlotImpl(props) {
             alignItems: "center",
           }}
         >
-          <Dropdown>
-            <Dropdown.Toggle variant="primary" id="dropdown-basic">
-              Selection Options
-            </Dropdown.Toggle>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Dropdown>
+              <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                Scatter Plot Options
+              </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={() => {
-                  const visibleData = getRandomSubset(data, percentage);
-                  setFilteredData(visibleData);
-                  setCurrentSpans(visibleData);
-                  setLastDrawLocation(null);
-                }}
-              >
-                Randomize displayed spans
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  setFilteredData(currentSpans);
-                  setLastDrawLocation(null);
-                }}
-              >
-                Show all current spans
-              </Dropdown.Item>
-              {clickedDataPoint && (
-                <div>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setLastDrawLocation(null);
-                      handleOptionClick("trace");
-                      setClickedDataPoint(null);
-                    }}
-                  >
-                    Show all spans from trace with ID:{" "}
-                    {clickedDataPoint.traceID}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setLastDrawLocation(null);
-                      handleOptionClick("service");
-                      setClickedDataPoint(null);
-                    }}
-                  >
-                    Show all spans from microservice named:{" "}
-                    {clickedDataPoint.serviceName}
-                  </Dropdown.Item>
-                </div>
-              )}
-            </Dropdown.Menu>
-          </Dropdown>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => {
+                    setClickedDataPoint(null);
+                    const visibleData = getRandomSubset(data, percentage);
+                    setFilteredData(visibleData);
+                    setCurrentSpans(visibleData);
+                    setLastDrawLocation(null);
+                  }}
+                >
+                  Draw Other Spans to Be Displayed
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setFilteredData(currentSpans);
+                    setLastDrawLocation(null);
+                  }}
+                >
+                  Show All Currently Drawn Spans
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            {clickedDataPoint && (
+              <div>
+                <Dropdown>
+                  <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                    Selection Options
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => setClickedDataPoint(null)}>
+                      Cancel Selection
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setLastDrawLocation(null);
+                        handleOptionClick("trace");
+                        setClickedDataPoint(null);
+                      }}
+                    >
+                      Show All Spans from Trace With ID:{" "}
+                      {clickedDataPoint.traceID}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setLastDrawLocation(null);
+                        handleOptionClick("service");
+                        setClickedDataPoint(null);
+                      }}
+                    >
+                      Show All Spans from Microservice Named:{" "}
+                      {clickedDataPoint.serviceName}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            )}
+          </div>
         </div>
       )}
       <div className="App">
@@ -361,7 +380,7 @@ function ScatterPlotImpl(props) {
           <div className="centered-text">
             Scatter Plot of Group {selectedGroupNumber}'s Spans
           </div>
-          <div>Percentage of spans to display:</div>
+          <div>Percentage of Spans to Display:</div>
           <div>{percentage}%</div>
           <div>
             <input
@@ -372,6 +391,11 @@ function ScatterPlotImpl(props) {
               onChange={handlePercentageChange}
             />
           </div>
+          {clickedDataPoint && (
+            <div className="centered-text">
+              Selected Span: {clickedDataPoint.spanID}
+            </div>
+          )}
 
           <FlexibleXYPlot
             xType="time"
@@ -636,6 +660,8 @@ ScatterPlotImpl.propTypes = {
   overValue: valueShape,
   onValueOut: PropTypes.func.isRequired,
   onValueOver: PropTypes.func.isRequired,
+  selectedGroupNumber: PropTypes.number.isRequired,
+  showMenu: PropTypes.bool.isRequired, // Add this line
 };
 
 ScatterPlotImpl.defaultProps = {

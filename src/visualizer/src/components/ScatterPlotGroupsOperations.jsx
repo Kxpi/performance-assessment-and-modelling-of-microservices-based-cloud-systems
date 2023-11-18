@@ -155,6 +155,11 @@ function ScatterPlotImpl(props) {
           <div className="centered-text">
             Scatter Plot of Group {selectedGroupNumber}'s Operations
           </div>
+          {clickedDataPoint && (
+            <div className="centered-text">
+              Selected Operation: {clickedDataPoint.operationName}
+            </div>
+          )}
           <FlexibleXYPlot
             xType="time"
             xDomain={
@@ -190,7 +195,7 @@ function ScatterPlotImpl(props) {
             {data.map((d, i) => {
               return [
                 <HorizontalRectSeries
-                  key={`${i}-box`}
+                  key={`${d.operationName}-box`}
                   stroke={d.color}
                   style={{ strokeWidth: 1 }}
                   data={[
@@ -204,7 +209,7 @@ function ScatterPlotImpl(props) {
                   ]}
                 />,
                 <HorizontalRectSeries
-                  key={`${i}-inner-box`}
+                  key={`${d.operationName}-inner-box`}
                   stroke={d.color}
                   style={{ strokeWidth: 1 }}
                   data={[
@@ -373,6 +378,11 @@ ScatterPlotImpl.propTypes = {
   overValue: valueShape,
   onValueOut: PropTypes.func.isRequired,
   onValueOver: PropTypes.func.isRequired,
+  children: PropTypes.node,
+  selectedGroupNumber: PropTypes.number,
+  showMenu: PropTypes.bool,
+  onGroupOperationCloseClick: PropTypes.func,
+  onGroupOperationHistogramClick: PropTypes.func,
 };
 
 ScatterPlotImpl.defaultProps = {

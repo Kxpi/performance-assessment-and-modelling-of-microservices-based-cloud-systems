@@ -73,7 +73,7 @@ function StartTimeHistogramGroupsOperations({ data }) {
         <g transform={`translate(${margin.left},${margin.top})`}>
           {data.map((d, i) => (
             <rect
-              key={i}
+              key={d.operationName}
               x={x(i)}
               y={y(d.startTime99Percentile)} // Use d.startTime99Percentile for y value
               width={x.bandwidth()}
@@ -113,6 +113,7 @@ StartTimeHistogramGroupsOperations.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       x: PropTypes.number.isRequired,
+      operationName: PropTypes.string.isRequired, // Add this line
     })
   ).isRequired,
 };
