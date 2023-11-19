@@ -17,6 +17,7 @@ function CallGraphPage(data) {
   const [selectedTrace, setSelectedTrace] = useState(null);
 
   const groups = data.data["groups"]
+  groups.sort((a, b) => b.traceNumber - a.traceNumber);
 
 
   const microserviceColors = {};

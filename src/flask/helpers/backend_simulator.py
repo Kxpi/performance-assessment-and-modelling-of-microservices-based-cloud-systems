@@ -4,6 +4,8 @@ from collections import defaultdict
 import numpy as np
 
 
+
+#ToDO: Remove startTimes
 """
 result:
     {
@@ -96,18 +98,19 @@ def get_callGraphRep(spans, root):
 
 
 def get_groups(data):
-    # print("File Path: ", file_path)
-    # data = read_file(file_path)
+
     traces = data["data"]
 
     groupID = 0
-    # {traceid: callGraph}
+    
+    # CallGraph_rep: {traceid: callGraph}
     traces_callGraph_rep = {}
     groups = []
 
     # Collect all start times to find the global minimum
     all_start_times = []
 
+    # Create callGraph representation  for each trace
     for trace in traces:
         trace_spans = trace["spans"][:]
 
@@ -135,8 +138,11 @@ def get_groups(data):
     # Find the minimal startTime value across all spans
     min_start_time = min(all_start_times)
 
+
+    #Group traces by callGraph representation
     initial_trace = traces.pop(0)
 
+    # Create first group which contains the first trace
     groups.append(
         {
             "global_min_start_time": 0,
@@ -152,6 +158,8 @@ def get_groups(data):
     # print("End of first Phase")
 
     for trace in traces:
+
+        # Check if group for this trace already exists
         for group in groups:
             diff = DeepDiff(
                 traces_callGraph_rep[trace["traceID"]],
@@ -162,6 +170,7 @@ def get_groups(data):
                 group["traces"].append(trace)
                 break
         else:
+        # If not exists create new group
             groups.append(
                 {
                     "global_min_start_time": 0,
@@ -174,6 +183,8 @@ def get_groups(data):
             )
             groupID += 1
 
+
+    
     for group in groups:
         group["traceNumber"] = len(group["traces"])
 
@@ -186,6 +197,7 @@ def get_groups(data):
         # Collect operation stats for the group
         for trace in group["traces"]:
             for span in trace["spans"]:
+        
                 operation_name = span["operationName"]
                 operation_stats[operation_name]["exec_times"].append(span["duration"])
                 operation_stats[operation_name]["start_times"].append(

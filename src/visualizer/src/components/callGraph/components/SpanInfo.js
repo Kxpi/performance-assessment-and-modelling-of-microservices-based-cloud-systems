@@ -6,30 +6,21 @@ const SpanInfo = ({ selectedSpan, operationStats }) => {
     return (
         <div className="span-info">
             <h2>Span Information</h2>
-            <p>Start Time: <br></br>{selectedSpan.startTime + ' μs'}</p>
-            <p>Duration: <br></br>{selectedSpan.duration + ' μs'}</p>
+            <p>Start Time: <br></br>{Date(selectedSpan.startTime).toString()}</p>
+            <p>Duration: <br></br>{selectedSpan.duration / 1000 + ' ms'}</p>
             <p>Service: <br></br>{selectedSpan.serviceName}</p>
 
             <h3>------------------Stats-----------------------------</h3>
-            <p>Exec_time_min: <br></br>{operationStats.exec_time_min + ' μs'}</p>
-            <p>Exec_time_max <br></br>{operationStats.exec_time_max + ' μs'}</p>
-            <p>Exec_time_q1: <br />{operationStats.exec_time_q1 + ' μs'}</p>
-            <p>Exec_time_q2: <br />{operationStats.exec_time_q2 + ' μs'}</p>
-            <p>Exec_time_q3: <br />{operationStats.exec_time_q3 + ' μs'}</p>
-            <p>Exec_time_95_percentile: <br />{operationStats.exec_time_95_percentile + ' μs'}</p>
-            <p>Exec_time_99_percentile: <br />{operationStats.exec_time_99_percentile + ' μs'}</p>
-            <p>Exec_time_average: <br />{operationStats.exec_time_average + ' μs'}</p>
-            <p>Start_time_min: <br />{operationStats.start_time_min + ' μs'}</p>
-            <p>Start_time_max: <br />{operationStats.start_time_max + ' μs'}</p>
-            <p>Start_time_q1: <br />{operationStats.start_time_q1 + ' μs'}</p>
-            <p>Start_time_q2: <br />{operationStats.start_time_q2 + ' μs'}</p>
-            <p>Start_time_q3: <br />{operationStats.start_time_q3 + ' μs'}</p>
-            <p>Start_time_95_percentile: <br />{operationStats.start_time_95_percentile + ' μs'}</p>
-            <p>Start_time_99_percentile: <br />{operationStats.start_time_99_percentile + ' μs'}</p>
-            <p>Start_time_average: <br />{operationStats.start_time_average + ' μs'}</p>
-
-
-
+            <p>Average duration: <br />{operationStats.exec_time_average / 1000 + ' ms'}</p>
+            <p>Min duration: <br />{operationStats.exec_time_min / 1000 + ' ms'}</p>
+            <p>Q1 duration: <br />{operationStats.exec_time_q1 / 1000 + ' ms'}</p>
+            <p>Q2 duration: <br />{operationStats.exec_time_q2 / 1000 + ' ms'}</p>
+            <p>Q3 duration: <br />{operationStats.exec_time_q3 / 1000 + ' ms'}</p>
+            <p>Max duration <br />{operationStats.exec_time_max / 1000 + ' ms'}</p>
+            <p>95_percentile duration: <br />{operationStats.exec_time_95_percentile / 1000 + ' ms'}</p>
+            <p>99_percentile duration: <br />{operationStats.exec_time_99_percentile / 1000 + ' ms'}</p>
+            <p>Stdev duration: <br />{operationStats.exec_time_stddev / 1000 + ' ms'}</p>
+            <p>IQR duration: <br />{operationStats.exec_time_IQR / 1000 + ' ms'}</p>
         </div>
     );
 };
