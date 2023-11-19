@@ -266,14 +266,14 @@ def get_statistic_of_traces(comm_time):
             times = count_of_percendence[pair_of_spans][1]
             np_array = np.array(times)
             
-            if not any(pair_of_spans[0] in value[0] for value in statistic_to_graph.keys()):
+            if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
                 statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
             else:
                 for i in list(statistic_to_graph.keys()):
                     if i[0] == pair_of_spans[0]:
                         if statistic_to_graph[i][3] > np.percentile(np_array, 95):
                             del statistic_to_graph[i]
-                statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+                            statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
     
     return statistic_to_graph
 
@@ -283,23 +283,34 @@ def index():
 
 @app.route('/data')
 def graph():
-    args = cli_parser()
-    traces = read_traces(args['file'])
+  args = cli_parser()
+  traces = read_traces(args['file'])
 
-    non_child = find_non_child(traces)
-    # pprint(non_child)
+  non_child = find_non_child(traces)
+  traces_reformatted = reformat_dict(traces)
+  communication_times = calculate_comm_times(traces_reformatted, False)
 
-    traces_reformatted = reformat_dict(traces)
-    #pprint(traces_reformatted)
+  graph = get_statistic_of_traces(communication_times)
+  graph_list = [(str(pair), stats) for pair, stats in graph.items()]
+  
+  nodes = set()
+  links = []
 
-    # include negative
-    communication_times = calculate_comm_times(traces_reformatted, False)
+  for item in graph_list:
+      print(item[0])
+      source, target = item[0][1:-1].replace("'", "").split(',')
+      target=target[1:]
+      nodes.add(source)
+      nodes.add(target)
+      links.append({"source": source, "target": target, "Statistic": item[1]})
+      
+  nodes = list(nodes)
 
-    graph = get_statistic_of_traces(communication_times)
-    graph_list = [(str(pair), stats) for pair, stats in graph.items()]
+  # Transform nodes to node objects
+  nodes = [{"id": node} for node in nodes]
 
-    return jsonify(graph_list)
-
+  # Return a JSON response
+  return jsonify({"nodes": nodes, "links": links,})
 
 def main():
     """

@@ -1,154 +1,170 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Directed Graph Visualization</title>
-  <style type="text/css">
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-    }
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .links line {
+            stroke: #999;
+            stroke-opacity: 5;
+            cursor: pointer;
+        }
 
-    #graph {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+        .nodes rect {
+            stroke: #0f0d0d;
+            cursor: pointer;
+        }
 
-    #statistics {
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-color: #fff;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      display: none;
-    }
-  </style>
-  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 8px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 1px solid #999;
+            border-radius: 8px;
+            pointer-events: none;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <div id="graph"></div>
-  <div id="statistics"></div>
+    <div class="tooltip" id="tooltip"></div>
 
-  <script>
- // Fetch data from the endpoint
-// Fetch data from the endpoint
-fetch('/data')
-  .then(response => response.json())
-  .then(data => {
-    // Create a new network instance
-    const container = document.getElementById('graph');
-    const options = {
-      layout: {
-        hierarchical: {
-          direction: 'LR',
-          sortMethod: 'directed',
-          levelSeparation: getLevelSeparation(data), // Set the level separation dynamically based on the first value of the label
-          nodeSpacing: 20
-        },
-        randomSeed: Math.round(Math.random() * 1000) // Set a random seed to disperse the nodes
-      },
-      edges: {
-        arrows: {
-          to: {
-            enabled: true,
-            scaleFactor: 1
-          }
-        },
-        font: {
-          size: 0, // Set the font size to 0 to hide the default labels
-          color: '#ffffff' // Set the font color to match the background color
-        },
-        smooth: {
-          type: 'horizontal' // Set the edge smoothing type to horizontal
-        }
-      },
-      interaction: {
-        hover: true
-      }
-    };
-    const network = new vis.Network(container);
+    <script>
+        var svg = d3.select("body").append("svg")
+            .attr("width", 8000)
+            .attr("height", 4000);
 
-    // Create nodes and edges from the data
-    const nodes = new vis.DataSet();
-    const edges = new vis.DataSet();
+        var width = +svg.attr("width"),
+            height = +svg.attr("height");
 
-    data.forEach((item, index) => {
-      const source = item[0].split(',')[0].trim();
-      const target = item[0].split(',')[1].trim();
-      const values = item[1];
+        var tooltip = d3.select("#tooltip");
 
-      // Check if node with the same ID already exists
-      if (!nodes.get(source)) {
-        nodes.add({ id: source, label: source });
-      }
-      if (!nodes.get(target)) {
-        nodes.add({ id: target, label: target });
-      }
+        var simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(function(d) { return d.Statistic[0]*2; }))
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter(width/2, height/2 ));
 
-      edges.add({ from: source, to: target, label: values.join(', ') });
-    });
+        var tempSvg = d3.select("body").append("svg")
+            .attr("width", 0)
+            .attr("height", 0)
+            .style("visibility", "hidden");
 
-    // Set the nodes and edges to the network
-    const graphData = { nodes: nodes, edges: edges };
-    network.setOptions(options);
-    network.setData(graphData);
+        fetch('/data')
+            .then(response => response.json())
+            .then(data => {
+                // Randomly assign initial positions to nodes
+                data.nodes.forEach(function(d) {
+                    d.x = Math.random() * width;
+                    d.y = Math.random() * height;
+                });
 
-    // Display values as a popup window next to the mouse on hover
-    const statisticsContainer = document.getElementById('statistics');
-    network.on('hoverNode', (event) => {
-      const nodeId = event.node;
-      const nodeLabel = nodes.get(nodeId).label;
-      const nodeValues = edges.get({ filter: (item) => item.from === nodeId }).map((item) => item.label).join(', ');
+                var link = svg.append("g")
+                    .attr("class", "links")
+                    .selectAll("line")
+                    .data(data.links)
+                    .enter().append("line")
+                    .attr("marker-end", "url(#arrow)")
+                    .style("stroke-width", 4)
+                    .on("mouseover", function(d) {
+                        tooltip.style("display", "block")
+                            .html("Mean: " + d.Statistic[0] + ", Median: " + d.Statistic[1] + ",\n 75 percentil: " + d.Statistic[2] + ",\n 95 percentil: " + d.Statistic[3])
+                            .style("left", (d3.event.pageX + 10) + "px")
+                            .style("top", (d3.event.pageY - 25) + "px");
+                    })
+                    .on("mouseout", function() {
+                        tooltip.style("display", "none");
+                    });
 
-      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
-      statisticsContainer.style.display = 'block';
-    });
+                var node = svg.append("g")
+                    .attr("class", "nodes")
+                    .selectAll("g")
+                    .data(data.nodes)
+                    .enter().append("g")
+                    .attr("transform", d => `translate(${d.x},${d.y})`)
+                    .call(d3.drag()
+                        .on("start", dragStarted)
+                        .on("drag", dragged)
+                        .on("end", dragEnded));
 
-    network.on('blurNode', () => {
-      statisticsContainer.innerHTML = '';
-      statisticsContainer.style.display = 'none';
-    });
+                node.each(function(d) {
+                    var text = tempSvg.append("text")
+                        .attr("font-size", "25px")
+                        .text(d.id);
 
-    network.on('hover', (event) => {
-      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
-      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
-      statisticsContainer.style.left = `${event.pointer.canvas.x}px`;
-      statisticsContainer.style.top = `${event.pointer.canvas.y}px`;
-      statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
-    });
+                    var textWidth = text.node().getBBox().width;
+                    text.remove();
 
-    network.on('blur', () => {
-      //statisticsContainer.innerHTML = `<h3>${nodeLabel}</h3>`;
-      statisticsContainer.style.display = 'none';
-    });
+                    var rect = d3.select(this)
+                        .append("rect")
+                        .attr("width", textWidth + 40) // Add padding
+                        .attr("height", 40)
+                        .attr("rx", 0)
+                        .attr("ry", 0)
+                        .attr("fill", "#69b3a2");
 
-    network.on('hoverEdge', (event) => {
-      const edgeId = event.edge;
-      const edgeLabel = edges.get(edgeId).label;
+                    d3.select(this)
+                        .append("text")
+                        .attr("x", function() {
+                            return (textWidth + 40) / 2; // Set text position to center
+                        })
+                        .attr("y", 20)
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "black")
+                        .style("font-size", "25px")
+                        .text(d.id);
+                });
 
-      statisticsContainer.innerHTML = `<p>${edgeLabel}</p>`;
-      statisticsContainer.style.display = 'block';
-    });
+                simulation
+                    .nodes(data.nodes)
+                    .on("tick", ticked);
 
-    // Function to calculate the level separation based on the first value of the label
-    function getLevelSeparation(data) {
-      const firstValue = data[0][1][0];
-      // Calculate the level separation based on the first value
-      // You can adjust the formula to fit your desired distance
-      const levelSeparation = firstValue * 2;
-      return levelSeparation;
-    }
-  })
-  .catch(error => {
-    console.error('Error fetching data:', error);
-  });
-  </script>
+                simulation.force("link")
+                    .links(data.links);
+
+                svg.append("defs").append("marker")
+                    .attr("id", "arrow")
+                    .attr("viewBox", "-0 -5 10 10")
+                    .attr("refX", 25)
+                    .attr("refY", 0)
+                    .attr("orient", "auto")
+                    .attr("markerWidth", 6)
+                    .attr("markerHeight", 6)
+                    .attr("xoverflow", "visible")
+                    .append("svg:path")
+                    .attr("d", "M 0,-5 L 10 ,0 L 0,5")
+                    .attr("fill", "#999")
+                    .style("stroke","none");
+
+                function ticked() {
+                    node.attr("transform", d => `translate(${d.x},${d.y})`);
+
+                    link.attr("x1", function(d) { return d.source.x + 25; })
+                        .attr("y1", function(d) { return d.source.y + 10; })
+                        .attr("x2", function(d) { return d.target.x + 25; })
+                        .attr("y2", function(d) { return d.target.y + 10; });
+                }
+
+                function dragStarted(d) {
+                    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
+
+                function dragged(d) {
+                    d.fx = d3.event.x;
+                    d.fy = d3.event.y;
+                }
+
+                function dragEnded(d) {
+                    if (!d3.event.active) simulation.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
 </body>
 </html>
