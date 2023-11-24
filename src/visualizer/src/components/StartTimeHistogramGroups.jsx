@@ -111,7 +111,7 @@ StartTimeHistogramGroups.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       x: PropTypes.number.isRequired,
-      groupID: PropTypes.string.isRequired, // Add this line
+      groupID: PropTypes.number.isRequired, // Add this line
     })
   ).isRequired,
 };

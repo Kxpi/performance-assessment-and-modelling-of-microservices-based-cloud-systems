@@ -417,30 +417,32 @@ function ScatterPlotImpl(props) {
               tickFormat={(t) => formatDuration(t)}
             />
             <YAxis title="Duration" tickFormat={(t) => formatDuration(t)} />
-            <CustomSVGSeries
-              className="mark-series-fill"
-              opacity={0.5}
-              customComponent={({ color, svg }) => {
-                const Svg = svg;
-                return (
-                  <g transform="translate(-10, -15)">
-                    <Svg
-                      width={30}
-                      height={30}
-                      fill={color}
-                      onClick={() => {
-                        if (filteredData === currentSpans) {
-                          setClickedDataPoint(overValue);
-                        }
-                      }}
-                    />
-                  </g>
-                );
-              }}
-              onValueMouseOver={onValueOver}
-              onValueMouseOut={onValueOut}
-              data={filteredData}
-            />
+            {filteredData && (
+              <CustomSVGSeries
+                className="mark-series-fill"
+                opacity={0.5}
+                customComponent={({ color, svg }) => {
+                  const Svg = svg;
+                  return (
+                    <g transform="translate(-10, -15)">
+                      <Svg
+                        width={30}
+                        height={30}
+                        fill={color}
+                        onClick={() => {
+                          if (filteredData === currentSpans) {
+                            setClickedDataPoint(overValue);
+                          }
+                        }}
+                      />
+                    </g>
+                  );
+                }}
+                onValueMouseOver={onValueOver}
+                onValueMouseOut={onValueOut}
+                data={filteredData}
+              />
+            )}
             {isShiftPressed && ( // render the Highlight component only when the shift key is pressed
               <Highlight
                 onBrushEnd={(area) => {

@@ -559,11 +559,7 @@ function AppGroups({ jsonData, showMenu }) {
                 </Dropdown.Item>
               </DropdownButton>
 
-              <DropdownButton
-                id="dropdown-basic-button"
-                title="Scatter Plots"
-                style={{ zIndex: 10000 }}
-              >
+              <DropdownButton id="dropdown-basic-button" title="Scatter Plots">
                 <Dropdown.Item
                   style={{
                     backgroundColor: isScatterPlotGroupsOperationsVisible
