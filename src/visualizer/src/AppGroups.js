@@ -202,12 +202,12 @@ function AppGroups({ jsonData, showMenu }) {
   const handleGroupOperationsClick = (groupID) => {
     setSelectedGroupNumber(groupID);
     const selectedGroup = data.find((group) => group.groupID === groupID);
-    const globalMinStartTime = selectedGroup.globalMinStartTime;
+
     const processedHistogramSingleGroupData = selectedGroup.traces.flatMap(
       (trace) =>
         trace.spans.map((span) => ({
           ...span,
-          startTime: span.startTime - globalMinStartTime,
+          startTime: span.startTime,
         }))
     );
     setHistogramSingleGroupData(processedHistogramSingleGroupData);
@@ -284,10 +284,8 @@ function AppGroups({ jsonData, showMenu }) {
           const spansData = t.spans
             .filter((span) => span.operationName === operationName)
             .map((span) => {
-              const globalMinStartTime = selectedGroup.globalMinStartTime;
-
               return {
-                startTime: span.startTime - globalMinStartTime,
+                startTime: span.startTime,
                 duration: span.duration,
                 spanID: span.spanID,
               };
@@ -323,10 +321,9 @@ function AppGroups({ jsonData, showMenu }) {
         const spansData = t.spans.map((span) => {
           // Get the operation stats for the current operation name
           const operationStats = selectedGroup.operations[span.operationName];
-          const minStartTime = selectedGroup.globalMinStartTime;
 
           return {
-            x: span.startTime - minStartTime,
+            x: span.startTime,
             y: span.duration,
             spanID: span.spanID,
             traceID: t.traceID,
@@ -365,7 +362,7 @@ function AppGroups({ jsonData, showMenu }) {
       const numberOfTraces = group.traceNumber;
       const operations = group.operation_stats;
       const traces = group.traces;
-      const globalMinStartTime = group.global_min_start_time;
+
       const minStartTime = group.span_stats.start_time_min;
       const maxStartTime = group.span_stats.start_time_max;
       const minDuration = group.span_stats.exec_time_min;
@@ -392,7 +389,7 @@ function AppGroups({ jsonData, showMenu }) {
         numberOfTraces: numberOfTraces,
         operations: operations,
         traces: traces,
-        globalMinStartTime: globalMinStartTime,
+
         minStartTime: minStartTime,
         maxStartTime: maxStartTime,
         minDuration: minDuration,
@@ -434,33 +431,22 @@ function AppGroups({ jsonData, showMenu }) {
             top: 40,
             zIndex: 10005,
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
           }}
         >
           {(view === "Group's Operations" || view === "Group's Spans") && (
             <Button
               variant="primary"
               onClick={handleBackClick}
-              style={buttonStyle}
+              style={{ width: "135px" }}
             >
               Back to Groups
             </Button>
           )}
 
           {view === "Groups" && (
-            <div
-              style={{
-                zIndex: 10005,
-                position: "relative",
-                display: "flex",
-                justifyContent: "flex-start",
-              }}
-            >
-              <DropdownButton
-                id="dropdown-basic-button"
-                title="Histograms"
-                style={{ zIndex: 10005, position: "relative" }}
-              >
+            <div>
+              <DropdownButton id="dropdown-basic-button" title="Histograms">
                 <Dropdown.Item
                   style={{
                     backgroundColor: isDurationHistogramGroupVisible
@@ -491,18 +477,12 @@ function AppGroups({ jsonData, showMenu }) {
                 </Dropdown.Item>
               </DropdownButton>
 
-              <DropdownButton
-                id="dropdown-basic-button"
-                title="Scatter Plots"
-                style={{ zIndex: 10005, position: "relative" }}
-              >
+              <DropdownButton id="dropdown-basic-button" title="Scatter Plots">
                 <Dropdown.Item
                   style={{
                     backgroundColor: isScatterPlotGroupVisible
                       ? "chartreuse"
                       : "white",
-                    zIndex: 10005,
-                    position: "relative",
                   }}
                   onClick={() =>
                     setScatterPlotGroupVisibility(!isScatterPlotGroupVisible)
@@ -515,12 +495,8 @@ function AppGroups({ jsonData, showMenu }) {
           )}
 
           {view === "Group's Operations" && (
-            <div style={{ display: "flex", justifyContent: "flex-start" }}>
-              <DropdownButton
-                id="dropdown-basic-button"
-                title="Histograms"
-                style={{ zIndex: 10005 }}
-              >
+            <div>
+              <DropdownButton id="dropdown-basic-button" title="Histograms">
                 <Dropdown.Item
                   style={{
                     backgroundColor: isDurationHistogramGroupsOperationsVisible
@@ -734,12 +710,6 @@ function AppGroups({ jsonData, showMenu }) {
     </div>
   );
 }
-
-const buttonStyle = {
-  fontSize: "0.9rem",
-  padding: "0.375rem 1rem",
-  height: "38px",
-};
 
 AppGroups.propTypes = {
   jsonData: PropTypes.object.isRequired,

@@ -300,79 +300,70 @@ function ScatterPlotImpl(props) {
             position: "fixed",
             top: 70,
             zIndex: 9998,
-            display: "flex",
-            alignItems: "center",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Dropdown>
-              <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                Scatter Plot Options
-              </Dropdown.Toggle>
+          <Dropdown>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+              Scatter Plot Options
+            </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => {
-                    setClickedDataPoint(null);
-                    const visibleData = getRandomSubset(data, percentage);
-                    setFilteredData(visibleData);
-                    setCurrentSpans(visibleData);
-                    setLastDrawLocation(null);
-                  }}
-                >
-                  Draw Other Spans to Be Displayed
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setFilteredData(currentSpans);
-                    setLastDrawLocation(null);
-                  }}
-                >
-                  Show All Currently Drawn Spans
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            {clickedDataPoint && (
-              <div>
-                <Dropdown>
-                  <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                    Selection Options
-                  </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => {
+                  setClickedDataPoint(null);
+                  const visibleData = getRandomSubset(data, percentage);
+                  setFilteredData(visibleData);
+                  setCurrentSpans(visibleData);
+                  setLastDrawLocation(null);
+                }}
+              >
+                Draw Other Spans to Be Displayed
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  setFilteredData(currentSpans);
+                  setLastDrawLocation(null);
+                }}
+              >
+                Show All Currently Drawn Spans
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          {clickedDataPoint && (
+            <div>
+              <Dropdown>
+                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                  Selection Options
+                </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => setClickedDataPoint(null)}>
-                      Cancel Selection
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => {
-                        setLastDrawLocation(null);
-                        handleOptionClick("trace");
-                        setClickedDataPoint(null);
-                      }}
-                    >
-                      Show All Spans from Trace With ID:{" "}
-                      {clickedDataPoint.traceID}
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => {
-                        setLastDrawLocation(null);
-                        handleOptionClick("service");
-                        setClickedDataPoint(null);
-                      }}
-                    >
-                      Show All Spans from Microservice Named:{" "}
-                      {clickedDataPoint.serviceName}
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            )}
-          </div>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => setClickedDataPoint(null)}>
+                    Cancel Selection
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setLastDrawLocation(null);
+                      handleOptionClick("trace");
+                      setClickedDataPoint(null);
+                    }}
+                  >
+                    Show All Spans from Trace With ID:{" "}
+                    {clickedDataPoint.traceID}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setLastDrawLocation(null);
+                      handleOptionClick("service");
+                      setClickedDataPoint(null);
+                    }}
+                  >
+                    Show All Spans from Microservice Named:{" "}
+                    {clickedDataPoint.serviceName}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          )}
         </div>
       )}
       <div className="App">

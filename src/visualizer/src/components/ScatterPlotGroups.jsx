@@ -67,7 +67,7 @@ function ScatterPlotGroupsImpl(props) {
         <div
           style={{
             position: "fixed",
-            top: 80,
+            top: 130,
             zIndex: 9998,
             display: "flex",
             alignItems: "center",

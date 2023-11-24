@@ -83,7 +83,7 @@ function ScatterPlotImpl(props) {
         <div
           style={{
             position: "fixed",
-            top: 80,
+            top: 170,
             zIndex: 9998,
             display: "flex",
             alignItems: "center",
