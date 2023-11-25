@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CallGraphPage.css';
 import GroupSelector from './components/GroupSelector'
 import TraceSelector from './components/TraceSelector';
@@ -7,7 +7,7 @@ import Legend from './components/Legend';
 import OperationStatsTable from './components/OperationStatsTable';
 
 
-function CallGraphPage(data) {
+function CallGraphPage({ data, serviceColors }) {
 
 
 
@@ -16,7 +16,13 @@ function CallGraphPage(data) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedTrace, setSelectedTrace] = useState(null);
 
-  const groups = data.data["groups"]
+
+  useEffect(() => {
+
+    setSelectedTrace(null);
+  }, [selectedGroup]);
+
+  const groups = data["groups"]
   groups.sort((a, b) => b.traceNumber - a.traceNumber);
 
 
@@ -27,24 +33,13 @@ function CallGraphPage(data) {
 
     var trace = traces.find((trace) => trace.traceID === selectedTrace);
 
-
-    function getRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
-
     // Obiekt mapowania kolorów
 
 
     // Przypisz kolory do mikroserwisów
     for (let processKey in selectedTrace.processes) {
-      microserviceColors[processKey] = { color: getRandomColor(), serviceName: selectedTrace.processes[processKey].serviceName };
-
-      console.log(microserviceColors)
+      var serviceName = selectedTrace.processes[processKey].serviceName
+      microserviceColors[processKey] = { color: serviceColors[serviceName], serviceName: serviceName };
     }
   }
 

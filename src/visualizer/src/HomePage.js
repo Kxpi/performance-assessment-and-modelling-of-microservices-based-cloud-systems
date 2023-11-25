@@ -5,11 +5,19 @@ import AppGroups from "./AppGroups";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import { randomColors } from './helpers.js'
+
+
 function HomePage() {
   const [data, setData] = useState(null);
   const [showCallGraph, setShowCallGraph] = useState(true);
   const [showMenu, setShowMenu] = useState(true);
   const [fileName, setFileName] = useState("Null");
+
+
+  if (data) {
+    var serviceColors = randomColors(data["microservice_stats"])
+  }
 
   return (
     <div>
@@ -83,7 +91,7 @@ function HomePage() {
       {data && (
         <div>
           {showCallGraph ? (
-            <CallGraphPage data={data} />
+            <CallGraphPage data={data} serviceColors={serviceColors} />
           ) : (
             <AppGroups jsonData={data} showMenu={showMenu} />
           )}

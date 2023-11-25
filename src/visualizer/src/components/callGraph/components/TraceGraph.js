@@ -1,7 +1,7 @@
 
 //this is TraceGraph without timeline
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactFlow from 'reactflow';
 import dagre from 'dagre';
 
@@ -13,6 +13,11 @@ const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
 
 
     const [selectedNode, setSelectedNode] = useState(null);
+
+    useEffect(() => {
+
+        setSelectedNode(null);
+    }, [selectedTrace]);
 
 
     const dagreGraph = new dagre.graphlib.Graph();
