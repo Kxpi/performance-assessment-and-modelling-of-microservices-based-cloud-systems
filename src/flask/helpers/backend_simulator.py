@@ -28,6 +28,8 @@ result:
 file_path = ".\modelowanie\jaeger-traces.json"
 
 
+#only for debugging purpose
+# how to use: get_groups(read_file(file_path)))
 def read_file(file_path):
     with open(file_path, "r") as f:
         data = json.load(f)
@@ -47,7 +49,6 @@ def isParent(parent, span):
             if reference["spanID"] == parent["spanID"]:
                 return True
         return False
-
 
 def findRoot(spans):
     if len(spans) == 1:
@@ -77,7 +78,6 @@ def findRoot(spans):
             return -1
             # exit(1)
 
-
 def get_callGraphRep(spans, root):
     # callGraph represented by nested dictionaries
 
@@ -97,7 +97,7 @@ def get_callGraphRep(spans, root):
     else:
         return None, 0
 
-
+#main
 def get_groups(data):
     traces = data["data"]
 
@@ -258,14 +258,12 @@ def get_groups(data):
         # Replace traces with traceIDs
         # group["traces"] = [trace["traceID"] for trace in group["traces"]]
 
-    # print("End of the second phase now just write the result to the file")
+
+    #save output to file, for debugging
     # with open('mateusz_groups.json', 'w') as f:
     #     json.dump({"groups": groups}, f, indent=4)
 
     return groups
-
-
-# get_groups(file_path)
 
 
 def get_microservice_stats(data):
