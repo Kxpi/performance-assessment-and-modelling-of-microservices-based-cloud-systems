@@ -1,0 +1,59 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Upload JSON</help_text><element><id>UMLGeneric</id><coordinates><x>150</x><y>30</y><w>950</w><h>940</h></coordinates><panel_attributes>System
+halign=left</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>40</x><y>110</y><w>150</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>13;12;130;20</additional_attributes></element><element><id>Relation</id><coordinates><x>310</x><y>80</y><w>180</w><h>70</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>160;10;10;50</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>210</y><w>380</w><h>70</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;includes&gt;&gt;</panel_attributes><additional_attributes>10;50;200;30;360;10</additional_attributes></element><element><id>Relation</id><coordinates><x>80</x><y>110</y><w>110</w><h>170</h></coordinates><panel_attributes></panel_attributes><additional_attributes>13;12;50;60;90;150</additional_attributes></element><element><id>Relation</id><coordinates><x>230</x><y>310</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>10;70;20;10</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>280</y><w>530</w><h>50</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>510;15;190;20;10;25</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>170</x><y>210</y><w>160</w><h>110</h></coordinates><panel_attributes>Analyze data
+--
+extension points
+Analyze diagrams
+Analyze statistical values
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>170</x><y>80</y><w>150</w><h>90</h></coordinates><panel_attributes>Import data
+--
+extension points
+Upload JSON
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>470</x><y>50</y><w>160</w><h>90</h></coordinates><panel_attributes>Upload JSON
+--
+extension points
+JSON validation
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>670</x><y>190</y><w>120</w><h>40</h></coordinates><panel_attributes>JSON validation</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>560</x><y>130</y><w>190</w><h>80</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>170;60;10;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>160</x><y>380</y><w>160</w><h>120</h></coordinates><panel_attributes>Analyze diagrams
+--
+extension points
+Analyze Call Graphs
+Analyze Scatter Plots
+Analyze Histograms
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>490</y><w>90</w><h>250</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>10;230;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>480</y><w>110</w><h>80</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>52;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>310</x><y>430</y><w>110</w><h>50</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>90;15;10;30</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>440</x><y>920</y><w>140</w><h>40</h></coordinates><panel_attributes>For groups of traces</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>160</x><y>710</y><w>210</w><h>130</h></coordinates><panel_attributes>Analyze Call Graphs
+--
+extension points
+For traces
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>790</x><y>830</y><w>190</w><h>40</h></coordinates><panel_attributes>For spans within the groups</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>630</x><y>700</y><w>210</w><h>50</h></coordinates><panel_attributes>For operations within the groups</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLActor</id><coordinates><x>10</x><y>90</y><w>80</w><h>110</h></coordinates><panel_attributes>Enginner</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>280</x><y>530</y><w>210</w><h>100</h></coordinates><panel_attributes>Analyze Scatter Plots
+--
+For groups of traces
+For operations within the groups
+For spans within the groups
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>180</x><y>910</y><w>120</w><h>40</h></coordinates><panel_attributes>For traces</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>230</x><y>830</y><w>90</w><h>100</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>900</x><y>320</y><w>90</w><h>530</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>10;510;10;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>810</x><y>230</y><w>210</w><h>100</h></coordinates><panel_attributes>Analyze statistical values
+--
+For groups of traces
+For operations within the groups
+For spans within the groups
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>470</x><y>600</y><w>340</w><h>270</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>320;250;110;250;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>300</y><w>540</w><h>660</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>10;640;470;610;430;10</additional_attributes></element><element><id>Relation</id><coordinates><x>400</x><y>620</y><w>100</w><h>340</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>40;320;10;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>400</x><y>380</y><w>230</w><h>110</h></coordinates><panel_attributes>Analyze Histograms
+--
+extension points
+For groups of traces
+For operations within the groups
+For spans within the groups
+valign=top</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>480</y><w>250</w><h>240</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>230;220;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>770</x><y>310</y><w>120</w><h>410</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>10;390;70;10</additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>560</y><w>170</w><h>180</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>150;160;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>620</x><y>430</y><w>260</w><h>420</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>240;400;230;240;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>460</x><y>470</y><w>140</w><h>470</h></coordinates><panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes><additional_attributes>10;450;110;10</additional_attributes></element></diagram>
