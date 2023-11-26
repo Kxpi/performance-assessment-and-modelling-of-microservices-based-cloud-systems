@@ -1,24 +1,17 @@
 import React, { useState } from "react";
 import CallGraphPage from "./components/callGraph/CallGraphPage";
 import FileUploader from "./components/callGraph/components/FileUploader";
+import PercendanceGraph from "./components/PercendanceGraph";
 import AppGroups from "./AppGroups";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-import { randomColors } from './helpers.js'
-
 
 function HomePage() {
   const [data, setData] = useState(null);
   const [showCallGraph, setShowCallGraph] = useState(true);
   const [showMenu, setShowMenu] = useState(true);
   const [fileName, setFileName] = useState("Null");
-
-
-  if (data) {
-    var serviceColors = randomColors(data["microservice_stats"])
-  }
-
+  const [showPercendanceGraph, setShowPercendanceGraph] = useState(false);
   return (
     <div>
       <div
@@ -73,6 +66,12 @@ function HomePage() {
                 >
                   Show ScatterPlot And Histograms
                 </Dropdown.Item>
+                <Dropdown.Item
+                  style={{ zIndex: 10010, position: "relative" }}
+                  onClick={() => setShowPercendanceGraph(false)}
+                >
+                  Show PercendanceGraph
+                </Dropdown.Item>
               </DropdownButton>
             </div>
           )}
@@ -89,13 +88,15 @@ function HomePage() {
       <div className="centered-text">Uploaded JSON: {fileName}</div>
 
       {data && (
-        <div>
-          {showCallGraph ? (
-            <CallGraphPage data={data} serviceColors={serviceColors} />
-          ) : (
-            <AppGroups jsonData={data} showMenu={showMenu} />
-          )}
-        </div>
+      <div>
+        {showCallGraph ? (
+          <CallGraphPage data={data} />
+        ) : showPercendanceGraph ? (
+          <PercendanceGraph data={data} />
+        ) : (
+          <AppGroups jsonData={data} showMenu={showMenu} />
+        )}
+      </div>
       )}
     </div>
   );
