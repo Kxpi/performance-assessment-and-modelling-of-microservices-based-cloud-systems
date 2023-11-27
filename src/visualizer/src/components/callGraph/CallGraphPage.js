@@ -46,14 +46,14 @@ function CallGraphPage({ data, serviceColors }) {
 
 
   return (
-    <div style={{ marginLeft: "50px" }}>
+    <div style={{ width: '100%' }}>
 
-      <div className='group-selector'>
+      <div className='group-selector' style={{ width: '100%' }}>
         <GroupSelector setSelectedGroup={setSelectedGroup} groups={groups} selectedGroup={selectedGroup} />
         {selectedGroup && <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace} selectedTrace={selectedTrace} />}
       </div>
 
-      {selectedTrace && <div style={{ display: "flex", justifyContent: "space-around" }}>
+      {selectedTrace && <div style={{ width: '100%', display: "flex", justifyContent: "space-around" }}>
         {microserviceColors && <Legend microserviceColors={microserviceColors} />}
         {selectedTrace && <TraceGraph selectedTrace={selectedTrace} servicesInfo={microserviceColors} operationStats={selectedGroup["operation_stats"]} />}
       </div>}

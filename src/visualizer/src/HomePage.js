@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import CallGraphPage from "./components/callGraph/CallGraphPage";
 import FileUploader from "./components/callGraph/components/FileUploader";
+import PercendenceGraph from "./components/PercendenceGraph";
 import AppGroups from "./AppGroups";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import { randomColors } from './helpers.js'
-
 
 function HomePage() {
   const [data, setData] = useState(null);
   const [showCallGraph, setShowCallGraph] = useState(true);
   const [showMenu, setShowMenu] = useState(true);
   const [fileName, setFileName] = useState("Null");
-
+  const [showPercendanceGraph, setShowPercendanceGraph] = useState(false);
+  const [currentView, setCurrentView] = useState(0);
+  // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
   if (data) {
     var serviceColors = randomColors(data["microservice_stats"])
@@ -63,15 +64,21 @@ function HomePage() {
               >
                 <Dropdown.Item
                   style={{ zIndex: 10010, position: "relative" }}
-                  onClick={() => setShowCallGraph(true)}
+                  onClick={() => setCurrentView(0)}
                 >
                   Show CallGraph
                 </Dropdown.Item>
                 <Dropdown.Item
                   style={{ zIndex: 10010, position: "relative" }}
-                  onClick={() => setShowCallGraph(false)}
+                  onClick={() => setCurrentView(1)}
                 >
                   Show ScatterPlot And Histograms
+                </Dropdown.Item>
+                <Dropdown.Item
+                  style={{ zIndex: 10010, position: "relative" }}
+                  onClick={() => setCurrentView(2)}
+                >
+                  Show PercendanceGraph
                 </Dropdown.Item>
               </DropdownButton>
             </div>
@@ -90,10 +97,14 @@ function HomePage() {
 
       {data && (
         <div>
-          {showCallGraph ? (
+          {currentView === 0 ? (
             <CallGraphPage data={data} serviceColors={serviceColors} />
-          ) : (
+          ) : currentView === 1 ? (
             <AppGroups jsonData={data} showMenu={showMenu} />
+          ) : currentView === 2 ? (
+            <PercendenceGraph data={data} />
+          ) : (
+            <h1>Error</h1>
           )}
         </div>
       )}

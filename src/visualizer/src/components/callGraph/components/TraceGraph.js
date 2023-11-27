@@ -90,8 +90,8 @@ const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
             // We are shifting the dagre node position (anchor=center center) to the top left
             // so it matches the React Flow node anchor point (top left).
             node.position = {
-                x: nodeWithPosition.x - nodeWidth / 2,
-                y: nodeWithPosition.y - nodeHeight / 2,
+                x: (nodeWithPosition.x - nodeWidth / 2) + 100,
+                y: (nodeWithPosition.y - nodeHeight / 2) + 100,
             };
 
 
@@ -119,7 +119,7 @@ const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
 
 
     return (
-        <div style={{ width: '100vw', height: '100vh', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+        <div style={{ height: '400px', width: '100vw', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
             <ReactFlow style={{ border: "solid", padding: "10px" }} nodes={nodes} edges={edges} onNodeClick={onNodeClick} />
             {selectedNode && <SpanInfo selectedSpan={selectedNode.data} operationStats={operationStats[selectedNode.data.operationName]} />}
         </div>

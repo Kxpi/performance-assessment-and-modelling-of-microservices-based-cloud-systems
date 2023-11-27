@@ -74,14 +74,12 @@ export function randomColors(services) {
     const serviceKeys = Object.keys(services);
 
     var total = serviceKeys.length;
-    console.log(total)
     var serviceColors = {};
     var i = 360 / (total - 1);
 
     serviceKeys.forEach((serviceName, x) => {
 
         const color = hsvToRgb(i * x, 70, 100);
-        console.log("to jest color: ", color)
         serviceColors[serviceName] = color;
     });
 
