@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef,useState } from 'react';
 import * as d3 from 'd3';
 
-const MyD3Component = () => {
+const PercendenceGraph = () => {
   const svgRef = useRef(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -150,4 +150,4 @@ const MyD3Component = () => {
   );
 };
 
-export default MyD3Component;
+export default PercendenceGraph;

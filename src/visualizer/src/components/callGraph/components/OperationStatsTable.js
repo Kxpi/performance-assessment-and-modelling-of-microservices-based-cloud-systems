@@ -18,11 +18,13 @@ function OperationStatsTable({ operationStats }) {
           </tr>
         </thead>
         <tbody>
+
+          
           {columnHeaders.map((header, headerIndex) => (
             <tr key={headerIndex}>
               <td>{header}</td>
               {operationNames.map((operationName, operationIndex) => (
-                <td key={operationIndex}>{operationStats[operationName][header] + ' μs'}</td>
+                <td key={operationIndex}>{operationStats[operationName][header] / 1000 + ' ms'}</td>
               ))}
             </tr>
           ))}
@@ -33,3 +35,6 @@ function OperationStatsTable({ operationStats }) {
 }
 
 export default OperationStatsTable;
+
+
+
