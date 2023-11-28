@@ -70,13 +70,18 @@ function HomePage() {
                 </Dropdown.Item>
                 <Dropdown.Item
                   style={{ zIndex: 10010, position: "relative" }}
-                  onClick={() => setCurrentView(1)}
+                  onClick={() => {setCurrentView(1);
+                    console.log("Current view set to 1:", currentView);}
+                  }
                 >
                   Show ScatterPlot And Histograms
                 </Dropdown.Item>
                 <Dropdown.Item
                   style={{ zIndex: 10010, position: "relative" }}
-                  onClick={() => setCurrentView(2)}
+                  onClick={() => {
+                    setCurrentView(2);
+                    console.log("Current view set to 2:", currentView); // Add this line for debugging
+                  }}
                 >
                   Show PercendanceGraph
                 </Dropdown.Item>
@@ -102,7 +107,7 @@ function HomePage() {
           ) : currentView === 1 ? (
             <AppGroups jsonData={data} showMenu={showMenu} />
           ) : currentView === 2 ? (
-            <PercendenceGraph data={data} />
+            <PercendenceGraph />
           ) : (
             <h1>Error</h1>
           )}

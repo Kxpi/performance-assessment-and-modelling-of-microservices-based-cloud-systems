@@ -1,12 +1,12 @@
 import React, { useEffect, useRef,useState } from 'react';
 import * as d3 from 'd3';
 
-const PercendenceGraph = () => {
+function PercendenceGraph() {
   const svgRef = useRef(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const svg = d3.select(svgRef.current);
-
+    console.log("SVG container:", svg.node());
     const width = 8000;
     const height = 4000;
 
@@ -14,18 +14,19 @@ const PercendenceGraph = () => {
       .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(function(d) { return d.Statistic[0] * 2; }))
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2));
-
+    console.log("Simulation:", simulation);
     const tooltip = d3.select("#tooltip");
 
     var tempSvg = d3.select("body").append("svg")
     .attr("width", 0)
     .attr("height", 0)
     .style("visibility", "hidden");
-
+    console.log("Fetching data...");
     // Fetch data
     fetch('http://127.0.0.1:5000/data')
       .then(response => response.json())
       .then(data => {
+                console.log("Fetched data:", data);
                 // Randomly assign initial positions to nodes
                 data.nodes.forEach(function(d) {
                     d.x = Math.random() * width;
@@ -60,7 +61,7 @@ const PercendenceGraph = () => {
                         .on("start", dragStarted)
                         .on("drag", dragged)
                         .on("end", dragEnded));
-
+                console.log("Links:", link.nodes());                       
                 node.each(function(d) {
                     var text = tempSvg.append("text")
                         .attr("font-size", "25px")
@@ -149,5 +150,5 @@ const PercendenceGraph = () => {
     </div>
   );
 };
-
+console.log("siema");
 export default PercendenceGraph;

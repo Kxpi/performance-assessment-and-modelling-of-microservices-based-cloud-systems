@@ -80,7 +80,7 @@ def send_data():
     links = []
 
     for item in graph_list:
-        print(item[0])
+       
         source, target = item[0][1:-1].replace("'", "").split(',')
         target=target[1:]
         nodes.add(source)
