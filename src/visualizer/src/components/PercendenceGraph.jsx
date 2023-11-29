@@ -1,154 +1,135 @@
-import React, { useEffect, useRef,useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
+import './GraphComponent.css'; 
 
-function PercendenceGraph() {
+const DirectedGraph = () => {
   const svgRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const svg = d3.select(svgRef.current);
-    console.log("SVG container:", svg.node());
-    const width = 8000;
-    const height = 4000;
 
-    const simulation = d3.forceSimulation()
-      .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(function(d) { return d.Statistic[0] * 2; }))
-      .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width / 2, height / 2));
-    console.log("Simulation:", simulation);
-    const tooltip = d3.select("#tooltip");
+  useEffect(() => {
+    // Fetch data from the /data endpoint
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/data');
+        const data = await response.json();
+        renderGraph(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const renderGraph = (data) => {
+    const { nodes, links } = data;
+
+    const width = 2000;
+    const height = 1000;
+    var tooltip = d3.select("#tooltip");
+    const svg = d3.select(svgRef.current)
+      .attr('width', width)
+      .attr('height', height);
+
+    const simulation = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(function(d) { return d.Statistic[0]*0.2; }))
+      .force('charge', d3.forceManyBody())
+      .force('center', d3.forceCenter(width / 2, height / 2));
 
     var tempSvg = d3.select("body").append("svg")
-    .attr("width", 0)
-    .attr("height", 0)
-    .style("visibility", "hidden");
-    console.log("Fetching data...");
-    // Fetch data
-    fetch('http://127.0.0.1:5000/data')
-      .then(response => response.json())
-      .then(data => {
-                console.log("Fetched data:", data);
-                // Randomly assign initial positions to nodes
-                data.nodes.forEach(function(d) {
-                    d.x = Math.random() * width;
-                    d.y = Math.random() * height;
-                });
+      .attr("width", 0)
+      .attr("height", 0)
+      .style("visibility", "hidden");
 
-                var link = svg.append("g")
-                    .attr("class", "links")
-                    .selectAll("line")
-                    .data(data.links)
-                    .enter().append("line")
-                    .attr("marker-end", "url(#arrow)")
-                    .style("stroke-width", 4)
-                    .on("mouseover", function(event, d) {
-                        tooltip.style("display", "block")
-                            .html("Mean: " + d.Statistic[0] + ", Median: " + d.Statistic[1] + ",\n 75 percentile: " + d.Statistic[2] + ",\n 95 percentile: " + d.Statistic[3])
-                            .style("left", (event.pageX + 10) + "px")
-                            .style("top", (event.pageY - 25) + "px");
-                    })
-                    .on("drag", function(event, d) {
-                        d.fx = event.x;
-                        d.fy = event.y;
-                    })
+      const link = svg.append("g")
+      .attr("class", "links")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("marker-end", "url(#arrow)")
+      .style("stroke-width", 4)
+      .on("mouseover", function (event, d) {
+        tooltip.style("display", "block")
+          .html(
+            "Mean: " + d.Statistic[0] +
+            ", Median: " + d.Statistic[1] +
+            ", 75th percentile: " + d.Statistic[2] +
+            ", 95th percentile: " + d.Statistic[3]
+          )
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 25) + "px");
+       })
+       .on("mouseout", function () {
+        tooltip.style("display", "none");
+       });
 
-                var node = svg.append("g")
-                    .attr("class", "nodes")
-                    .selectAll("g")
-                    .data(data.nodes)
-                    .enter().append("g")
-                    .attr("transform", d => `translate(${d.x},${d.y})`)
-                    .call(d3.drag()
-                        .on("start", dragStarted)
-                        .on("drag", dragged)
-                        .on("end", dragEnded));
-                console.log("Links:", link.nodes());                       
-                node.each(function(d) {
-                    var text = tempSvg.append("text")
-                        .attr("font-size", "25px")
-                        .text(d.id);
+    var node = svg.append("g")
+       .attr("class", "nodes")
+       .selectAll("g")
+       .data(nodes)
+       .enter().append("g")
+       .attr("transform", d => `translate(${d.x},${d.y})`)
+       .call(d3.drag()
+           .on("start", dragstarted)
+           .on("drag", dragged)
+           .on("end", dragended));
 
-                    var textWidth = text.node().getBBox().width;
-                    text.remove();
+    node.each(function(d) {
+            var text = tempSvg.append("text")
+                .attr("font-size", "11px")
+                .text(d.id);
 
-                    var rect = d3.select(this)
-                        .append("rect")
-                        .attr("width", textWidth + 40) // Add padding
-                        .attr("height", 40)
-                        .attr("rx", 0)
-                        .attr("ry", 0)
-                        .attr("fill", "#69b3a2");
+            var textWidth = text.node().getComputedTextLength();
+            text.remove();
 
-                    d3.select(this)
-                        .append("text")
-                        .attr("x", function() {
-                            return (textWidth + 40) / 2; // Set text position to center
-                        })
-                        .attr("y", 20)
-                        .attr("text-anchor", "middle")
-                        .attr("fill", "black")
-                        .style("font-size", "25px")
-                        .text(d.id);
-                });
+            var rect = d3.select(this)
+                .append("rect")
+                .attr("width", textWidth + 11) // Add padding
+                .attr("height", 17)
+                .attr("rx", 0)
+                .attr("ry", 0)
+                .attr("fill", "#69b3a2");
 
-                simulation
-                    .nodes(data.nodes)
-                    .on("tick", ticked);
+            d3.select(this)
+                .append("text")
+                .attr("x", function() {
+                    return (textWidth + 11) / 2; // Set text position to center
+                })
+                .attr("y", 9)
+                .attr("text-anchor", "middle")
+                .attr("fill", "black")
+                .style("font-size", "11px")
+                .text(d.id);
+        });
 
-                simulation.force("link")
-                    .links(data.links);
+        simulation.on('tick', () => {
+            link
+              .attr('x1', d => d.source.x)
+              .attr('y1', d => d.source.y)
+              .attr('x2', d => d.target.x)
+              .attr('y2', d => d.target.y);
+        
+            node.attr('transform', d => `translate(${d.x},${d.y})`);
+          });
 
-                svg.append("defs").append("marker")
-                    .attr("id", "arrow")
-                    .attr("viewBox", "-0 -5 10 10")
-                    .attr("refX", 25)
-                    .attr("refY", 0)
-                    .attr("orient", "auto")
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 6)
-                    .attr("xoverflow", "visible")
-                    .append("svg:path")
-                    .attr("d", "M 0,-5 L 10 ,0 L 0,5")
-                    .attr("fill", "#999")
-                    .style("stroke","none");
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
 
-                function ticked() {
-                    node.attr("transform", d => `translate(${d.x},${d.y})`);
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
 
-                    link.attr("x1", function(d) { return d.source.x + 25; })
-                        .attr("y1", function(d) { return d.source.y + 10; })
-                        .attr("x2", function(d) { return d.target.x + 25; })
-                        .attr("y2", function(d) { return d.target.y + 10; });
-                }
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  };
 
-                function dragStarted(event, d) {
-                    if (!event.active) simulation.alphaTarget(0.3).restart();
-                    d.fx = d.x;
-                    d.fy = d.y;
-                }
-                
-                function dragged(event, d) {
-                    d.fx = event.x;
-                    d.fy = event.y;
-                }
-                
-                function dragEnded(event, d) {
-                    if (!event.active) simulation.alphaTarget(0);
-                    d.fx = null;
-                    d.fy = null;
-                }
-      })
-      .catch(error => console.error('Error:', error));
-      setLoading(false);
-  }, []); // Empty dependency array to run the effect only once
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  return (
-    <div>
-      <div className="tooltip" id="tooltip"></div>
-      <svg ref={svgRef} width={8000} height={4000}></svg>
-    </div>
-  );
+  return <svg ref={svgRef}></svg>;
 };
-console.log("siema");
-export default PercendenceGraph;
+
+export default DirectedGraph;
