@@ -25,13 +25,18 @@ const DirectedGraph = () => {
 
     const width = 2000;
     const height = 1000;
+    const margin = 50; // Adjust this margin as needed
+    const maxX = width - margin;
+    const maxY = height - margin;
+    const minX = margin;
+    const minY = margin;
     var tooltip = d3.select("#tooltip");
     const svg = d3.select(svgRef.current)
       .attr('width', width)
       .attr('height', height);
 
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(function(d) { return d.Statistic[0]*0.2; }))
+      .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(function(d) { return d.Statistic[0]*0.5; }))
       .force('charge', d3.forceManyBody())
       .force('center', d3.forceCenter(width / 2, height / 2));
 
@@ -118,8 +123,9 @@ const DirectedGraph = () => {
     }
 
     function dragged(event, d) {
-      d.fx = event.x;
-      d.fy = event.y;
+
+      d.fx = Math.max(minX, Math.min(maxX, event.x));
+      d.fy = Math.max(minY, Math.min(maxY, event.y));
     }
 
     function dragended(event, d) {
