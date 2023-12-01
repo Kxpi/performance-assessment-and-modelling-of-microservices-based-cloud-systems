@@ -18,6 +18,17 @@ const DirectedGraph = () => {
     };
 
     fetchData();
+
+    const tooltip = d3.select("body").append("div")
+    .attr("id", "tooltip")
+    .style("display", "none")
+    .style("position", "absolute")
+    .style("background", "rgba(0, 0, 0, 0.7)")
+    .style("color", "#fff")
+    .style("padding", "5px 10px")
+    .style("border-radius", "5px")
+    .style("pointer-events", "none");
+        
   }, []);
 
   const renderGraph = (data) => {
@@ -37,7 +48,6 @@ const DirectedGraph = () => {
 
     const simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(function(d) { return d.Statistic[0]*0.5; }))
-      .force('charge', d3.forceManyBody())
       .force('center', d3.forceCenter(width / 2, height / 2));
 
     var tempSvg = d3.select("body").append("svg")
