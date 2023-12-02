@@ -5,12 +5,12 @@ from helpers.processing import get_data
 from flask_cors import CORS
 
 from helpers.backend_simulator import get_groups
-from helpers.backend_simulator import get_microservice_stats
 from helpers.comm_times import *
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 data = None
+
 
 @app.before_request
 def handle_preflight():
@@ -54,8 +54,7 @@ def upload_file():
         global data
         data = request.get_json()
 
-        microservice_stats = get_microservice_stats(data)
-        groups = get_groups(data)
+        microservice_stats, groups = get_groups(data)
 
         return jsonify({"microservice_stats": microservice_stats, "groups": groups})
 
@@ -67,7 +66,7 @@ def upload_file():
 @app.route("/data")
 def send_data():
     global data
-    traces =  data.copy()
+    traces = data.copy()
 
     non_child = find_non_child(traces)
     traces_reformatted = reformat_dict(traces)
@@ -75,25 +74,30 @@ def send_data():
 
     graph = get_statistic_of_traces(communication_times)
     graph_list = [(str(pair), stats) for pair, stats in graph.items()]
-    
+
     nodes = set()
     links = []
 
     for item in graph_list:
-       
-        source, target = item[0][1:-1].replace("'", "").split(',')
-        target=target[1:]
+        source, target = item[0][1:-1].replace("'", "").split(",")
+        target = target[1:]
         nodes.add(source)
         nodes.add(target)
         links.append({"source": source, "target": target, "Statistic": item[1]})
-        
+
     nodes = list(nodes)
 
     # Transform nodes to node objects
     nodes = [{"id": node} for node in nodes]
 
     # Return a JSON response
-    return jsonify({"nodes": nodes, "links": links,})
+    return jsonify(
+        {
+            "nodes": nodes,
+            "links": links,
+        }
+    )
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

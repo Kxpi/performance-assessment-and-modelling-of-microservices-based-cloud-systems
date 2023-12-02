@@ -412,7 +412,7 @@ function ScatterPlotImpl(props) {
             <HorizontalGridLines />
             <VerticalGridLines />
             <XAxis
-              title="Time Counted From The Earliest Span"
+              title="Start Time"
               tickTotal={18}
               tickFormat={(t) => formatDuration(t)}
             />

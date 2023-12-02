@@ -25,10 +25,10 @@ result:
     }
 """
 
-file_path = ".\modelowanie\jaeger-traces.json"
+file_path = "./modelowanie/jaeger-traces.json"
 
 
-#only for debugging purpose
+# only for debugging purpose
 # how to use: get_groups(read_file(file_path)))
 def read_file(file_path):
     with open(file_path, "r") as f:
@@ -36,7 +36,7 @@ def read_file(file_path):
 
     for trace in data["data"]:
         trace["spans"].sort(key=lambda span: span["startTime"])
-        
+
     return data
 
 
@@ -46,6 +46,7 @@ def isParent(parent, span):
             if reference["spanID"] == parent["spanID"]:
                 return True
         return False
+
 
 def findRoot(spans):
     if len(spans) == 1:
@@ -75,6 +76,7 @@ def findRoot(spans):
             return -1
             # exit(1)
 
+
 def get_callGraphRep(spans, root):
     # callGraph represented by nested dictionaries
 
@@ -94,33 +96,33 @@ def get_callGraphRep(spans, root):
     else:
         return None, 0
 
+
 def dealWithDuplicates(spans):
+    d = {}
+    num = {}
 
-    d={}
-    num={}
-
-    for i,s in enumerate(spans):
-
-        opName=s["operationName"]
-        IDs={}        
-        if  opName in d:
-            
+    for i, s in enumerate(spans):
+        opName = s["operationName"]
+        IDs = {}
+        if opName in d:
             if opName not in IDs:
-                IDs[opName]=0
+                IDs[opName] = 0
 
-            IDs[opName]+=1
+            IDs[opName] += 1
 
-            if isParent(spans[d[opName][1]],s):
-                s["operationName"]+="ID-"+str(IDs[opName])
+            if isParent(spans[d[opName][1]], s):
+                s["operationName"] += "ID-" + str(IDs[opName])
 
-            elif isParent(s,spans[d[opName][1]]):
-                spans[d[opName][1]]["operationName"]+="-(ID-"+str(IDs[opName])+')'
+            elif isParent(s, spans[d[opName][1]]):
+                spans[d[opName][1]]["operationName"] += "-(ID-" + str(IDs[opName]) + ")"
             else:
-                spans[d[opName][1]]["operationName"]+="ID-"+str(IDs[opName])
+                spans[d[opName][1]]["operationName"] += "ID-" + str(IDs[opName])
 
         else:
-            d[opName]=(s["spanID"],i)
-#main
+            d[opName] = (s["spanID"], i)
+
+
+# main
 def get_groups(data):
     traces = data["data"]
 
@@ -129,10 +131,14 @@ def get_groups(data):
     # CallGraph_rep: {traceid: callGraph}
     traces_callGraph_rep = {}
     groups = []
+    microservices = set()
+    """
+    microservice_exec_times = defaultdict(list)
+    microservice_start_times = defaultdict(list)
+    """
 
     # Create callGraph representation  for each trace
     for trace in traces:
-
         dealWithDuplicates(trace["spans"])
         trace_spans = trace["spans"][:]
 
@@ -142,8 +148,36 @@ def get_groups(data):
         earliest_start_time = trace_root["startTime"]
 
         # Update the startTime for each span in the trace
+        # negative_start_spans = []
         for span in trace["spans"]:
+            # original_start_time = span["startTime"]
             span["startTime"] -= earliest_start_time
+            """
+            if span["startTime"] < 0:
+                negative_start_spans.append(
+                    {
+                        "trace_id": trace["traceID"],
+                        "trace_root_span_id": trace_root["spanID"],
+                        "trace_root_span_operation_name": trace_root["operationName"],
+                        "trace_root_span_start_time": earliest_start_time,
+                        "span_id": span["spanID"],
+                        "original_span_start_time": original_start_time,
+                        "span_operation_name": span["operationName"],
+                    }
+                )
+            """
+            # Get the serviceName using the processId of the span
+
+            service_name = trace["processes"][span["processID"]]["serviceName"]
+            microservices.add(service_name)
+            """
+            microservice_exec_times[service_name].append(span["duration"])
+            microservice_start_times[service_name].append(span["startTime"])
+            
+        if negative_start_spans:
+            with open("negative_start_spans.json", "a") as f:
+                json.dump(negative_start_spans, f, indent=4)
+        """
 
         callG, used_spans = get_callGraphRep(trace_spans, trace_root)
 
@@ -160,6 +194,37 @@ def get_groups(data):
             traces_callGraph_rep[trace["traceID"]][
                 trace_root["operationName"]
             ] = get_callGraphRep(trace_spans, trace_root)
+
+    # Calculate statistics for each microservice
+    """
+    microservice_stats = {}
+    for service_name in microservice_exec_times.keys():
+        exec_times = np.array(microservice_exec_times[service_name])
+        start_times = np.array(microservice_start_times[service_name])
+
+        microservice_stats[service_name] = {
+            "exec_time_min": int(np.min(exec_times)),
+            "exec_time_max": int(np.max(exec_times)),
+            "exec_time_q1": int(np.percentile(exec_times, 25)),
+            "exec_time_q2": int(np.percentile(exec_times, 50)),
+            "exec_time_q3": int(np.percentile(exec_times, 75)),
+            "exec_time_95_percentile": int(np.percentile(exec_times, 95)),
+            "exec_time_99_percentile": int(np.percentile(exec_times, 99)),
+            "exec_time_average": int(np.average(exec_times)),
+            "exec_time_stddev": int(np.std(exec_times)),
+            "exec_time_IQR": int(np.subtract(*np.percentile(exec_times, [75, 25]))),
+            "start_time_min": int(np.min(start_times)),
+            "start_time_max": int(np.max(start_times)),
+            "start_time_q1": int(np.percentile(start_times, 25)),
+            "start_time_q2": int(np.percentile(start_times, 50)),
+            "start_time_q3": int(np.percentile(start_times, 75)),
+            "start_time_95_percentile": int(np.percentile(start_times, 95)),
+            "start_time_99_percentile": int(np.percentile(start_times, 99)),
+            "start_time_average": int(np.average(start_times)),
+            "start_time_stddev": int(np.std(start_times)),
+            "start_time_IQR": int(np.subtract(*np.percentile(start_times, [75, 25]))),
+        }
+        """
 
     # Group traces by callGraph representation
     initial_trace = traces.pop(0)
@@ -283,60 +348,14 @@ def get_groups(data):
         # Replace traces with traceIDs
         # group["traces"] = [trace["traceID"] for trace in group["traces"]]
 
+    microservices = {service: {} for service in microservices}
 
-    #save output to file, for debugging
-    # with open('mateusz_groups.json', 'w') as f:
-    #     json.dump({"groups": groups}, f, indent=4)
+    # save output to file, for debugging
+    """
+    with open("mateusz_groups.json", "w") as f:
+        json.dump(
+            {"microservice_stats": list(microservices), "groups": groups}, f, indent=4
+        )
+    """
 
-    return groups
-
-
-def get_microservice_stats(data):
-    microservice_exec_times = defaultdict(list)
-    microservice_start_times = defaultdict(list)
-
-    traces = data["data"]
-    for trace in traces:
-        trace_spans = trace["spans"][:]
-        # Find the earliest startTime in the trace
-        earliest_start_time = min(span["startTime"] for span in trace_spans)
-
-        # Update the startTime for each span in the trace
-        for span in trace_spans:
-            span["startTime"] -= earliest_start_time
-        for span in trace["spans"]:
-            # Get the serviceName using the processId of the span
-            service_name = trace["processes"][span["processID"]]["serviceName"]
-            microservice_exec_times[service_name].append(span["duration"])
-            microservice_start_times[service_name].append(span["startTime"])
-
-    # Calculate statistics for each microservice
-    microservice_stats = {}
-    for service_name in microservice_exec_times.keys():
-        exec_times = np.array(microservice_exec_times[service_name])
-        start_times = np.array(microservice_start_times[service_name])
-
-        microservice_stats[service_name] = {
-            "exec_time_min": int(np.min(exec_times)),
-            "exec_time_max": int(np.max(exec_times)),
-            "exec_time_q1": int(np.percentile(exec_times, 25)),
-            "exec_time_q2": int(np.percentile(exec_times, 50)),
-            "exec_time_q3": int(np.percentile(exec_times, 75)),
-            "exec_time_95_percentile": int(np.percentile(exec_times, 95)),
-            "exec_time_99_percentile": int(np.percentile(exec_times, 99)),
-            "exec_time_average": int(np.average(exec_times)),
-            "exec_time_stddev": int(np.std(exec_times)),
-            "exec_time_IQR": int(np.subtract(*np.percentile(exec_times, [75, 25]))),
-            "start_time_min": int(np.min(start_times)),
-            "start_time_max": int(np.max(start_times)),
-            "start_time_q1": int(np.percentile(start_times, 25)),
-            "start_time_q2": int(np.percentile(start_times, 50)),
-            "start_time_q3": int(np.percentile(start_times, 75)),
-            "start_time_95_percentile": int(np.percentile(start_times, 95)),
-            "start_time_99_percentile": int(np.percentile(start_times, 99)),
-            "start_time_average": int(np.average(start_times)),
-            "start_time_stddev": int(np.std(start_times)),
-            "start_time_IQR": int(np.subtract(*np.percentile(start_times, [75, 25]))),
-        }
-
-    return microservice_stats
+    return microservices, groups

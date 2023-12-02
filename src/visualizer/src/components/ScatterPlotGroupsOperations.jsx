@@ -184,14 +184,11 @@ function ScatterPlotImpl(props) {
             <HorizontalGridLines />
             <VerticalGridLines />
             <XAxis
-              title="Median Start Time Counted From The Earliest Span"
+              title="Start Time"
               tickTotal={18}
               tickFormat={(t) => formatDuration(t)}
             />
-            <YAxis
-              title="Median Duration"
-              tickFormat={(t) => formatDuration(t)}
-            />
+            <YAxis title="Duration" tickFormat={(t) => formatDuration(t)} />
             {data.map((d, i) => {
               return [
                 <HorizontalRectSeries
