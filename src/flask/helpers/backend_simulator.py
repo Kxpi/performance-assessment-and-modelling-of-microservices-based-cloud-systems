@@ -36,10 +36,7 @@ def read_file(file_path):
 
     for trace in data["data"]:
         trace["spans"].sort(key=lambda span: span["startTime"])
-        earliest_span = trace["spans"][0]
-        for span in trace["spans"]:
-            span["startTime"] = span["startTime"] - earliest_span["startTime"]
-
+        
     return data
 
 
@@ -97,6 +94,32 @@ def get_callGraphRep(spans, root):
     else:
         return None, 0
 
+def dealWithDuplicates(spans):
+
+    d={}
+    num={}
+
+    for i,s in enumerate(spans):
+
+        opName=s["operationName"]
+        IDs={}        
+        if  opName in d:
+            
+            if opName not in IDs:
+                IDs[opName]=0
+
+            IDs[opName]+=1
+
+            if isParent(spans[d[opName][1]],s):
+                s["operationName"]+="ID-"+str(IDs[opName])
+
+            elif isParent(s,spans[d[opName][1]]):
+                spans[d[opName][1]]["operationName"]+="-(ID-"+str(IDs[opName])+')'
+            else:
+                spans[d[opName][1]]["operationName"]+="ID-"+str(IDs[opName])
+
+        else:
+            d[opName]=(s["spanID"],i)
 #main
 def get_groups(data):
     traces = data["data"]
@@ -109,16 +132,18 @@ def get_groups(data):
 
     # Create callGraph representation  for each trace
     for trace in traces:
+
+        dealWithDuplicates(trace["spans"])
         trace_spans = trace["spans"][:]
 
+        trace_root = findRoot(trace_spans)
+
         # Find the earliest startTime in the trace
-        earliest_start_time = min(span["startTime"] for span in trace_spans)
+        earliest_start_time = trace_root["startTime"]
 
         # Update the startTime for each span in the trace
-        for span in trace_spans:
+        for span in trace["spans"]:
             span["startTime"] -= earliest_start_time
-
-        trace_root = findRoot(trace_spans)
 
         callG, used_spans = get_callGraphRep(trace_spans, trace_root)
 
