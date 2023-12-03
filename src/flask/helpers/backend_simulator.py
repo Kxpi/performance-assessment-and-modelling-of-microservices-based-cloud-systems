@@ -25,7 +25,7 @@ result:
     }
 """
 
-file_path = "./modelowanie/jaeger-traces.json"
+file_path = ""
 
 
 # only for debugging purpose
@@ -66,13 +66,12 @@ def findRoot(spans):
                         spans.pop(index)
                         return span
         else:
-            print("Error: Couldn't find root! Spans: ")
-            for s in spans:
-                x = json.dumps(s, indent=4)
-                print("-" * 100)
-                print(x)
-                print("=" * 100)
-
+            # print("Error: Couldn't find root! Spans: ")
+            # for s in spans:
+            #     x = json.dumps(s, indent=4)
+            #     print("-" * 100)
+            #     print(x)
+            #     print("=" * 100)
             return -1
             # exit(1)
 
@@ -99,7 +98,6 @@ def get_callGraphRep(spans, root):
 
 def dealWithDuplicates(spans):
     d = {}
-    num = {}
 
     for i, s in enumerate(spans):
         opName = s["operationName"]
@@ -111,12 +109,12 @@ def dealWithDuplicates(spans):
             IDs[opName] += 1
 
             if isParent(spans[d[opName][1]], s):
-                s["operationName"] += "ID-" + str(IDs[opName])
+                s["operationName"] += "-(ID-" + str(IDs[opName]) + ")"
 
             elif isParent(s, spans[d[opName][1]]):
                 spans[d[opName][1]]["operationName"] += "-(ID-" + str(IDs[opName]) + ")"
             else:
-                spans[d[opName][1]]["operationName"] += "ID-" + str(IDs[opName])
+                spans[d[opName][1]]["operationName"] += "-(ID-" + str(IDs[opName]) + ")"
 
         else:
             d[opName] = (s["spanID"], i)
@@ -132,6 +130,7 @@ def get_groups(data):
     traces_callGraph_rep = {}
     groups = []
     microservices = set()
+    traces_with_negative_start=[]
     """
     microservice_exec_times = defaultdict(list)
     microservice_start_times = defaultdict(list)
@@ -149,9 +148,11 @@ def get_groups(data):
 
         # Update the startTime for each span in the trace
         # negative_start_spans = []
+        
         for span in trace["spans"]:
             # original_start_time = span["startTime"]
             span["startTime"] -= earliest_start_time
+            
             """
             if span["startTime"] < 0:
                 negative_start_spans.append(
@@ -166,6 +167,12 @@ def get_groups(data):
                     }
                 )
             """
+        for span in trace['spans']:
+            
+            if span["startTime"] < 0:
+                traces_with_negative_start.append(trace)
+                break
+
             # Get the serviceName using the processId of the span
 
             service_name = trace["processes"][span["processID"]]["serviceName"]
@@ -350,6 +357,18 @@ def get_groups(data):
 
     microservices = {service: {} for service in microservices}
 
+    if len(traces_with_negative_start)>0:
+        groups.append(
+                    {
+                        "groupID":'Negative start times',
+                        "traceNumber": len(traces_with_negative_start),
+                        "traces": traces_with_negative_start,
+                        "span_stats": None,
+                        "operation_stats": None
+                    }
+                )
+        
+    
     # save output to file, for debugging
     """
     with open("mateusz_groups.json", "w") as f:

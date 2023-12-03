@@ -2,6 +2,11 @@ import React from 'react';
 import './styles/OperationStatsTable.css'; // Zaimportuj plik stylów CSS
 
 function OperationStatsTable({ operationStats }) {
+
+  if (!operationStats) {
+    return null;
+  }
+
   const operationNames = Object.keys(operationStats); // Pobierz nazwy operacji
   const columnHeaders = Object.keys(operationStats[operationNames[0]]); // Pobierz nagłówki kolumn
 
@@ -19,7 +24,7 @@ function OperationStatsTable({ operationStats }) {
         </thead>
         <tbody>
 
-          
+
           {columnHeaders.map((header, headerIndex) => (
             <tr key={headerIndex}>
               <td>{header}</td>

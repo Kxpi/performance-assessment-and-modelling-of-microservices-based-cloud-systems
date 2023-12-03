@@ -15,7 +15,7 @@ var hsvToRgb = function (h, s, v) {
     s /= 100;
     v /= 100;
 
-    if (s == 0) {
+    if (s === 0) {
         // Achromatic (grey)
         r = g = b = v;
         return `rgb(${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)})`;

@@ -59,7 +59,7 @@ function CallGraphPage({ data, serviceColors }) {
       </div>}
 
       <div style={{ marginTop: "50px", marginBottom: "50px" }}>
-        {selectedGroup && < OperationStatsTable operationStats={selectedGroup["operation_stats"]} />}
+        {selectedGroup && selectedGroup?.operation_stats?.length !== 0 && < OperationStatsTable operationStats={selectedGroup["operation_stats"]} />}
       </div>
 
 

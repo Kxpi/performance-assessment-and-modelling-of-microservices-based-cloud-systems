@@ -121,7 +121,8 @@ const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
     return (
         <div style={{ height: '400px', width: '100vw', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
             <ReactFlow style={{ border: "solid", padding: "10px" }} nodes={nodes} edges={edges} onNodeClick={onNodeClick} />
-            {selectedNode && <SpanInfo selectedSpan={selectedNode.data} operationStats={operationStats[selectedNode.data.operationName]} />}
+            {selectedNode && <SpanInfo selectedSpan={selectedNode.data}  />}
+            {/* operationStats={operationStats[selectedNode.data.operationName]} */}
         </div>
     );
 }

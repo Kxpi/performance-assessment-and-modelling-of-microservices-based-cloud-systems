@@ -353,7 +353,8 @@ function AppGroups({ jsonData, showMenu }) {
 
   useEffect(() => {
     setGroupedTraces(jsonData);
-    const groupsData = jsonData.groups;
+    // 'Negative start times' group is only to represent traces which have at least one span with negative starTime that's why we need to delete it
+    const groupsData = jsonData.groups.filter(item => item["groupID"] !== 'Negative start times');
 
     const propsData = Object.keys(groupsData).map((key, index) => {
       const group = groupsData[key];

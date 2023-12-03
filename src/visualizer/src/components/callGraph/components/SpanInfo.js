@@ -2,7 +2,7 @@ import React from 'react';
 
 const SpanInfo = ({ selectedSpan, operationStats }) => {
 
-    console.log("Operation Stats: ", operationStats)
+
     return (
         <div className="span-info">
             <h2>Span Information</h2>
