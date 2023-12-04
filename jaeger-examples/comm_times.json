@@ -1,0 +1,389 @@
+{
+    "data": [
+        {
+            "traceID": "47c96b7d20034ab",
+            "spans": [
+                {
+                    "traceId": "47c96b7d20034ab",
+                    "spanId": "d399c44",
+                    "operationName": "operation_135",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "47c96b7d20034ab",
+                            "spanID": "47c96b7d20034ab"
+                        }
+                    ],
+                    "startTime": 1701699819488335,
+                    "duration": 5860,
+                    "communication_time_to_next": 4392
+                },
+                {
+                    "traceId": "47c96b7d20034ab",
+                    "spanId": "19a5c853",
+                    "operationName": "operation_453",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "47c96b7d20034ab",
+                            "spanID": "d399c44"
+                        }
+                    ],
+                    "startTime": 1701699819498587,
+                    "duration": 91273,
+                    "communication_time_to_next": 3608
+                },
+                {
+                    "traceId": "47c96b7d20034ab",
+                    "spanId": "1f207109",
+                    "operationName": "operation_125",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "47c96b7d20034ab",
+                            "spanID": "19a5c853"
+                        }
+                    ],
+                    "startTime": 1701699819593468,
+                    "duration": 64455,
+                    "communication_time_to_next": 7763
+                },
+                {
+                    "traceId": "47c96b7d20034ab",
+                    "spanId": "13a2b0ce",
+                    "operationName": "operation_292",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "47c96b7d20034ab",
+                            "spanID": "1f207109"
+                        }
+                    ],
+                    "startTime": 1701699819665686,
+                    "duration": 35853,
+                    "communication_time_to_next": 3705
+                },
+                {
+                    "traceId": "47c96b7d20034ab",
+                    "spanId": "2962ed6d",
+                    "operationName": "operation_337",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "47c96b7d20034ab",
+                            "spanID": "13a2b0ce"
+                        }
+                    ],
+                    "startTime": 1701699819705244,
+                    "duration": 77869,
+                    "communication_time_to_next": 7695
+                }
+            ]
+        },
+        {
+            "traceID": "c0e1aae1f04fb7a",
+            "spans": [
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "19b2db42",
+                    "operationName": "operation_912",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "c0e1aae1f04fb7a"
+                        }
+                    ],
+                    "startTime": 1701699819488403,
+                    "duration": 65664,
+                    "communication_time_to_next": 7916
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "3693d167",
+                    "operationName": "operation_400",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "19b2db42"
+                        }
+                    ],
+                    "startTime": 1701699819561983,
+                    "duration": 66415,
+                    "communication_time_to_next": 9858
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "30f9b0e4",
+                    "operationName": "operation_680",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "3693d167"
+                        }
+                    ],
+                    "startTime": 1701699819638256,
+                    "duration": 9190,
+                    "communication_time_to_next": 9467
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "8ed781d",
+                    "operationName": "operation_418",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "30f9b0e4"
+                        }
+                    ],
+                    "startTime": 1701699819656913,
+                    "duration": 59942,
+                    "communication_time_to_next": 2328
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "51eb522",
+                    "operationName": "operation_835",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "8ed781d"
+                        }
+                    ],
+                    "startTime": 1701699819719183,
+                    "duration": 65386,
+                    "communication_time_to_next": 9823
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "1a54b08f",
+                    "operationName": "operation_278",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "51eb522"
+                        }
+                    ],
+                    "startTime": 1701699819794392,
+                    "duration": 27700,
+                    "communication_time_to_next": 1752
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "b4add98",
+                    "operationName": "operation_453",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "1a54b08f"
+                        }
+                    ],
+                    "startTime": 1701699819823844,
+                    "duration": 97536,
+                    "communication_time_to_next": 3919
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "cb86efc",
+                    "operationName": "operation_928",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "b4add98"
+                        }
+                    ],
+                    "startTime": 1701699819925299,
+                    "duration": 25767,
+                    "communication_time_to_next": 5579
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "32b28dcf",
+                    "operationName": "operation_473",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "cb86efc"
+                        }
+                    ],
+                    "startTime": 1701699819956645,
+                    "duration": 75199,
+                    "communication_time_to_next": 2598
+                },
+                {
+                    "traceId": "c0e1aae1f04fb7a",
+                    "spanId": "85bfa8a",
+                    "operationName": "operation_922",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "c0e1aae1f04fb7a",
+                            "spanID": "32b28dcf"
+                        }
+                    ],
+                    "startTime": 1701699820034442,
+                    "duration": 45147,
+                    "communication_time_to_next": 3544
+                }
+            ]
+        },
+        {
+            "traceID": "5d5071fb9f3e7cd",
+            "spans": [
+                {
+                    "traceId": "5d5071fb9f3e7cd",
+                    "spanId": "933a38d",
+                    "operationName": "operation_254",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "5d5071fb9f3e7cd",
+                            "spanID": "5d5071fb9f3e7cd"
+                        }
+                    ],
+                    "startTime": 1701699819488443,
+                    "duration": 66658,
+                    "communication_time_to_next": 9029
+                },
+                {
+                    "traceId": "5d5071fb9f3e7cd",
+                    "spanId": "30212d6d",
+                    "operationName": "operation_326",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "5d5071fb9f3e7cd",
+                            "spanID": "933a38d"
+                        }
+                    ],
+                    "startTime": 1701699819564130,
+                    "duration": 57811,
+                    "communication_time_to_next": 6530
+                }
+            ]
+        },
+        {
+            "traceID": "fedf3740630942",
+            "spans": [
+                {
+                    "traceId": "fedf3740630942",
+                    "spanId": "2bf623f2",
+                    "operationName": "operation_774",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "fedf3740630942",
+                            "spanID": "fedf3740630942"
+                        }
+                    ],
+                    "startTime": 1701699819488468,
+                    "duration": 18198,
+                    "communication_time_to_next": 604
+                },
+                {
+                    "traceId": "fedf3740630942",
+                    "spanId": "18a2f8e8",
+                    "operationName": "operation_161",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "fedf3740630942",
+                            "spanID": "2bf623f2"
+                        }
+                    ],
+                    "startTime": 1701699819507270,
+                    "duration": 61042,
+                    "communication_time_to_next": 998
+                },
+                {
+                    "traceId": "fedf3740630942",
+                    "spanId": "327ebe11",
+                    "operationName": "operation_432",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "fedf3740630942",
+                            "spanID": "18a2f8e8"
+                        }
+                    ],
+                    "startTime": 1701699819569310,
+                    "duration": 60215,
+                    "communication_time_to_next": 8348
+                }
+            ]
+        },
+        {
+            "traceID": "752945295302595",
+            "spans": [
+                {
+                    "traceId": "752945295302595",
+                    "spanId": "35b1b3e2",
+                    "operationName": "operation_79",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "752945295302595",
+                            "spanID": "752945295302595"
+                        }
+                    ],
+                    "startTime": 1701699819488498,
+                    "duration": 74466,
+                    "communication_time_to_next": 7431
+                },
+                {
+                    "traceId": "752945295302595",
+                    "spanId": "293a9f6d",
+                    "operationName": "operation_779",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "752945295302595",
+                            "spanID": "35b1b3e2"
+                        }
+                    ],
+                    "startTime": 1701699819570395,
+                    "duration": 65558,
+                    "communication_time_to_next": 1247
+                },
+                {
+                    "traceId": "752945295302595",
+                    "spanId": "5eb85e",
+                    "operationName": "operation_392",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "752945295302595",
+                            "spanID": "293a9f6d"
+                        }
+                    ],
+                    "startTime": 1701699819637200,
+                    "duration": 71012,
+                    "communication_time_to_next": 114
+                },
+                {
+                    "traceId": "752945295302595",
+                    "spanId": "13933697",
+                    "operationName": "operation_708",
+                    "references": [
+                        {
+                            "type": "CHILD_OF",
+                            "traceID": "752945295302595",
+                            "spanID": "5eb85e"
+                        }
+                    ],
+                    "startTime": 1701699819708326,
+                    "duration": 44756,
+                    "communication_time_to_next": 7102
+                }
+            ]
+        }
+    ]
+}
