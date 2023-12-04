@@ -6,13 +6,12 @@ import TraceGraph from './components/TraceGraph';
 import OperationStatsTable from './components/OperationStatsTable';
 
 
-function CallGraphPage({ data, serviceColors }) {
+function CallGraphPage({ selectedGroup, setSelectedGroup,data, serviceColors }) {
 
 
 
   const [traces, setTraces] = useState([]);
   //const [groups, setGroups] = useState([])
-  const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedTrace, setSelectedTrace] = useState(null);
 
 

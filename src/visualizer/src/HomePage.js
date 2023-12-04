@@ -12,6 +12,8 @@ function HomePage() {
   const [showMenu, setShowMenu] = useState(true);
   const [fileName, setFileName] = useState("Null");
   const [currentView, setCurrentView] = useState(0);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+
   // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
   if (data) {
@@ -101,7 +103,7 @@ function HomePage() {
       {data && (
         <div>
           {currentView === 0 ? (
-            <CallGraphPage data={data} serviceColors={serviceColors} />
+            <CallGraphPage selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} data={data} serviceColors={serviceColors} />
           ) : currentView === 1 ? (
             <AppGroups jsonData={data} showMenu={showMenu} />
           ) : currentView === 2 ? (

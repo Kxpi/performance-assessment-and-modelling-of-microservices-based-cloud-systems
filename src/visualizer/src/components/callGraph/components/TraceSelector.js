@@ -6,6 +6,8 @@ const TraceSelector = ({ traces, setSelectedTrace, selectedTrace }) => {
   const [isActive, setIsActive] = useState(false)
 
   let dropdownRef = useRef();
+  traces = traces.sort((a, b) => b["spans"][0]["duration"] - a["spans"][0]["duration"]);
+
 
   useEffect(() => {
     let handler = (e) => {
