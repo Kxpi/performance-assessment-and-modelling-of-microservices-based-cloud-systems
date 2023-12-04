@@ -1,22 +1,20 @@
 .legend {
-    /* position: absolute;
-    top: 10px;
-    right: 10px; */
-    height: fit-content;
+    display: flex;
+    flex-wrap: wrap; /* Zapewnia, że elementy zamiast przejścia na nową linię, będą się "zawijać" do nowego wiersza */
     background-color: white;
     border: 1px solid #ccc;
     padding: 10px;
-    z-index: 2;
-}
-
-.legend-item {
+  }
+  
+  .legend-item {
     display: flex;
     align-items: center;
+    margin-right: 15px; /* Dodatkowe marginesy między elementami */
     margin-bottom: 5px;
-}
-
-.legend-color {
+  }
+  
+  .legend-color {
     width: 20px;
     height: 20px;
     margin-right: 5px;
-}
+  }

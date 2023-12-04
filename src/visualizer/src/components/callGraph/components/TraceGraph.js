@@ -8,8 +8,9 @@ import dagre from 'dagre';
 import 'reactflow/dist/style.css';
 import './styles/TraceGraph.css'
 import SpanInfo from './SpanInfo';
+import Legend from './Legend';
 
-const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
+const TraceGraph = ({ selectedTrace, serviceColors, isGroupGraph = false, operationStats }) => {
 
 
     const [selectedNode, setSelectedNode] = useState(null);
@@ -17,8 +18,16 @@ const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
     useEffect(() => {
 
         setSelectedNode(null);
+
     }, [selectedTrace]);
 
+
+    var servicesInfo = {}
+
+    for (let processKey in selectedTrace.processes) {
+        var serviceName = selectedTrace.processes[processKey].serviceName
+        servicesInfo[processKey] = { color: serviceColors[serviceName], serviceName: serviceName };
+    }
 
     const dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -30,7 +39,6 @@ const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
     const edges = [];
     var x = 0;
     // nodes.sort((a, b) => a.data.startTime - b.data.startTime);
-    console.log(selectedTrace)
 
     var spans = selectedTrace.spans.sort((a, b) => a.startTime - b.startTime);
 
@@ -110,19 +118,21 @@ const TraceGraph = ({ selectedTrace, servicesInfo, operationStats }) => {
 
 
     const onNodeClick = (event, node) => {
-        console.log("Node selected:", node)
 
         setSelectedNode(node);
+
         //if(node.selected) node.style.border='5px solid red';
-        console.log(selectedNode)
     };
 
 
     return (
-        <div style={{ height: '400px', width: '100vw', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-            <ReactFlow style={{ border: "solid", padding: "10px" }} nodes={nodes} edges={edges} onNodeClick={onNodeClick} />
-            {selectedNode && <SpanInfo selectedSpan={selectedNode.data}  />}
-            {/* operationStats={operationStats[selectedNode.data.operationName]} */}
+        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Legend microserviceColors={servicesInfo} />
+            <div style={{ height: '400px', width: '100vw', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+                <ReactFlow style={{ border: "solid", padding: "10px" }} nodes={nodes} edges={edges} onNodeClick={onNodeClick} />
+                {selectedNode && <SpanInfo selectedSpan={selectedNode.data} operationStats={operationStats} />}
+                {/* operationStats={operationStats[selectedNode.data.operationName]} */}
+            </div>
         </div>
     );
 }

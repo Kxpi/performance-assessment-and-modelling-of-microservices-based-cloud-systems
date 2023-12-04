@@ -9,10 +9,8 @@ import { randomColors } from './helpers.js'
 
 function HomePage() {
   const [data, setData] = useState(null);
-  const [showCallGraph, setShowCallGraph] = useState(true);
   const [showMenu, setShowMenu] = useState(true);
   const [fileName, setFileName] = useState("Null");
-  const [showPercendanceGraph, setShowPercendanceGraph] = useState(false);
   const [currentView, setCurrentView] = useState(0);
   // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
