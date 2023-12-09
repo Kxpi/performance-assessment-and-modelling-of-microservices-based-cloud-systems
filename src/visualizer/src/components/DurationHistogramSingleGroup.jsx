@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 
-function DurationHistogramGroups({ data }) {
+function DurationHistogramSingleGroup({ data }) {
   // Define dimensions
   const margin = { top: 30, right: 30, bottom: 80, left: 100 };
   const [width, setWidth] = useState(
@@ -116,7 +116,7 @@ function DurationHistogramGroups({ data }) {
   );
 }
 
-DurationHistogramGroups.propTypes = {
+DurationHistogramSingleGroup.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       duration: PropTypes.number.isRequired,
@@ -124,4 +124,4 @@ DurationHistogramGroups.propTypes = {
   ).isRequired,
 };
 
-export default DurationHistogramGroups;
+export default DurationHistogramSingleGroup;

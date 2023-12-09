@@ -5,7 +5,11 @@ import PercendenceGraph from "./components/PercendenceGraph";
 import AppGroups from "./AppGroups";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { randomColors } from './helpers.js'
+import { randomColors, processSelectedGroupData, myColors } from "./helpers.js";
+import DurationHistogramGroupsOperations from "./components/DurationHistogramGroupsOperations.jsx";
+import DurationHistogramSingleGroup from "./components/DurationHistogramSingleGroup.jsx";
+import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramGroupsOperations.jsx";
+import StartTimeHistogramSingleGroup from "./components/StartTimeHistogramSingleGroup.jsx";
 
 function HomePage() {
   const [data, setData] = useState(null);
@@ -13,11 +17,21 @@ function HomePage() {
   const [fileName, setFileName] = useState("Null");
   const [currentView, setCurrentView] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedGroupOperationsToParent, setselectedGroupOperationsToParent] =
+    useState(null);
+  const [appGroupsGui, setAppGroupsGui] = useState(false);
+  const handleSelectedGroupOperations = (data) => {
+    setselectedGroupOperationsToParent(data);
+  };
+  const [
+    isDurationHistogramGroupsOperationsVisible,
+    setDurationHistogramGroupsOperationsVisibility,
+  ] = useState(false);
 
   // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
   if (data) {
-    var serviceColors = randomColors(data["microservice_stats"])
+    var serviceColors = randomColors(data["microservice_stats"]);
   }
 
   return (
@@ -64,15 +78,19 @@ function HomePage() {
               >
                 <Dropdown.Item
                   style={{ zIndex: 10010, position: "relative" }}
-                  onClick={() => setCurrentView(0)}
+                  onClick={() => {
+                    setCurrentView(0);
+                  }}
                 >
                   Show CallGraph
                 </Dropdown.Item>
                 <Dropdown.Item
                   style={{ zIndex: 10010, position: "relative" }}
-                  onClick={() => {setCurrentView(1);
-                    console.log("Current view set to 1:", currentView);}
-                  }
+                  onClick={() => {
+                    setCurrentView(1);
+
+                    console.log("Current view set to 1:", currentView);
+                  }}
                 >
                   Show ScatterPlot And Histograms
                 </Dropdown.Item>
@@ -84,6 +102,42 @@ function HomePage() {
                   }}
                 >
                   Show PercendanceGraph
+                </Dropdown.Item>
+              </DropdownButton>
+            </div>
+          )}
+          {data && showMenu && selectedGroup && currentView === 0 && (
+            <div style={{ zIndex: 10010, position: "relative" }}>
+              <DropdownButton
+                id="dropdown-basic-button"
+                title="View Histograms"
+                style={{
+                  zIndex: 10010,
+                  position: "relative",
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                <Dropdown.Item
+                  style={{
+                    zIndex: 10010,
+                    position: "relative",
+                    backgroundColor: isDurationHistogramGroupsOperationsVisible
+                      ? "chartreuse"
+                      : "white",
+                  }}
+                  onClick={() => {
+                    console.log(selectedGroup);
+                    setselectedGroupOperationsToParent(
+                      processSelectedGroupData(selectedGroup, myColors)
+                    );
+                    setDurationHistogramGroupsOperationsVisibility(
+                      !isDurationHistogramGroupsOperationsVisible
+                    );
+                  }}
+                >
+                  Duration Histogram of Group {selectedGroup.groupID}'s
+                  Operations
                 </Dropdown.Item>
               </DropdownButton>
             </div>
@@ -103,7 +157,25 @@ function HomePage() {
       {data && (
         <div>
           {currentView === 0 ? (
-            <CallGraphPage selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} data={data} serviceColors={serviceColors} />
+            <div>
+              <CallGraphPage
+                selectedGroup={selectedGroup}
+                setSelectedGroup={setSelectedGroup}
+                data={data}
+                serviceColors={serviceColors}
+              />
+              {isDurationHistogramGroupsOperationsVisible && (
+                <div>
+                  <div className="centered-text">
+                    Duration Histogram of Group {selectedGroup.groupID}'s
+                    Operations
+                  </div>
+                  <DurationHistogramGroupsOperations
+                    data={selectedGroupOperationsToParent}
+                  />
+                </div>
+              )}
+            </div>
           ) : currentView === 1 ? (
             <AppGroups jsonData={data} showMenu={showMenu} />
           ) : currentView === 2 ? (
