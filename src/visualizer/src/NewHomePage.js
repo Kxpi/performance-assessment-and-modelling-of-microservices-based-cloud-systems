@@ -41,7 +41,7 @@ function NewHomePage() {
                                 />
 
                             ) : currentView === 2 ? ( //ScatterPlot
-                                <AppGroups jsonData={data} />
+                                <AppGroups jsonData={data} showMenu={true} />
 
                             )  //Put here histograms instead of PercendenceGraph
                                 : currentView === 3 && <PercendenceGraph />
