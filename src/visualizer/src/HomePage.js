@@ -278,7 +278,7 @@ function HomePage() {
           ) : currentView === 1 ? (
             <AppGroups jsonData={data} showMenu={showMenu} />
           ) : currentView === 2 ? (
-            <PercendenceGraph />
+            <PercendenceGraph groupID={selectedGroup.groupID}/>
           ) : (
             <h1>Error</h1>
           )}

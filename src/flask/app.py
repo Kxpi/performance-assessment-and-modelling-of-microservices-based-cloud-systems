@@ -10,7 +10,7 @@ from helpers.comm_times import *
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 data = None
-
+groups = None
 
 @app.before_request
 def handle_preflight():
@@ -55,7 +55,7 @@ def upload_file():
         data = request.get_json()
 
         microservice_stats, groups = get_groups(data)
-
+        
         return jsonify({"microservice_stats": microservice_stats, "groups": groups})
 
     except Exception as e:
@@ -63,7 +63,7 @@ def upload_file():
         return jsonify({"Error": "File processing error: " + str(e)}), 500
 
 
-@app.route("/data")
+@app.route("/data/<groupID>")
 def send_data():
     global data
     traces = data.copy()

@@ -2,14 +2,14 @@ import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import './GraphComponent.css'; 
 
-const DirectedGraph = () => {
+function DirectedGraph(groupID){
   const svgRef = useRef(null);
 
   useEffect(() => {
     // Fetch data from the /data endpoint
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/data');
+        const response = await fetch('http://localhost:5000/data/'+groupID);
         const data = await response.json();
         renderGraph(data);
       } catch (error) {
