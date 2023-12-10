@@ -5,7 +5,12 @@ import PercendenceGraph from "./components/PercendenceGraph";
 import AppGroups from "./AppGroups";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { randomColors, processSelectedGroupData, myColors } from "./helpers.js";
+import {
+  randomColors,
+  processSelectedGroupData,
+  processHistogramSingleGroupData,
+  myColors,
+} from "./helpers.js";
 import DurationHistogramGroupsOperations from "./components/DurationHistogramGroupsOperations.jsx";
 import DurationHistogramSingleGroup from "./components/DurationHistogramSingleGroup.jsx";
 import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramGroupsOperations.jsx";
@@ -17,15 +22,25 @@ function HomePage() {
   const [fileName, setFileName] = useState("Null");
   const [currentView, setCurrentView] = useState(0);
   const [selectedGroup, setSelectedGroup] = useState(null);
-  const [selectedGroupOperationsToParent, setselectedGroupOperationsToParent] =
+  const [selectedGroupOperationsToParent, setSelectedGroupOperationsToParent] =
     useState(null);
-  const [appGroupsGui, setAppGroupsGui] = useState(false);
-  const handleSelectedGroupOperations = (data) => {
-    setselectedGroupOperationsToParent(data);
-  };
+  const [histogramSingleGroupData, setHistogramSingleGroupData] = useState([]);
+
   const [
     isDurationHistogramGroupsOperationsVisible,
     setDurationHistogramGroupsOperationsVisibility,
+  ] = useState(false);
+  const [
+    isStartTimeHistogramGroupsOperationsVisible,
+    setStartTimeHistogramGroupsOperationsVisibility,
+  ] = useState(false);
+  const [
+    isDurationHistogramSingleGroupVisible,
+    setDurationHistogramSingleGroupVisibility,
+  ] = useState(false);
+  const [
+    isStartTimeHistogramSingleGroupVisible,
+    setStartTimeHistogramSingleGroupVisibility,
   ] = useState(false);
 
   // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
@@ -107,30 +122,34 @@ function HomePage() {
             </div>
           )}
           {data && showMenu && selectedGroup && currentView === 0 && (
-            <div style={{ zIndex: 10010, position: "relative" }}>
+            <div style={{ zIndex: 10010 }}>
               <DropdownButton
                 id="dropdown-basic-button"
                 title="View Histograms"
                 style={{
                   zIndex: 10010,
-                  position: "relative",
+
                   margin: 0,
                   padding: 0,
+                }}
+                onClick={() => {
+                  setSelectedGroupOperationsToParent(
+                    processSelectedGroupData(selectedGroup, myColors)
+                  );
+                  setHistogramSingleGroupData(
+                    processHistogramSingleGroupData(selectedGroup)
+                  );
                 }}
               >
                 <Dropdown.Item
                   style={{
                     zIndex: 10010,
-                    position: "relative",
+
                     backgroundColor: isDurationHistogramGroupsOperationsVisible
                       ? "chartreuse"
                       : "white",
                   }}
                   onClick={() => {
-                    console.log(selectedGroup);
-                    setselectedGroupOperationsToParent(
-                      processSelectedGroupData(selectedGroup, myColors)
-                    );
                     setDurationHistogramGroupsOperationsVisibility(
                       !isDurationHistogramGroupsOperationsVisible
                     );
@@ -138,6 +157,55 @@ function HomePage() {
                 >
                   Duration Histogram of Group {selectedGroup.groupID}'s
                   Operations
+                </Dropdown.Item>
+                <Dropdown.Item
+                  style={{
+                    zIndex: 10010,
+
+                    backgroundColor: isStartTimeHistogramGroupsOperationsVisible
+                      ? "chartreuse"
+                      : "white",
+                  }}
+                  onClick={() => {
+                    setStartTimeHistogramGroupsOperationsVisibility(
+                      !isStartTimeHistogramGroupsOperationsVisible
+                    );
+                  }}
+                >
+                  Start Time Histogram of Group {selectedGroup.groupID}'s
+                  Operations
+                </Dropdown.Item>
+                <Dropdown.Item
+                  style={{
+                    zIndex: 10010,
+
+                    backgroundColor: isDurationHistogramSingleGroupVisible
+                      ? "chartreuse"
+                      : "white",
+                  }}
+                  onClick={() => {
+                    setDurationHistogramSingleGroupVisibility(
+                      !isDurationHistogramSingleGroupVisible
+                    );
+                  }}
+                >
+                  Duration Histogram of Group {selectedGroup.groupID}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  style={{
+                    zIndex: 10010,
+
+                    backgroundColor: isStartTimeHistogramSingleGroupVisible
+                      ? "chartreuse"
+                      : "white",
+                  }}
+                  onClick={() => {
+                    setStartTimeHistogramSingleGroupVisibility(
+                      !isStartTimeHistogramSingleGroupVisible
+                    );
+                  }}
+                >
+                  Start Time Histogram of Group {selectedGroup.groupID}
                 </Dropdown.Item>
               </DropdownButton>
             </div>
@@ -172,6 +240,37 @@ function HomePage() {
                   </div>
                   <DurationHistogramGroupsOperations
                     data={selectedGroupOperationsToParent}
+                  />
+                </div>
+              )}
+              {isStartTimeHistogramGroupsOperationsVisible && (
+                <div>
+                  <div className="centered-text">
+                    Start Time Histogram of Group {selectedGroup.groupID}'s
+                    Operations
+                  </div>
+                  <StartTimeHistogramGroupsOperations
+                    data={selectedGroupOperationsToParent}
+                  />
+                </div>
+              )}
+              {isDurationHistogramSingleGroupVisible && (
+                <div>
+                  <div className="centered-text">
+                    Duration Histogram of Group {selectedGroup.groupID}
+                  </div>
+                  <DurationHistogramSingleGroup
+                    data={histogramSingleGroupData}
+                  />
+                </div>
+              )}
+              {isStartTimeHistogramSingleGroupVisible && (
+                <div>
+                  <div className="centered-text">
+                    Start Time Histogram of Group {selectedGroup.groupID}
+                  </div>
+                  <StartTimeHistogramSingleGroup
+                    data={histogramSingleGroupData}
                   />
                 </div>
               )}

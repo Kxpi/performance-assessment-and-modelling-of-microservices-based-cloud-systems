@@ -115,7 +115,7 @@ function DurationHistogramGroupsOperations({ data }) {
 DurationHistogramGroupsOperations.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      y: PropTypes.number.isRequired,
+      duration99Percentile: PropTypes.number.isRequired,
       operationName: PropTypes.string.isRequired,
     })
   ).isRequired,

@@ -93,6 +93,7 @@ export function processSelectedGroupData(selectedGroup, myColors) {
       const dataObj = {
         operationName: operationName,
         duration99Percentile: operationStats.exec_time_99_percentile,
+        startTime99Percentile: operationStats.start_time_99_percentile,
         color: myColors[index % myColors.length],
       };
       return dataObj;
@@ -100,6 +101,16 @@ export function processSelectedGroupData(selectedGroup, myColors) {
   );
 
   return propsData;
+}
+
+export function processHistogramSingleGroupData(selectedGroup) {
+  const processedHistogramSingleGroupData = selectedGroup.traces.flatMap(
+    (trace) =>
+      trace.spans.map((span) => ({
+        ...span,
+      }))
+  );
+  return processedHistogramSingleGroupData;
 }
 
 export const myColors = [

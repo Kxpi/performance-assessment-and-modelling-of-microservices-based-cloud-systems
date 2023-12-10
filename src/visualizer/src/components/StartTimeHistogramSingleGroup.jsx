@@ -28,14 +28,18 @@ function StartTimeHistogramSingleGroup({ data }) {
     .domain(d3.extent(data, (d) => d.startTime))
     .thresholds(Math.ceil(Math.log2(data.length) + 1))(data);
 
+  // Check max bin length
+  const maxBinLength = d3.max(bins, (d) => d.length);
+  if (maxBinLength <= 0) {
+    console.error("Invalid max bin length:", maxBinLength);
+    return null;
+  }
+
   // Create scales
   // Define a scale for the x-axis
   const x = d3.scaleLinear().range([0, width]);
 
-  const y = d3
-    .scaleLog()
-    .domain([1, d3.max(bins, (d) => d.length)])
-    .range([height, 0]);
+  const y = d3.scaleLog().domain([1, maxBinLength]).range([height, 0]);
 
   // Create axes
   const xAxis = d3.axisBottom(x);
@@ -76,19 +80,21 @@ function StartTimeHistogramSingleGroup({ data }) {
         style={{ width: "100%", height: "auto" }}
       >
         <g transform={`translate(${margin.left},${margin.top})`}>
-          {bins.map((bin, i) => (
-            <g key={`${bin.x0}-${bin.x1}`}>
-              <rect
-                x={x(bin.x0)}
-                y={y(bin.length)}
-                width={Math.max(0, x(bin.x1) - x(bin.x0) - 1)} // Ensure width is never less than 0
-                height={height - y(bin.length)}
-                fill="steelblue"
-                stroke="white"
-                strokeWidth="1"
-              />
-            </g>
-          ))}
+          {bins
+            .filter((bin) => bin.length > 0)
+            .map((bin, i) => (
+              <g key={`${bin.x0}-${bin.x1}`}>
+                <rect
+                  x={x(bin.x0)}
+                  y={y(bin.length)}
+                  width={Math.max(0, x(bin.x1) - x(bin.x0) - 1)} // Ensure width is never less than 0
+                  height={height - y(bin.length)}
+                  fill="steelblue"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+              </g>
+            ))}
           <g
             ref={(node) => d3.select(node).call(xAxis)}
             style={{ transform: `translateY(${height}px)` }}

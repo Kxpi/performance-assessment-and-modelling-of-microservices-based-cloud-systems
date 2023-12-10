@@ -112,7 +112,7 @@ function StartTimeHistogramGroupsOperations({ data }) {
 StartTimeHistogramGroupsOperations.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      x: PropTypes.number.isRequired,
+      startTime99Percentile: PropTypes.number.isRequired,
       operationName: PropTypes.string.isRequired, // Add this line
     })
   ).isRequired,
