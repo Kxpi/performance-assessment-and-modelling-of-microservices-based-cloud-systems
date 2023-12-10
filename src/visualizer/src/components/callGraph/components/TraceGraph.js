@@ -126,9 +126,9 @@ const TraceGraph = ({ selectedTrace, serviceColors, isGroupGraph = false, operat
 
 
     return (
-        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Legend microserviceColors={servicesInfo} />
-            <div style={{ height: '400px', width: '100vw', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+            <div style={{ height: '50vh', width: '100%', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <ReactFlow style={{ border: "solid", padding: "10px" }} nodes={nodes} edges={edges} onNodeClick={onNodeClick} />
                 {selectedNode && <SpanInfo selectedSpan={selectedNode.data} operationStats={operationStats} />}
                 {/* operationStats={operationStats[selectedNode.data.operationName]} */}

@@ -6,7 +6,7 @@ import TraceGraph from './components/TraceGraph';
 import OperationStatsTable from './components/OperationStatsTable';
 
 
-function CallGraphPage({ selectedGroup, setSelectedGroup,data, serviceColors }) {
+function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors }) {
 
 
 
@@ -25,28 +25,19 @@ function CallGraphPage({ selectedGroup, setSelectedGroup,data, serviceColors }) 
 
   //
   return (
-    <div style={{ width: '100%', margin: "5px" }}>
+    <div className='callpage-root'>
 
-      <div className='group-selector' style={{ width: '100%' }}>
-        <GroupSelector setSelectedGroup={setSelectedGroup} groups={groups} selectedGroup={selectedGroup} />
-        {selectedGroup && selectedGroup.groupID !== 'Negative start times' && <TraceGraph selectedTrace={selectedGroup["traces"][0]} serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]} />}
 
-      </div>
+      <GroupSelector setSelectedGroup={setSelectedGroup} groups={groups} selectedGroup={selectedGroup} />
+      {selectedGroup && selectedGroup.groupID !== 'Negative start times' && <TraceGraph selectedTrace={selectedGroup["traces"][0]} serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]} />}
 
-      <div style={{ marginTop: "50px", marginBottom: "50px" }}>
-        {selectedGroup && selectedGroup?.operation_stats?.length !== 0 && < OperationStatsTable operationStats={selectedGroup["operation_stats"]} />}
-      </div>
 
-      < div className='group-selector'>
-        {selectedGroup && <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace} selectedTrace={selectedTrace} />}
-        {selectedTrace && <div style={{ width: '100%', display: "flex", justifyContent: "space-around" }}>
-          {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} />}
-        </div>}
-      </div>
+      {selectedGroup && selectedGroup?.operation_stats?.length !== 0 && < OperationStatsTable operationStats={selectedGroup["operation_stats"]} />}
 
 
 
-
+      {selectedGroup && <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace} selectedTrace={selectedTrace} />}
+      {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} />}
 
 
     </div>

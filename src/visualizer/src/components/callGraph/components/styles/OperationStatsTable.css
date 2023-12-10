@@ -1,10 +1,15 @@
 /* styles.css */
 .table-container {
+  width: 100%;
+  height: 100%;
+
   font-family: Arial, sans-serif;
+  overflow: auto;
 }
 
 table {
   width: 100%;
+  height: 100%;
   border-collapse: collapse;
   border: 1px solid #ddd;
 }
