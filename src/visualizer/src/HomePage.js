@@ -80,7 +80,7 @@ function HomePage() {
           />
 
           {data && showMenu && (
-            <div style={{ zIndex: 10010, position: "relative" }}>
+            <div style={{ zIndex: 10011, position: "relative" }}>
               <DropdownButton
                 id="dropdown-basic-button"
                 title="View Menu"
@@ -92,7 +92,7 @@ function HomePage() {
                 }}
               >
                 <Dropdown.Item
-                  style={{ zIndex: 10010, position: "relative" }}
+                  style={{ zIndex: 10011, position: "relative" }}
                   onClick={() => {
                     setCurrentView(0);
                   }}
@@ -100,7 +100,7 @@ function HomePage() {
                   Show CallGraph
                 </Dropdown.Item>
                 <Dropdown.Item
-                  style={{ zIndex: 10010, position: "relative" }}
+                  style={{ zIndex: 10011, position: "relative" }}
                   onClick={() => {
                     setCurrentView(1);
 
@@ -110,102 +110,13 @@ function HomePage() {
                   Show ScatterPlot And Histograms
                 </Dropdown.Item>
                 <Dropdown.Item
-                  style={{ zIndex: 10010, position: "relative" }}
+                  style={{ zIndex: 10011, position: "relative" }}
                   onClick={() => {
                     setCurrentView(2);
                     console.log("Current view set to 2:", currentView); // Add this line for debugging
                   }}
                 >
                   Show PercendanceGraph
-                </Dropdown.Item>
-              </DropdownButton>
-            </div>
-          )}
-          {data && showMenu && selectedGroup && currentView === 0 && (
-            <div style={{ zIndex: 10010 }}>
-              <DropdownButton
-                id="dropdown-basic-button"
-                title="View Histograms"
-                style={{
-                  zIndex: 10010,
-
-                  margin: 0,
-                  padding: 0,
-                }}
-                onClick={() => {
-                  setSelectedGroupOperationsToParent(
-                    processSelectedGroupData(selectedGroup, myColors)
-                  );
-                  setHistogramSingleGroupData(
-                    processHistogramSingleGroupData(selectedGroup)
-                  );
-                }}
-              >
-                <Dropdown.Item
-                  style={{
-                    zIndex: 10010,
-
-                    backgroundColor: isDurationHistogramGroupsOperationsVisible
-                      ? "chartreuse"
-                      : "white",
-                  }}
-                  onClick={() => {
-                    setDurationHistogramGroupsOperationsVisibility(
-                      !isDurationHistogramGroupsOperationsVisible
-                    );
-                  }}
-                >
-                  Duration Histogram of Group {selectedGroup.groupID}'s
-                  Operations
-                </Dropdown.Item>
-                <Dropdown.Item
-                  style={{
-                    zIndex: 10010,
-
-                    backgroundColor: isStartTimeHistogramGroupsOperationsVisible
-                      ? "chartreuse"
-                      : "white",
-                  }}
-                  onClick={() => {
-                    setStartTimeHistogramGroupsOperationsVisibility(
-                      !isStartTimeHistogramGroupsOperationsVisible
-                    );
-                  }}
-                >
-                  Start Time Histogram of Group {selectedGroup.groupID}'s
-                  Operations
-                </Dropdown.Item>
-                <Dropdown.Item
-                  style={{
-                    zIndex: 10010,
-
-                    backgroundColor: isDurationHistogramSingleGroupVisible
-                      ? "chartreuse"
-                      : "white",
-                  }}
-                  onClick={() => {
-                    setDurationHistogramSingleGroupVisibility(
-                      !isDurationHistogramSingleGroupVisible
-                    );
-                  }}
-                >
-                  Duration Histogram of Group {selectedGroup.groupID}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  style={{
-                    zIndex: 10010,
-
-                    backgroundColor: isStartTimeHistogramSingleGroupVisible
-                      ? "chartreuse"
-                      : "white",
-                  }}
-                  onClick={() => {
-                    setStartTimeHistogramSingleGroupVisibility(
-                      !isStartTimeHistogramSingleGroupVisible
-                    );
-                  }}
-                >
-                  Start Time Histogram of Group {selectedGroup.groupID}
                 </Dropdown.Item>
               </DropdownButton>
             </div>
@@ -221,6 +132,94 @@ function HomePage() {
         </Button>
       </div>
       <div className="centered-text">Uploaded JSON: {fileName}</div>
+
+      {data && showMenu && selectedGroup && currentView === 0 && (
+        <div style={{ zIndex: 10010 }}>
+          <DropdownButton
+            id="dropdown-basic-button"
+            title="View Histograms"
+            style={{
+              zIndex: 10010,
+              top: 15,
+              margin: 0,
+              padding: 0,
+            }}
+            onClick={() => {
+              setSelectedGroupOperationsToParent(
+                processSelectedGroupData(selectedGroup, myColors)
+              );
+              setHistogramSingleGroupData(
+                processHistogramSingleGroupData(selectedGroup)
+              );
+            }}
+          >
+            <Dropdown.Item
+              style={{
+                zIndex: 10010,
+
+                backgroundColor: isDurationHistogramGroupsOperationsVisible
+                  ? "chartreuse"
+                  : "white",
+              }}
+              onClick={() => {
+                setDurationHistogramGroupsOperationsVisibility(
+                  !isDurationHistogramGroupsOperationsVisible
+                );
+              }}
+            >
+              Duration Histogram of Group {selectedGroup.groupID}'s Operations
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                zIndex: 10010,
+
+                backgroundColor: isStartTimeHistogramGroupsOperationsVisible
+                  ? "chartreuse"
+                  : "white",
+              }}
+              onClick={() => {
+                setStartTimeHistogramGroupsOperationsVisibility(
+                  !isStartTimeHistogramGroupsOperationsVisible
+                );
+              }}
+            >
+              Start Time Histogram of Group {selectedGroup.groupID}'s Operations
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                zIndex: 10010,
+
+                backgroundColor: isDurationHistogramSingleGroupVisible
+                  ? "chartreuse"
+                  : "white",
+              }}
+              onClick={() => {
+                setDurationHistogramSingleGroupVisibility(
+                  !isDurationHistogramSingleGroupVisible
+                );
+              }}
+            >
+              Duration Histogram of Group {selectedGroup.groupID}
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                zIndex: 10010,
+
+                backgroundColor: isStartTimeHistogramSingleGroupVisible
+                  ? "chartreuse"
+                  : "white",
+              }}
+              onClick={() => {
+                setStartTimeHistogramSingleGroupVisibility(
+                  !isStartTimeHistogramSingleGroupVisible
+                );
+              }}
+            >
+              Start Time Histogram of Group {selectedGroup.groupID}
+            </Dropdown.Item>
+          </DropdownButton>
+        </div>
+      )}
 
       {data && (
         <div>
@@ -278,7 +277,7 @@ function HomePage() {
           ) : currentView === 1 ? (
             <AppGroups jsonData={data} showMenu={showMenu} />
           ) : currentView === 2 ? (
-            <PercendenceGraph groupID={selectedGroup.groupID}/>
+            <PercendenceGraph groupID={selectedGroup.groupID} />
           ) : (
             <h1>Error</h1>
           )}
