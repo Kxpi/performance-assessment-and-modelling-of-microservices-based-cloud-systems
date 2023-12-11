@@ -10,6 +10,7 @@ import {
   processSelectedGroupData,
   processHistogramSingleGroupData,
   processScatterPlotGroupsOperationsData,
+  processScatterPlotData,
   myColors,
 } from "./helpers.js";
 import DurationHistogramGroupsOperations from "./components/DurationHistogramGroupsOperations.jsx";
@@ -17,6 +18,7 @@ import DurationHistogramSingleGroup from "./components/DurationHistogramSingleGr
 import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramGroupsOperations.jsx";
 import StartTimeHistogramSingleGroup from "./components/StartTimeHistogramSingleGroup.jsx";
 import ScatterPlotGroupsOperationsCg from "./components/ScatterPlotGroupsOperationsCg.jsx";
+import ScatterPlot from "./components/ScatterPlot";
 import * as SVGs from "./components/SVGs";
 import { set } from "lodash";
 
@@ -39,6 +41,7 @@ function HomePage() {
   const [histogramSingleGroupData, setHistogramSingleGroupData] = useState([]);
   const [scatterPlotGroupsOperationsData, setScatterPlotGroupsOperationsData] =
     useState([]);
+  const [scatterPlotData, setScatterPlotData] = useState([]);
 
   const [
     isDurationHistogramGroupsOperationsVisible,
@@ -60,6 +63,7 @@ function HomePage() {
     isScatterPlotGroupsOperationsVisible,
     setScatterPlotGroupsOperationsVisibility,
   ] = useState(false);
+  const [isScatterPlotVisible, setScatterPlotVisibility] = useState(false);
 
   // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
@@ -266,6 +270,7 @@ function HomePage() {
                     svgComponents
                   )
                 );
+                setScatterPlotData(processScatterPlotData(selectedGroup));
               }}
             >
               <Dropdown.Item
@@ -288,14 +293,12 @@ function HomePage() {
                 style={{
                   zIndex: 10010,
                   position: "relative",
-                  backgroundColor: isStartTimeHistogramGroupsOperationsVisible
+                  backgroundColor: isScatterPlotVisible
                     ? "chartreuse"
                     : "white",
                 }}
                 onClick={() => {
-                  setStartTimeHistogramGroupsOperationsVisibility(
-                    !isStartTimeHistogramGroupsOperationsVisible
-                  );
+                  setScatterPlotVisibility(!isScatterPlotVisible);
                 }}
               >
                 Scatter Plot of Group's {selectedGroup.groupID} Spans
@@ -364,6 +367,15 @@ function HomePage() {
                   </div>
                   <ScatterPlotGroupsOperationsCg
                     data={scatterPlotGroupsOperationsData}
+                  />
+                </div>
+              )}
+              {isScatterPlotVisible && (
+                <div>
+                  <ScatterPlot
+                    data={scatterPlotData}
+                    showMenu={showMenu}
+                    selectedGroupNumber={selectedGroup.groupID}
                   />
                 </div>
               )}

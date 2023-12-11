@@ -304,3 +304,31 @@ export function processScatterPlotGroupsOperationsData(
   });
   return processedScatterPlotGroupsOperationsData;
 }
+
+const isErrorTag = ({ key, value }) =>
+  key === "error" && (value === true || value === "true");
+
+export function processScatterPlotData(selectedGroup) {
+  const processedScatterPlotData = selectedGroup.traces.reduce((acc, t) => {
+    const spansData = t.spans.map((span) => {
+      // Get the operation stats for the current operation name
+      const operationStats = selectedGroup.operation_stats[span.operationName];
+
+      return {
+        x: span.startTime,
+        y: span.duration,
+        spanID: span.spanID,
+        traceID: t.traceID,
+        name: span.operationName,
+        color:
+          Array.isArray(span.tags) && span.tags.some(isErrorTag) ? "red" : null,
+        serviceName: t.processes[span.processID].serviceName,
+        groupID: selectedGroup.groupID,
+        operationStats: operationStats,
+      };
+    });
+    return [...acc, ...spansData];
+  }, []);
+  return processedScatterPlotData;
+}
+
