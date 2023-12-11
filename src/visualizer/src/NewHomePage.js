@@ -11,8 +11,8 @@ function NewHomePage() {
     const [currentView, setCurrentView] = useState(0);
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [selectedTrace, setSelectedTrace] = useState(null);
-    const [selectedSpan, setSelectedSpan] = useState(null);
-
+    const [selectedOperation, setSelectedOperation] = useState(null)
+    const [fileName, setFileName] = useState("No file uploaded");
     // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
 
@@ -23,12 +23,14 @@ function NewHomePage() {
     return (
         <div className="homepage-root">
             <Header currentView={currentView} setCurrentView={setCurrentView}
-                selectedGroup={selectedGroup} selectedTrace={selectedTrace} selectedSpan={selectedSpan} />
+                selectedGroup={selectedGroup} selectedTrace={selectedTrace} selectedSpan={selectedOperation}
+                setSelectedGroup={setSelectedGroup} setSelectedTrace={setSelectedTrace}
+                setSelectedSpan={setSelectedOperation} />
 
 
             <div className="homepage-content">
                 {currentView === 0 ?
-                    <FilesPage setData={setData}></FilesPage>
+                    <FilesPage setData={setData} fileName={fileName} setFileName={setFileName}></FilesPage>
                     :
                     data && (
                         <div>
@@ -38,6 +40,10 @@ function NewHomePage() {
                                     setSelectedGroup={setSelectedGroup}
                                     data={data}
                                     serviceColors={serviceColors}
+                                    selectedOperation={selectedOperation}
+                                    setSelectedOperation={setSelectedOperation}
+                                    selectedTrace={selectedTrace}
+                                    setSelectedTrace={setSelectedTrace}
                                 />
 
                             ) : currentView === 2 ? ( //ScatterPlot

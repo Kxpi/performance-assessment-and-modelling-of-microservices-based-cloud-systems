@@ -2,9 +2,9 @@ import { useState, React } from "react"
 import OldFileUploader from "./callGraph/components/OldFileUploader"
 import './FilePage.css'
 
-function FilesPage({ setData }) {
+function FilesPage({ setData, fileName, setFileName }) {
 
-    const [fileName, setFileName] = useState("Null");
+
 
 
     return (
@@ -15,7 +15,7 @@ function FilesPage({ setData }) {
             />
             <div className="filespage-files">
                 <h1>Uploaded File: </h1>
-                {fileName ? fileName : "No file uploaded"}
+                {fileName}
             </div>
         </div>
     )

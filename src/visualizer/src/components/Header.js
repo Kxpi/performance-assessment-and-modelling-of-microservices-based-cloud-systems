@@ -1,16 +1,48 @@
 import React, { useState } from "react";
 import './Header.css'
-//{ currentView, setCurrentView, selectedGroup, selectedTrace, selectedSpan }
-function Header({ currentView, setCurrentView, selectedGroup, selectedTrace, selectedSpan }) {
+import { Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+function Header({ currentView, setCurrentView, selectedGroup, setSelectedGroup, selectedTrace, setSelectedTrace, selectedSpan, setSelectedSpan }) {
 
     const tabs = ['Files', 'CallGraph', 'ScatterPlot', 'Histograms']
 
     return (
         <div className="header-root">
             <div className="header-variables">
-                <div className="selectedGroup">selectedGroup: {selectedGroup ? selectedGroup.groupID : "No group selected"}</div>
-                <div className="selectedTrace">selectedTrace: {selectedTrace ? selectedTrace.traceID : "No trace selected"}</div>
-                <div className="selectedSpan">selectedSpan: {selectedSpan ? selectedSpan.spanID : currentView}</div>
+                <div className="selectedGroup">
+                    selectedGroup: <br /> {selectedGroup ? (
+                        <span>
+                            {selectedGroup.groupID}
+                            <Button variant="danger" onClick={() => setSelectedGroup(null)}>
+                                &#x2717;
+                            </Button>
+                        </span>
+                    ) : <span>No group selected</span>}
+                </div>
+
+                <div className="selectedTrace">
+                    selectedTrace: <br />{selectedTrace ? (
+                        <span>
+                            {selectedTrace.traceID}
+                            <Button variant="danger" onClick={() => setSelectedTrace(null)}>
+                                &#x2717;
+                            </Button>
+                        </span>
+                    ) : <span>No trace selected</span>}
+                </div>
+
+                <div className="selectedSpan">
+                    selectedSpan: <br /> {selectedSpan ? (
+                        <span>
+                            {selectedSpan.data.operationName}
+                            <Button variant="danger" onClick={() => setSelectedSpan(null)}>
+                                &#x2717;
+                            </Button>
+                        </span>
+                    ) : <span>No span selected</span>}
+                </div>
+
             </div>
             <div className="header-nav">
 

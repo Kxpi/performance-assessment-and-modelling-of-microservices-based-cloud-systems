@@ -12,10 +12,10 @@ root.render(
     {/* skrot do komentarzy ctrl+k+c, do cofania komentarzy ctrl+k+u*/}
     {/* <AppGroups /> */}
     {/* <NewApp /> */}
-    <HomePage />
+    {/* <HomePage /> */}
 
     {/* New Interface playground */}
-    {/* <NewHomePage /> */}
+    <NewHomePage />
   </React.StrictMode>
 );
 

@@ -10,14 +10,16 @@ import './styles/TraceGraph.css'
 import SpanInfo from './SpanInfo';
 import Legend from './Legend';
 
-const TraceGraph = ({ selectedTrace, serviceColors, isGroupGraph = false, operationStats }) => {
+const TraceGraph = ({ selectedTrace, serviceColors, operationStats, selectedOperation, setSelectedOperation }) => {
 
 
-    const [selectedNode, setSelectedNode] = useState(null);
+    // const [selectedNode, setSelectedNode] = useState(null);
+    const [showSpanInfo, setShowSpanInfo] = useState(false)
 
     useEffect(() => {
 
-        setSelectedNode(null);
+        // setSelectedOperation(null);
+        setShowSpanInfo(false)
 
     }, [selectedTrace]);
 
@@ -119,8 +121,13 @@ const TraceGraph = ({ selectedTrace, serviceColors, isGroupGraph = false, operat
 
     const onNodeClick = (event, node) => {
 
-        setSelectedNode(node);
 
+
+        if (node) {
+            setSelectedOperation(node);
+            setShowSpanInfo(true)
+
+        }
         //if(node.selected) node.style.border='5px solid red';
     };
 
@@ -130,7 +137,7 @@ const TraceGraph = ({ selectedTrace, serviceColors, isGroupGraph = false, operat
             <Legend microserviceColors={servicesInfo} />
             <div style={{ height: '50vh', width: '100%', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <ReactFlow style={{ border: "solid", padding: "10px" }} nodes={nodes} edges={edges} onNodeClick={onNodeClick} />
-                {selectedNode && <SpanInfo selectedSpan={selectedNode.data} operationStats={operationStats} />}
+                {showSpanInfo && selectedOperation && <SpanInfo selectedSpan={selectedOperation.data} operationStats={operationStats} />}
                 {/* operationStats={operationStats[selectedNode.data.operationName]} */}
             </div>
         </div>
