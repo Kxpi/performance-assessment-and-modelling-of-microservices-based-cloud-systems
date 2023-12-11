@@ -55,7 +55,7 @@ function HomePage() {
         style={{
           position: "fixed",
           top: 0,
-          zIndex: 10010,
+          zIndex: 10011,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -133,93 +133,108 @@ function HomePage() {
       </div>
       <div className="centered-text">Uploaded JSON: {fileName}</div>
 
-      {data && showMenu && selectedGroup && currentView === 0 && (
-        <div style={{ zIndex: 10010 }}>
-          <DropdownButton
-            id="dropdown-basic-button"
-            title="View Histograms"
-            style={{
-              zIndex: 10010,
-              top: 15,
-              margin: 0,
-              padding: 0,
-            }}
-            onClick={() => {
-              setSelectedGroupOperationsToParent(
-                processSelectedGroupData(selectedGroup, myColors)
-              );
-              setHistogramSingleGroupData(
-                processHistogramSingleGroupData(selectedGroup)
-              );
-            }}
-          >
-            <Dropdown.Item
+      <div
+        style={{
+          position: "fixed",
+          top: 20,
+          zIndex: 10010,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+          margin: 0,
+          padding: 0,
+        }}
+      >
+        {data && showMenu && selectedGroup && currentView === 0 && (
+          <div style={{ zIndex: 10010, position: "relative" }}>
+            <DropdownButton
+              id="dropdown-basic-button"
+              title="View Histograms"
               style={{
                 zIndex: 10010,
-
-                backgroundColor: isDurationHistogramGroupsOperationsVisible
-                  ? "chartreuse"
-                  : "white",
+                margin: 0,
+                top: 20,
+                padding: 0,
               }}
               onClick={() => {
-                setDurationHistogramGroupsOperationsVisibility(
-                  !isDurationHistogramGroupsOperationsVisible
+                setSelectedGroupOperationsToParent(
+                  processSelectedGroupData(selectedGroup, myColors)
+                );
+                setHistogramSingleGroupData(
+                  processHistogramSingleGroupData(selectedGroup)
                 );
               }}
             >
-              Duration Histogram of Group {selectedGroup.groupID}'s Operations
-            </Dropdown.Item>
-            <Dropdown.Item
-              style={{
-                zIndex: 10010,
-
-                backgroundColor: isStartTimeHistogramGroupsOperationsVisible
-                  ? "chartreuse"
-                  : "white",
-              }}
-              onClick={() => {
-                setStartTimeHistogramGroupsOperationsVisibility(
-                  !isStartTimeHistogramGroupsOperationsVisible
-                );
-              }}
-            >
-              Start Time Histogram of Group {selectedGroup.groupID}'s Operations
-            </Dropdown.Item>
-            <Dropdown.Item
-              style={{
-                zIndex: 10010,
-
-                backgroundColor: isDurationHistogramSingleGroupVisible
-                  ? "chartreuse"
-                  : "white",
-              }}
-              onClick={() => {
-                setDurationHistogramSingleGroupVisibility(
-                  !isDurationHistogramSingleGroupVisible
-                );
-              }}
-            >
-              Duration Histogram of Group {selectedGroup.groupID}
-            </Dropdown.Item>
-            <Dropdown.Item
-              style={{
-                zIndex: 10010,
-
-                backgroundColor: isStartTimeHistogramSingleGroupVisible
-                  ? "chartreuse"
-                  : "white",
-              }}
-              onClick={() => {
-                setStartTimeHistogramSingleGroupVisibility(
-                  !isStartTimeHistogramSingleGroupVisible
-                );
-              }}
-            >
-              Start Time Histogram of Group {selectedGroup.groupID}
-            </Dropdown.Item>
-          </DropdownButton>
-        </div>
-      )}
+              <Dropdown.Item
+                style={{
+                  zIndex: 10010,
+                  position: "relative",
+                  backgroundColor: isDurationHistogramGroupsOperationsVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() => {
+                  setDurationHistogramGroupsOperationsVisibility(
+                    !isDurationHistogramGroupsOperationsVisible
+                  );
+                }}
+              >
+                Duration Histogram of Group {selectedGroup.groupID}'s Operations
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  zIndex: 10010,
+                  position: "relative",
+                  backgroundColor: isStartTimeHistogramGroupsOperationsVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() => {
+                  setStartTimeHistogramGroupsOperationsVisibility(
+                    !isStartTimeHistogramGroupsOperationsVisible
+                  );
+                }}
+              >
+                Start Time Histogram of Group {selectedGroup.groupID}'s
+                Operations
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  zIndex: 10010,
+                  position: "relative",
+                  backgroundColor: isDurationHistogramSingleGroupVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() => {
+                  setDurationHistogramSingleGroupVisibility(
+                    !isDurationHistogramSingleGroupVisible
+                  );
+                }}
+              >
+                Duration Histogram of Group {selectedGroup.groupID}
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  zIndex: 10010,
+                  position: "relative",
+                  backgroundColor: isStartTimeHistogramSingleGroupVisible
+                    ? "chartreuse"
+                    : "white",
+                }}
+                onClick={() => {
+                  setStartTimeHistogramSingleGroupVisibility(
+                    !isStartTimeHistogramSingleGroupVisible
+                  );
+                }}
+              >
+                Start Time Histogram of Group {selectedGroup.groupID}
+              </Dropdown.Item>
+            </DropdownButton>
+          </div>
+        )}
+      </div>
 
       {data && (
         <div>
