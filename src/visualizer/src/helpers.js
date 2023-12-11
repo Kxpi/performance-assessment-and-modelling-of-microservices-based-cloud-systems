@@ -1,3 +1,5 @@
+import { select } from "d3";
+
 var hsvToRgb = function (h, s, v) {
   var r, g, b;
   var i;
@@ -242,3 +244,91 @@ export const myColors = [
   "WhiteSmoke",
   "YellowGreen",
 ];
+
+export function processScatterPlotGroupsOperationsData(
+  selectedGroup,
+  svgComponents
+) {
+  const processedScatterPlotGroupsOperationsData = Object.entries(
+    selectedGroup.operation_stats
+  ).map(([operationName, operationStats], index) => {
+    const minStartTime = operationStats.start_time_min;
+    const maxStartTime = operationStats.start_time_max;
+    const minDuration = operationStats.exec_time_min;
+    const maxDuration = operationStats.exec_time_max;
+    const startTime95Percentile = operationStats.start_time_95_percentile;
+    const startTime99Percentile = operationStats.start_time_99_percentile;
+    const duration95Percentile = operationStats.exec_time_95_percentile;
+    const duration99Percentile = operationStats.exec_time_99_percentile;
+    const startTimeQ0 = operationStats.start_time_min;
+    const startTimeQ1 = operationStats.start_time_q1;
+    const startTimeQ2 = operationStats.start_time_q2;
+    const startTimeQ3 = operationStats.start_time_q3;
+    const startTimeQ4 = operationStats.start_time_max;
+    const durationQ0 = operationStats.exec_time_min;
+    const durationQ1 = operationStats.exec_time_q1;
+    const durationQ2 = operationStats.exec_time_q2;
+    const durationQ3 = operationStats.exec_time_q3;
+    const durationQ4 = operationStats.exec_time_max;
+
+    const dataObj = {
+      groupID: selectedGroup.groupID,
+      operationName: operationName,
+      x: operationStats.start_time_q2,
+      y: operationStats.exec_time_q2,
+      minStartTime: minStartTime,
+      maxStartTime: maxStartTime,
+      minDuration: minDuration,
+      maxDuration: maxDuration,
+      startTimeSpread: maxStartTime - minStartTime,
+      durationSpread: maxDuration - minDuration,
+      startTimeQ0: startTimeQ0,
+      startTimeQ1: startTimeQ1,
+      startTimeQ2: startTimeQ2,
+      startTimeQ3: startTimeQ3,
+      startTimeQ4: startTimeQ4,
+      durationQ0: durationQ0,
+      durationQ1: durationQ1,
+      durationQ2: durationQ2,
+      durationQ3: durationQ3,
+      durationQ4: durationQ4,
+      startTime95Percentile: startTime95Percentile,
+      startTime99Percentile: startTime99Percentile,
+      duration95Percentile: duration95Percentile,
+      duration99Percentile: duration99Percentile,
+      color: myColors[index % myColors.length],
+      svg: svgComponents[selectedGroup.groupID % svgComponents.length],
+      ...operationStats,
+    };
+    return dataObj;
+  });
+  return processedScatterPlotGroupsOperationsData;
+}
+
+const isErrorTag = ({ key, value }) =>
+  key === "error" && (value === true || value === "true");
+
+export function processScatterPlotData(selectedGroup) {
+  const processedScatterPlotData = selectedGroup.traces.reduce((acc, t) => {
+    const spansData = t.spans.map((span) => {
+      // Get the operation stats for the current operation name
+      const operationStats = selectedGroup.operation_stats[span.operationName];
+
+      return {
+        x: span.startTime,
+        y: span.duration,
+        spanID: span.spanID,
+        traceID: t.traceID,
+        name: span.operationName,
+        color:
+          Array.isArray(span.tags) && span.tags.some(isErrorTag) ? "red" : null,
+        serviceName: t.processes[span.processID].serviceName,
+        groupID: selectedGroup.groupID,
+        operationStats: operationStats,
+      };
+    });
+    return [...acc, ...spansData];
+  }, []);
+  return processedScatterPlotData;
+}
+

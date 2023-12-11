@@ -298,7 +298,7 @@ function ScatterPlotImpl(props) {
         <div
           style={{
             position: "fixed",
-            top: 70,
+            top: 115,
             zIndex: 9998,
           }}
         >
