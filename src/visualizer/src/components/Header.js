@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function Header({ currentView, setCurrentView, selectedGroup, setSelectedGroup, selectedTrace, setSelectedTrace, selectedSpan, setSelectedSpan }) {
 
-    const tabs = ['Files', 'CallGraph', 'ScatterPlot', 'Histograms']
+    const tabs = ['Files', 'CallGraph', 'ScatterPlot', 'Transfer times', 'NewScatterPlot']
 
     return (
         <div className="header-root">

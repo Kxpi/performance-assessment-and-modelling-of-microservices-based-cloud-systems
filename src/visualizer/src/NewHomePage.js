@@ -6,6 +6,8 @@ import AppGroups from "./AppGroups";
 import { randomColors } from './helpers.js'
 import Header from "./components/Header.js";
 
+import ScatterPlotPage from "./components/ScatterPlot/ScatterPlotPage.js";
+
 function NewHomePage() {
     const [data, setData] = useState(null);
     const [currentView, setCurrentView] = useState(0);
@@ -47,10 +49,15 @@ function NewHomePage() {
                                 />
 
                             ) : currentView === 2 ? ( //ScatterPlot
-                                <AppGroups jsonData={data} showMenu={true} />
+                                <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />
 
-                            )  //Put here histograms instead of PercendenceGraph
-                                : currentView === 3 && <PercendenceGraph />
+                            ) : currentView === 3 ? (
+                                <PercendenceGraph />
+                            ) : currentView === 4 &&
+                            <ScatterPlotPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
+                                setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace} />
+
+
                             }
                         </div>
                     )}
