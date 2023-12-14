@@ -9,12 +9,12 @@ import {
     myColors
 } from "../../helpers.js";
 
-
+// #toDo Add operation selection ( onSpanClickMethod)
 
 function ScatterPlotPage({ jsonData, selectedGroup, setSelectedGroup, selectedOperation, setSelectedOperation,
     selectedTrace, setSelectedTrace }) {
 
-    // console.log(jsonData);
+
 
     const svgComponents = Object.entries(SVGs)
         .sort(([keyA], [keyB]) => {
@@ -105,7 +105,7 @@ function ScatterPlotPage({ jsonData, selectedGroup, setSelectedGroup, selectedOp
 
     return (
         <div>
-            <h1>ScatterPlotPage</h1>
+            <h1>Shift+ drag to zoom in | Shift+ click to zoom out</h1>
             {selectedGroup ? (
 
                 <div>Wybrana Grupa: {selectedGroup.groupID}, Graf dla wybranej grupy

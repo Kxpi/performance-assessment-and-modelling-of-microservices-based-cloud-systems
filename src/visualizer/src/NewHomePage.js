@@ -5,6 +5,7 @@ import PercendenceGraph from "./components/PercendenceGraph";
 import AppGroups from "./AppGroups";
 import { randomColors } from './helpers.js'
 import Header from "./components/Header.js";
+import HistogramsPage from "./components/Histograms/HistogramsPage.js";
 
 import ScatterPlotPage from "./components/ScatterPlot/ScatterPlotPage.js";
 
@@ -49,13 +50,14 @@ function NewHomePage() {
                                 />
 
                             ) : currentView === 2 ? ( //ScatterPlot
-                                <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />
+                                // <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />
+                                <ScatterPlotPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
+                                    setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace} />
 
                             ) : currentView === 3 ? (
                                 <PercendenceGraph />
                             ) : currentView === 4 &&
-                            <ScatterPlotPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
-                                setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace} />
+                            <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
 
 
                             }
