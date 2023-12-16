@@ -104,26 +104,34 @@ function ScatterPlotPage({ jsonData, selectedGroup, setSelectedGroup, selectedOp
     }
 
     return (
-        <div>
+        <div style={{ width: '100%', height: '100%' }} >
             {selectedGroup ? (
 
-                <div>
 
-                    
-                    <ScatterPlotGroupsOperationsCg
-                        data={processScatterPlotGroupsOperationsData(
-                            selectedGroup,
-                            svgComponents
-                        )}
-                    />
+                selectedGroup["groupID"] === "Negative start times" ?
+                    (<div style={{
+                        width: '100%', height: '100%', display: 'flex', justifyContent: 'center',
+                        textAlign: 'center', flexDirection: 'column'
+                    }}>Negative start times group selected</div>
+                    ) :
+                    (
+                        <div>
 
-                    {/* <ScatterPlot
+
+                            <ScatterPlotGroupsOperationsCg
+                                data={processScatterPlotGroupsOperationsData(
+                                    selectedGroup,
+                                    svgComponents
+                                )}
+                            />
+
+                            {/* <ScatterPlot
                         data={processScatterPlotData(selectedGroup)}
                         showMenu={true}
                         selectedGroupNumber={selectedGroup.groupID}
 
                     /> */}
-                </div>
+                        </div>)
             ) :
                 <div>
                     <ScatterPlotGroups

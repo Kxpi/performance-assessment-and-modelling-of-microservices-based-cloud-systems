@@ -9,11 +9,7 @@ import OperationStatsTable from './components/OperationStatsTable';
 function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, selectedOperation, setSelectedOperation,
   selectedTrace, setSelectedTrace }) {
 
-  useEffect(() => {
 
-    setSelectedTrace(null);
-    setSelectedOperation(null);
-  }, [selectedGroup]);
 
 
   //
@@ -40,9 +36,9 @@ function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, s
             </div>
           )
           : (
-            <div style={{ width: '100%', height: '100%' }}>
+            <div className="neg-start-times" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace} selectedTrace={selectedTrace} />
-              selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />
+              {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />}
             </div>
           )
 

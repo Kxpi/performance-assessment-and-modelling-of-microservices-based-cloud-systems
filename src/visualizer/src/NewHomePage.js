@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CallGraphPage from "./components/callGraph/CallGraphPage";
 import FilesPage from "./components/InputPage/FilesPage.js"
 import PercendenceGraph from "./components/PercendenceGraph";
@@ -18,6 +18,12 @@ function NewHomePage() {
     const [fileName, setFileName] = useState("No file uploaded");
     // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
+
+    useEffect(() => {
+
+        setSelectedTrace(null);
+        setSelectedOperation(null);
+    }, [selectedGroup]);
 
     if (data) {
         var serviceColors = randomColors(data["microservice_stats"]);
@@ -54,7 +60,8 @@ function NewHomePage() {
                         ) : currentView === 2 ? ( //ScatterPlot
                             // <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />
                             <ScatterPlotPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
-                                setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace} />
+                                setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace}
+                            />
 
                         ) : currentView === 3 ? (
                             <PercendenceGraph />
