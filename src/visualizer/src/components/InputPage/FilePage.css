@@ -4,12 +4,11 @@
     margin-top: 10px;
     margin-bottom: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
-    justify-content: center;
-    margin-top: 100px;
+    justify-content: flex-end;
 }
 
-.filespage-files{
-    margin-top: 100px;
+.filespage-root > div{
+    margin-top: 50px;
 }

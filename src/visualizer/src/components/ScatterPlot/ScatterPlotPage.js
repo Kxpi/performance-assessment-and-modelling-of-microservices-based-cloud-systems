@@ -105,14 +105,11 @@ function ScatterPlotPage({ jsonData, selectedGroup, setSelectedGroup, selectedOp
 
     return (
         <div>
-            <h1>Shift+ drag to zoom in | Shift+ click to zoom out</h1>
             {selectedGroup ? (
 
-                <div>Wybrana Grupa: {selectedGroup.groupID}, Graf dla wybranej grupy
+                <div>
 
-                    <div className="centered-text">
-                        Scatter Plot of Group's {selectedGroup.groupID} Operations
-                    </div>
+                    
                     <ScatterPlotGroupsOperationsCg
                         data={processScatterPlotGroupsOperationsData(
                             selectedGroup,
@@ -129,7 +126,6 @@ function ScatterPlotPage({ jsonData, selectedGroup, setSelectedGroup, selectedOp
                 </div>
             ) :
                 <div>
-                    <h2>Nie wybrano grupy, pokazuje graf dla wszystkich grup</h2>
                     <ScatterPlotGroups
                         data={setDataForScatterPlotGroups(jsonData)}
                         showMenu={true}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CallGraphPage from "./components/callGraph/CallGraphPage";
-import FileUploader from "./components/callGraph/components/FileUploader";
+import FileUploader from "./components/callGraph/components/OldFileUploader";
 import PercendenceGraph from "./components/PercendenceGraph";
 import AppGroups from "./AppGroups";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";

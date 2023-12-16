@@ -2,32 +2,37 @@ import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
+import { Button } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-const FileUploader = ({ setData, setFileName }) => {
+const FileUploader = ({ setData, showMenu, setFileName }) => {
   const [fileContent, setFileContent] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Funkcja do odczytu zawartości pliku i walidacji rozszerzenia
-  const handleFileDrop = useCallback((acceptedFiles) => {
-    setIsLoading(true);
-    if (acceptedFiles.length === 0) {
-      alert("Błąd: Załaduj plik JSON.");
-      return;
-    }
+  const handleFileDrop = useCallback(
+    (acceptedFiles) => {
+      setIsLoading(true);
+      if (acceptedFiles.length === 0) {
+        alert("Błąd: Załaduj plik JSON.");
+        return;
+      }
 
-    const file = acceptedFiles[0];
-    if (file.type !== "application/json") {
-      alert("Błąd: Plik musi mieć rozszerzenie JSON.");
-      return;
-    }
-    setFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target.result;
-      setFileContent(content);
-    };
-    reader.readAsText(file);
-  }, [setFileName]);
+      const file = acceptedFiles[0];
+      if (file.type !== "application/json") {
+        alert("Błąd: Plik musi mieć rozszerzenie JSON.");
+        return;
+      }
+      setFileName(file.name);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target.result;
+        setFileContent(content);
+      };
+      reader.readAsText(file);
+    },
+    [setFileName]
+  );
 
   // Konfiguracja dropzone
   const dropzoneConfig = useMemo(
@@ -64,32 +69,59 @@ const FileUploader = ({ setData, setFileName }) => {
           alert("Error uploading the file to the server.");
         });
     }
-  }, [fileContent]);
+  }, [fileContent, setData]);
 
   return (
-    <div {...getRootProps()} style={dropzoneStyle}>
-      <input {...getInputProps()} />
-      {isLoading ? (
-        <ThreeDots type="ThreeDots" color="#00BFFF" height={80} width={80} />
-      ) : isDragActive ? (
-        <p>Drop JSON file here...</p>
-      ) : (
-        <p>Drag & drop file here, or click to select json file</p>
+    <div>
+      {showMenu && (
+        <div {...getRootProps()} style={isDragActive ? dropzoneStyle : {}}>
+          <input {...getInputProps()} />
+          {isLoading ? (
+            <ThreeDots
+              type="ThreeDots"
+              color="#00BFFF"
+              height={80}
+              width={80}
+            />
+          ) : (
+            <Button
+              variant="primary"
+              as="label"
+              htmlFor="file-upload"
+              style={buttonStyle}
+            >
+              Upload JSON
+            </Button>
+          )}
+        </div>
       )}
     </div>
   );
 };
 
-
 const dropzoneStyle = {
-  width: "75%",
-  minHeight: "150px",
+  width: "200px",
+  height: "38px",
   border: "2px dashed #cccccc",
   borderRadius: "4px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   cursor: "pointer",
+  fontSize: "0.9rem",
+  padding: "0.375rem 1rem",
+};
+
+const buttonStyle = {
+  fontSize: "0.9rem",
+  padding: "0.375rem 1rem",
+  height: "38px",
+};
+
+FileUploader.propTypes = {
+  setData: PropTypes.func.isRequired,
+  showMenu: PropTypes.bool.isRequired,
+  setFileName: PropTypes.func.isRequired,
 };
 
 export default FileUploader;

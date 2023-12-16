@@ -23,10 +23,23 @@ const TraceSelector = ({ traces, setSelectedTrace, selectedTrace }) => {
     }
   }, []);
 
+  const handleButtonClick = () => {
+    setIsActive(!isActive);
+
+    // Scroll into view when the button is clicked
+    if (dropdownRef.current) {
+      dropdownRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleItemClick = (trace) => {
+    setSelectedTrace(trace);
+    setIsActive(false);
+  };
+
   return (
     <div className='dropdown' ref={dropdownRef}>
-      <div className='dropdown-btn' onClick={e =>
-        setIsActive(!isActive)}>
+      <div className='dropdown-btn' onClick={handleButtonClick}>
         {selectedTrace ? "TraceID: " + selectedTrace.traceID : "--Choose Trace--v"}
 
       </div>
@@ -35,10 +48,8 @@ const TraceSelector = ({ traces, setSelectedTrace, selectedTrace }) => {
 
           {traces.map((trace) => (
 
-            <div onClick={(e) => {
-              setSelectedTrace(trace);
-              setIsActive(false);
-            }}
+            <div key={trace.traceID}
+              onClick={() => handleItemClick(trace)}
               className='dropdown-item'>
               {trace.traceID + " Duration: " + trace["spans"][0]["duration"]}
             </div>

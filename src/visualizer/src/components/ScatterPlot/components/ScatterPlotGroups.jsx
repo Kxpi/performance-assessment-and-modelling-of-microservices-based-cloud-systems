@@ -103,7 +103,7 @@ function ScatterPlotGroupsImpl(props) {
 
       <div className="App">
         <div className="TraceResultsScatterPlot">
-          <div className="centered-text">Scatter Plot of Groups</div>
+          {/* <div className="centered-text">Scatter Plot of Groups</div> */}
           {clickedDataPoint && (
             <div className="centered-text">
               Selected Group: {clickedDataPoint.groupID}

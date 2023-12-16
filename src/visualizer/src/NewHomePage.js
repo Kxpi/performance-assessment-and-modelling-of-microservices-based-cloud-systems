@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import CallGraphPage from "./components/callGraph/CallGraphPage";
-import FilesPage from "./components/FilesPage.js"
+import FilesPage from "./components/InputPage/FilesPage.js"
 import PercendenceGraph from "./components/PercendenceGraph";
-import AppGroups from "./AppGroups";
+
 import { randomColors } from './helpers.js'
 import Header from "./components/Header.js";
 import HistogramsPage from "./components/Histograms/HistogramsPage.js";
-
 import ScatterPlotPage from "./components/ScatterPlot/ScatterPlotPage.js";
+
 
 function NewHomePage() {
     const [data, setData] = useState(null);
@@ -31,38 +31,41 @@ function NewHomePage() {
                 setSelectedSpan={setSelectedOperation} />
 
 
-            <div className="homepage-content">
+            <div className="homepage-content" style={{ height: '85vh' }}>
                 {currentView === 0 ?
-                    <FilesPage setData={setData} fileName={fileName} setFileName={setFileName}></FilesPage>
+                    <FilesPage
+                        data={data} setData={setData} fileName={fileName} setFileName={setFileName}
+                        setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />
                     :
-                    data && (
-                        <div>
-                            {currentView === 1 ? (
-                                <CallGraphPage
-                                    selectedGroup={selectedGroup}
-                                    setSelectedGroup={setSelectedGroup}
-                                    data={data}
-                                    serviceColors={serviceColors}
-                                    selectedOperation={selectedOperation}
-                                    setSelectedOperation={setSelectedOperation}
-                                    selectedTrace={selectedTrace}
-                                    setSelectedTrace={setSelectedTrace}
-                                />
+                    data ? (
 
-                            ) : currentView === 2 ? ( //ScatterPlot
-                                // <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />
-                                <ScatterPlotPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
-                                    setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace} />
+                        currentView === 1 ? (
+                            <CallGraphPage
+                                selectedGroup={selectedGroup}
+                                setSelectedGroup={setSelectedGroup}
+                                data={data}
+                                serviceColors={serviceColors}
+                                selectedOperation={selectedOperation}
+                                setSelectedOperation={setSelectedOperation}
+                                selectedTrace={selectedTrace}
+                                setSelectedTrace={setSelectedTrace}
+                            />
 
-                            ) : currentView === 3 ? (
-                                <PercendenceGraph />
-                            ) : currentView === 4 &&
-                            <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
+                        ) : currentView === 2 ? ( //ScatterPlot
+                            // <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />
+                            <ScatterPlotPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
+                                setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace} />
+
+                        ) : currentView === 3 ? (
+                            <PercendenceGraph />
+                        ) : currentView === 4 &&
+                        <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
+
+                    ) :
+                        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}>No File Provided</div>
 
 
-                            }
-                        </div>
-                    )}
+                }
             </div>
         </div>
     );
