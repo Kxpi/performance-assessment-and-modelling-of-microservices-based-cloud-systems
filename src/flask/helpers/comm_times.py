@@ -142,7 +142,7 @@ def communication_time(pair_dict: dict) -> dict:
 
 
 @timeit
-def reformat_dict(traces: dict) -> list:
+def reformat_dict(traces: dict, groups_traces) -> list:
     """
     Returns new dict with traces in given format:
 
@@ -162,6 +162,8 @@ def reformat_dict(traces: dict) -> list:
     new_dict = {}
 
     for trace in traces['data']:
+        if trace['traceID'] not in groups_traces:
+            continue
         current_traceID = trace['traceID']
         new_dict[current_traceID] = {}
 
@@ -275,4 +277,27 @@ def get_statistic_of_traces(comm_time):
                             del statistic_to_graph[i]
                             statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
     
+    if len(statistic_to_graph) == 0:
+        for pair_of_spans in count_of_percendence:
+            times = count_of_percendence[pair_of_spans][1]
+            np_array = np.array(times)
+            
+            if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
+                statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+            else:
+                for i in list(statistic_to_graph.keys()):
+                    if i[0] == pair_of_spans[0]:
+                        if statistic_to_graph[i][3] > np.percentile(np_array, 95):
+                            del statistic_to_graph[i]
+                            statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+    
     return statistic_to_graph
+
+def find_traces(groups, groupID):
+    traces=[]
+    for group in groups:
+        if str(group['groupID']) == str(groupID):
+            #print(group['traces'])
+            for trace in group['traces']:
+                traces.append(trace['traceID'])
+    return traces

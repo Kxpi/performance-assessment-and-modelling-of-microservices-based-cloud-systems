@@ -64,7 +64,7 @@ function NewHomePage() {
                             />
 
                         ) : currentView === 3 ? (
-                            <PercendenceGraph />
+                            <PercendenceGraph groupID={selectedGroup.groupID}/>
                         ) : currentView === 4 &&
                         <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
 
