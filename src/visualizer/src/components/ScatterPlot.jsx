@@ -298,13 +298,13 @@ function ScatterPlotImpl(props) {
         <div
           style={{
             position: "fixed",
-            top: 115,
+            top: 130,
             zIndex: 9998,
           }}
         >
           <Dropdown>
             <Dropdown.Toggle variant="primary" id="dropdown-basic">
-              Scatter Plot Options
+              Spans Scatter Plot
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
@@ -461,11 +461,6 @@ function ScatterPlotImpl(props) {
           </FlexibleXYPlot>
           {clickedDataPoint && (
             <div>
-              {clickedDataPoint.groupID !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Group ID: {clickedDataPoint.groupID}
-                </h4>
-              ) : null}
               <h4 className="scatter-plot-hint">
                 Span ID: {clickedDataPoint.spanID}
               </h4>
@@ -477,8 +472,7 @@ function ScatterPlotImpl(props) {
                 Time: {`${clickedDataPoint.x / 1000} ms`}
               </h4>
               <h4 className="scatter-plot-hint">
-                Duration:
-                {`${clickedDataPoint.y / 1000} ms`}
+                Duration: {`${clickedDataPoint.y / 1000} ms`}
               </h4>
               <h4 className="scatter-plot-hint">
                 Trace ID: {clickedDataPoint.traceID}
@@ -486,152 +480,6 @@ function ScatterPlotImpl(props) {
               <h4 className="scatter-plot-hint">
                 Service Name: {clickedDataPoint.serviceName}
               </h4>
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Average Duration For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.exec_time_average / 1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Min Duration For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.exec_time_min / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  First Quartile of Duration For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.exec_time_q1 / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Second Quartile of Duration For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.exec_time_q2 / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Third Quartile of Duration For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.exec_time_q3 / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Max Duration For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.exec_time_max / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  95th Percentile of Duration For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.exec_time_95_percentile /
-                    1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  99th Percentile of Duration For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.exec_time_99_percentile /
-                    1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Standard Deviation of Duration For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.exec_time_stddev / 1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Interquartile Range of Duration For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.exec_time_IQR / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Average Start Time For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.start_time_average / 1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Min Start Time For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.start_time_min / 1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  First Quartile of Start Time For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.start_time_q1 / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Second Quartile of Start Time For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.start_time_q2 / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Third Quartile of Start Time For {clickedDataPoint.name}:{" "}
-                  {`${clickedDataPoint.operationStats.start_time_q3 / 1000} ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Max Start Time For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.start_time_max / 1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  95th Percentile of Start Time For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.start_time_95_percentile /
-                    1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  99th Percentile of Start Time For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.start_time_99_percentile /
-                    1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Standard Deviation of Start Time For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.start_time_stddev / 1000
-                  } ms`}
-                </h4>
-              ) : null}
-              {clickedDataPoint.operationStats !== undefined ? (
-                <h4 className="scatter-plot-hint">
-                  Interquartile Range of Start Time For {clickedDataPoint.name}:{" "}
-                  {`${
-                    clickedDataPoint.operationStats.start_time_IQR / 1000
-                  } ms`}
-                </h4>
-              ) : null}
             </div>
           )}
         </div>
