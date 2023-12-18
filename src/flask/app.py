@@ -53,9 +53,9 @@ def upload_file():
     try:
         global data
         data = request.get_json()
-
+        global groups
         microservice_stats, groups = get_groups(data)
-        
+    
         return jsonify({"microservice_stats": microservice_stats, "groups": groups})
 
     except Exception as e:
@@ -64,15 +64,18 @@ def upload_file():
 
 
 @app.route("/data/<groupID>")
-def send_data():
+def send_data(groupID):
     global data
+    global groups
     traces = data.copy()
-
-    non_child = find_non_child(traces)
-    traces_reformatted = reformat_dict(traces)
+    groups_traces = find_traces(groups,groupID)
+    #non_child = find_non_child(traces)
+    traces_reformatted = reformat_dict(traces, groups_traces)
+    
     communication_times = calculate_comm_times(traces_reformatted, False)
-
+    
     graph = get_statistic_of_traces(communication_times)
+    print(graph)
     graph_list = [(str(pair), stats) for pair, stats in graph.items()]
 
     nodes = set()
