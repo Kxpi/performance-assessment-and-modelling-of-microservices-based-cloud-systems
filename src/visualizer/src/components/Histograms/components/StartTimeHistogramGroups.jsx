@@ -29,7 +29,7 @@ function StartTimeHistogramGroups({ data }) {
     .scaleBand()
     .domain(data.map((_, i) => i)) // use index as domain
     .range([0, width])
-    .padding(0.1);
+    .padding(0.2);
   const y = d3
     .scaleLinear()
     .domain([0, d3.max(data, (d) => d.startTime99Percentile)]) // Use d.startTime99Percentile for y scale
@@ -67,7 +67,7 @@ function StartTimeHistogramGroups({ data }) {
       viewBox={`0 0 ${width + margin.left + margin.right} ${
         height + margin.top + margin.bottom
       }`}
-      style={{ width: "100%", height: "auto" }}
+      style={{ width: "100%", height: "100%" }}
     >
       <g transform={`translate(${margin.left},${margin.top})`}>
         {data.map((d, i) => (

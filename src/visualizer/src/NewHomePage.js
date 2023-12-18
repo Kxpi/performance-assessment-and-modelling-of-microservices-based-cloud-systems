@@ -4,7 +4,7 @@ import FilesPage from "./components/InputPage/FilesPage.js"
 import PercendenceGraph from "./components/PercendenceGraph";
 
 import { randomColors } from './helpers.js'
-import Header from "./components/Header.js";
+import Header from "./components/Header/Header.js";
 import HistogramsPage from "./components/Histograms/HistogramsPage.js";
 import ScatterPlotPage from "./components/ScatterPlot/ScatterPlotPage.js";
 

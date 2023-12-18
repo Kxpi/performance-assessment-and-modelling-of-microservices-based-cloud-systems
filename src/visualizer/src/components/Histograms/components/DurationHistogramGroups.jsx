@@ -67,7 +67,7 @@ function DurationHistogramGroups({ data }) {
       viewBox={`0 0 ${width + margin.left + margin.right} ${
         height + margin.top + margin.bottom
       }`}
-      style={{ width: "100%", height: "auto" }}
+      style={{ width: "100%", height: "100%" }}
     >
       <g transform={`translate(${margin.left},${margin.top})`}>
         {data.map((d, i) => (
