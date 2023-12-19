@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SpanInfo = ({ selectedSpan, isGroupGraph = false, operationStats }) => {
+const SpanInfo = ({ selectedSpan, operationStats }) => {
 
     var sOpName = selectedSpan["operationName"]
 

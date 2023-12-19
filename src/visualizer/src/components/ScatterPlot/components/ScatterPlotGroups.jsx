@@ -182,7 +182,7 @@ function ScatterPlotGroupsImpl(props) {
                       width={30}
                       height={30}
                       fill={color}
-                      style={{ pointerEvents: "all" }}
+                      style={{ pointerEvents: "all" ,cursor: 'pointer'}}
                       onClick={() => {
                         //setClickedDataPoint(overValue);
                         if(overValue)
@@ -190,6 +190,7 @@ function ScatterPlotGroupsImpl(props) {
                           setSelectedGroup(overValue.groupID)
                         }
                       }}
+
                     />
                   </g>
                 );

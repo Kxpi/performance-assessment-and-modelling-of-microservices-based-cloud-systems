@@ -11,10 +11,16 @@ import StartTimeHistogramSingleGroup from "../StartTimeHistogramSingleGroup.jsx"
 // #toDo Add group selection from Histogram of all groups (click on bar method?)
 // #toDo Add operation selection (click on bar method?)
 
-function HistogramsPage({ jsonData, selectedGroup, setSelectedGroup }) {
+function HistogramsPage({ jsonData, selectedGroup, setSelectedGroup, selectedOperation, setSelectedOperation }) {
   //            const groupsData = jsonData.groups.filter(
   //(item) => item["groupID"] !== "Negative start times"
   //);
+
+  function setGroupHistogramOnClick(groupID) {
+    setSelectedGroup(
+      jsonData.groups.find((group) => group.groupID === groupID)
+    );
+  }
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -33,16 +39,25 @@ function HistogramsPage({ jsonData, selectedGroup, setSelectedGroup }) {
             Negative start times group selected
           </div>
         ) : (
-          <div style={{ width: '100%', height: '100%', display: 'felx', flexDirection: 'column', justifyContent: 'space-between' }}>
-            {/* <h3>Duration Histogram of Group {selectedGroup.groupID}</h3> */}
-            <DurationHistogramSingleGroup
-              data={processHistogramSingleGroupData(selectedGroup)}
-            />
-            {/* <h3>Start Time Histogram of Group{selectedGroup.groupID}</h3> */}
-            <StartTimeHistogramSingleGroup
-              data={processHistogramSingleGroupData(selectedGroup)}
-            />
-          </div>
+          selectedOperation ?
+            (
+              <div>
+                <h1>Message to Mikołaj: Put your Operation's Histograms here, please </h1>
+              </div>
+            )
+            :
+            (
+              <div style={{ width: '100%', height: '100%', display: 'felx', flexDirection: 'column', justifyContent: 'space-between' }}>
+                {/* <h3>Duration Histogram of Group {selectedGroup.groupID}</h3> */}
+                <DurationHistogramSingleGroup
+                  data={processHistogramSingleGroupData(selectedGroup)}
+                />
+                {/* <h3>Start Time Histogram of Group{selectedGroup.groupID}</h3> */}
+                <StartTimeHistogramSingleGroup
+                  data={processHistogramSingleGroupData(selectedGroup)}
+                />
+              </div>
+            )
         )
       ) : (
         <div
@@ -59,12 +74,12 @@ function HistogramsPage({ jsonData, selectedGroup, setSelectedGroup }) {
           {/* <h3>Duration Histogram of Groups</h3> */}
 
           <DurationHistogramGroups
-            data={setDataForScatterPlotGroups(jsonData)}
+            data={setDataForScatterPlotGroups(jsonData)} setGroupHistogramOnClick={setGroupHistogramOnClick}
           />
           {/* <h3>Start Time Histogram of Groups</h3> */}
 
           <StartTimeHistogramGroups
-            data={setDataForScatterPlotGroups(jsonData)}
+            data={setDataForScatterPlotGroups(jsonData)} setGroupHistogramOnClick={setGroupHistogramOnClick}
           />
         </div>
       )

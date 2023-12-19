@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 
-function StartTimeHistogramGroups({ data }) {
+function StartTimeHistogramGroups({ data,setGroupHistogramOnClick }) {
   // Define dimensions
   const margin = { top: 30, right: 30, bottom: 80, left: 100 };
   const [width, setWidth] = useState(
@@ -73,11 +73,13 @@ function StartTimeHistogramGroups({ data }) {
         {data.map((d, i) => (
           <rect
             key={d.groupID}
+            onClick={()=>{setGroupHistogramOnClick(d.groupID)}}
             x={x(i)}
             y={y(d.startTime99Percentile)} // Use d.startTime99Percentile for y value
             width={x.bandwidth()}
             height={height - y(d.startTime99Percentile)} // Use d.startTime99Percentile for height
             fill={d.color}
+            style={{cursor: 'pointer'}}
           />
         ))}
         <g

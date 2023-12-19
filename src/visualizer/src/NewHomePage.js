@@ -64,9 +64,10 @@ function NewHomePage() {
                             />
 
                         ) : currentView === 3 ? (
-                            <PercendenceGraph groupID={selectedGroup.groupID}/>
+                            <PercendenceGraph groupID={selectedGroup.groupID} />
                         ) : currentView === 4 &&
-                        <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} />
+                        <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
+                            setSelectedOperation={setSelectedOperation} />
 
                     ) :
                         <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}>No File Provided</div>

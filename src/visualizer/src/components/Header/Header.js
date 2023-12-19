@@ -35,7 +35,7 @@ function Header({ currentView, setCurrentView, selectedGroup, setSelectedGroup, 
                 <div className="selectedSpan">
                     selectedSpan: <br /> {selectedSpan ? (
                         <span>
-                            {selectedSpan.data.operationName}
+                            {selectedSpan}
                             <Button variant="danger" onClick={() => setSelectedSpan(null)}>
                                 &#x2717;
                             </Button>

@@ -48,13 +48,15 @@ function ScatterPlotPage({
             </div> */}
             <ScatterPlotGroupsOperationsCg
               data={processScatterPlotGroupsOperationsData(selectedGroup)}
+              selectedOperation={selectedOperation}
+              setSelectedOperation={setSelectedOperation}
             />
 
-            <ScatterPlot
+            {/* <ScatterPlot
               data={processScatterPlotData(selectedGroup)}
               showMenu={true}
               selectedGroupNumber={selectedGroup.groupID}
-            />
+            /> */}
           </div>
         )
       ) : (

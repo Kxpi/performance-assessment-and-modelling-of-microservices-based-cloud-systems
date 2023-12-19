@@ -13,7 +13,7 @@ import Legend from './Legend';
 const TraceGraph = ({ selectedTrace, serviceColors, operationStats, selectedOperation, setSelectedOperation }) => {
 
 
-    // const [selectedNode, setSelectedNode] = useState(null);
+    const [selectedNode, setSelectedNode] = useState(null);
     const [showSpanInfo, setShowSpanInfo] = useState(false)
 
     useEffect(() => {
@@ -124,7 +124,8 @@ const TraceGraph = ({ selectedTrace, serviceColors, operationStats, selectedOper
 
 
         if (node) {
-            setSelectedOperation(node);
+            setSelectedNode(node);
+            setSelectedOperation(node.data.operationName);
             setShowSpanInfo(true)
 
         }
@@ -137,7 +138,7 @@ const TraceGraph = ({ selectedTrace, serviceColors, operationStats, selectedOper
             <Legend microserviceColors={servicesInfo} />
             <div style={{ height: '100%', width: '100%', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <ReactFlow style={{ border: "solid", padding: "10px" }} nodes={nodes} edges={edges} onNodeClick={onNodeClick} />
-                {showSpanInfo && selectedOperation && <SpanInfo selectedSpan={selectedOperation.data} operationStats={operationStats} />}
+                {showSpanInfo && selectedOperation && <SpanInfo selectedSpan={selectedNode.data} operationStats={operationStats} />}
                 {/* operationStats={operationStats[selectedNode.data.operationName]} */}
             </div>
         </div>

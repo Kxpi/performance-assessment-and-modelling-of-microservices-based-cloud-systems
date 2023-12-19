@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 
-function DurationHistogramGroups({ data }) {
+function DurationHistogramGroups({ data,setGroupHistogramOnClick }) {
   // Define dimensions
   const margin = { top: 30, right: 30, bottom: 80, left: 100 }; // Increase bottom and left margins for labels
   const [width, setWidth] = useState(
@@ -71,13 +71,14 @@ function DurationHistogramGroups({ data }) {
     >
       <g transform={`translate(${margin.left},${margin.top})`}>
         {data.map((d, i) => (
-          <rect
+          <rect onClick={()=>{setGroupHistogramOnClick(d.groupID)}}
             key={d.groupID}
             x={x(i)}
             y={y(d.duration99Percentile)}
             width={x.bandwidth()} // use bandwidth to set width
             height={height - y(d.duration99Percentile)}
             fill={d.color}
+            style={{cursor: 'pointer'}}
           />
         ))}
         <g

@@ -56,6 +56,8 @@ function useShiftPress() {
 function ScatterPlotImpl(props) {
   const {
     data,
+    selectedOperation,
+    setSelectedOperation,
     overValue,
     onValueOver,
     onValueOut,
@@ -157,14 +159,20 @@ function ScatterPlotImpl(props) {
                       height={30}
                       fill={color}
                       onClick={() => {
-                        setClickedDataPoint(overValue);
-                        setIsDurationHistogramSingleGroupOperationVisible(
-                          false
-                        );
-                        setIsStartTimeHistogramSingleGroupOperationVisible(
-                          false
-                        );
+                        // setClickedDataPoint(overValue);
+                        // console.log(overValue.operationName);\
+                        console.log(overValue)
+                        if(overValue){
+                        setSelectedOperation(overValue["operationName"])
+                        }
+                        // setIsDurationHistogramSingleGroupOperationVisible(
+                        //   false
+                        // );
+                        // setIsStartTimeHistogramSingleGroupOperationVisible(
+                        //   false
+                        // );
                       }}
+                      style={{cursor: 'pointer'}}
                     />
                   </g>
                 );
