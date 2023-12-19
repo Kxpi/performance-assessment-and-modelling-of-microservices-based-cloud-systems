@@ -43,9 +43,9 @@ function ScatterPlotPage({
           </div>
         ) : (
           <div>
-            <div className="centered-text">
+            {/* <div className="centered-text">
               Scatter Plot of Group's {selectedGroup.groupID} Operations
-            </div>
+            </div> */}
             <ScatterPlotGroupsOperationsCg
               data={processScatterPlotGroupsOperationsData(selectedGroup)}
             />
@@ -59,10 +59,10 @@ function ScatterPlotPage({
         )
       ) : (
         <div>
-          <div className="centered-text">Scatter Plot of Groups</div>
+          {/* <div className="centered-text">Scatter Plot of Groups</div> */}
           <ScatterPlotGroups
             data={setDataForScatterPlotGroups(jsonData)}
-            showMenu={true}
+            showMenu={false}
             // onGroupOperationsClick={handleGroupOperationsClick}
             // onGroupSpansClick={handleGroupSpansClick}
             setSelectedGroup={setSelectedGroupFromScatterPlotGroups}

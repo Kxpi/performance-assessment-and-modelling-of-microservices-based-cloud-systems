@@ -297,7 +297,7 @@ function ScatterPlotImpl(props) {
       {showMenu && (
         <div
           style={{
-            position: "fixed",
+            position: "sticky",
             top: 130,
             zIndex: 9998,
           }}
@@ -366,7 +366,7 @@ function ScatterPlotImpl(props) {
           )}
         </div>
       )}
-      <div className="App">
+      <div className="App" style={{ width: "100%", height: "100%" }}>
         <div className="TraceResultsScatterPlot">
           <div className="centered-text">
             Scatter Plot of Group {selectedGroupNumber}'s Spans

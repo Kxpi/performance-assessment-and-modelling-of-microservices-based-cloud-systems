@@ -33,29 +33,15 @@ function HistogramsPage({ jsonData, selectedGroup, setSelectedGroup }) {
             Negative start times group selected
           </div>
         ) : (
-          <div>
-            <h2>
-              Wybrana Grupa: {selectedGroup.groupID}, Histogram dla wybranej
-              grupy
-            </h2>
-            <h3>
-              Duration Histogram of Group {selectedGroup.groupID}'s Operations
-            </h3>
-            <h3>
-              Start Time Histogram of {selectedGroup.groupID}'s Operations
-            </h3>
-            <h3>Duration Histogram of Group {selectedGroup.groupID}</h3>
+          <div style={{ width: '100%', height: '100%', display: 'felx', flexDirection: 'column', justifyContent: 'space-between' }}>
+            {/* <h3>Duration Histogram of Group {selectedGroup.groupID}</h3> */}
             <DurationHistogramSingleGroup
               data={processHistogramSingleGroupData(selectedGroup)}
             />
-            <h3>Start Time Histogram of Group{selectedGroup.groupID}</h3>
+            {/* <h3>Start Time Histogram of Group{selectedGroup.groupID}</h3> */}
             <StartTimeHistogramSingleGroup
               data={processHistogramSingleGroupData(selectedGroup)}
             />
-            <h4>
-              Czym się różni Operations od bez Operations, czy bez Operations to
-              są trejsy?
-            </h4>
           </div>
         )
       ) : (
@@ -64,10 +50,9 @@ function HistogramsPage({ jsonData, selectedGroup, setSelectedGroup }) {
           style={{
             width: "100%",
             height: "100%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
+            // display: "flex",
+            // flexDirection: "column",
+            // justifyContent: 'space-between'
           }}
         >
           {/* <h2>Nie wybrano grupy, pokazuje graf dla wszystkich grup</h2> */}
@@ -82,8 +67,9 @@ function HistogramsPage({ jsonData, selectedGroup, setSelectedGroup }) {
             data={setDataForScatterPlotGroups(jsonData)}
           />
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

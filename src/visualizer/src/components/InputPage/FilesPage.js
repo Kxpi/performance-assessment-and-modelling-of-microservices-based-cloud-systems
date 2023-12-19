@@ -5,10 +5,6 @@ import GroupSelector from './components/GroupSelector';
 
 function FilesPage({ data, setData, fileName, setFileName, setSelectedGroup, selectedGroup }) {
 
-        
-    useEffect(() => {
-        console.log("selectedGroup in useEffect:", selectedGroup);
-    }, [selectedGroup]);
 
     return (
         <div className="filespage-root">
