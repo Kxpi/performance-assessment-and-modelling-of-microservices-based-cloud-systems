@@ -52,11 +52,11 @@ function ScatterPlotPage({
               setSelectedOperation={setSelectedOperation}
             />
 
-            {/* <ScatterPlot
+            <ScatterPlot
               data={processScatterPlotData(selectedGroup)}
               showMenu={true}
               selectedGroupNumber={selectedGroup.groupID}
-            /> */}
+            />
           </div>
         )
       ) : (

@@ -106,14 +106,14 @@ function StartTimeHistogramSingleGroup({ data }) {
             y={0 - margin.left}
             x={0 - height / 2}
             dy="1em"
-            style={{ textAnchor: "middle" }}
+            style={{ textAnchor: "middle", fontSize: "1rem" }}
           >
             Count (Logarithmic Scale)
           </text>
           <text
             x={width / 2}
             y={height + margin.bottom / 2}
-            style={{ textAnchor: "middle" }}
+            style={{ textAnchor: "middle", fontSize: "1rem" }}
           >
             Start Time
           </text>

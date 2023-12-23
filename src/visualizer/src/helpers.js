@@ -90,7 +90,6 @@ export function randomColors(services) {
   return serviceColors;
 }
 
-
 const svgComponents = Object.entries(SVGs)
   .sort(([keyA], [keyB]) => {
     const numA = Number(keyA.replace("Svg", ""));
@@ -255,7 +254,7 @@ export const myColors = [
   "YellowGreen",
 ];
 
-//Selected Group, Spans from selected group, Scatter Plot 
+//Selected Group, Spans from selected group, Scatter Plot
 export function processScatterPlotGroupsOperationsData(
   selectedGroup
   //svgComponents
@@ -343,7 +342,7 @@ export function processScatterPlotData(selectedGroup) {
   return processedScatterPlotData;
 }
 
-//No selected Group,All groups, Scatter Plot, Histogram, 
+//No selected Group,All groups, Scatter Plot, Histogram,
 export function setDataForScatterPlotGroups(jsonData) {
   // 'Negative start times' group is only to represent traces which have at least one span with negative starTime that's why we need to delete it
   const groupsData = jsonData.groups.filter(
@@ -413,7 +412,29 @@ export function setDataForScatterPlotGroups(jsonData) {
     return dataObj;
   });
   if (!propsData) {
-    console.log("propsData jest puste")
+    console.log("propsData jest puste");
   }
-  return propsData
+  return propsData;
+}
+
+export function processGroupOperationHistogramData(
+  selectedGroup,
+  operationName
+) {
+  const processedGroupOperationHistogramData = selectedGroup.traces.reduce(
+    (acc, t) => {
+      const spansData = t.spans
+        .filter((span) => span.operationName === operationName)
+        .map((span) => {
+          return {
+            startTime: span.startTime,
+            duration: span.duration,
+            spanID: span.spanID,
+          };
+        });
+      return [...acc, ...spansData];
+    },
+    []
+  );
+  return processedGroupOperationHistogramData;
 }
