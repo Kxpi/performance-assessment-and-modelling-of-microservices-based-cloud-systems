@@ -1,7 +1,6 @@
-import React from 'react';
-import './styles/OperationStatsTable.css'; // Import the CSS styles file
-
-function OperationStatsTable({ operationStats }) {
+import React, { useState } from 'react';
+import './OperationStatsTable.css';
+function OperationStatsTable({ operationStats, selectedOperation, setSelectedOperation }) {
 
   if (!operationStats) {
     return null;
@@ -17,7 +16,7 @@ function OperationStatsTable({ operationStats }) {
 
       {/* Exec Table */}
       <div className="exec-table" style={{ overflow: 'auto', marginBottom: '10px', width: '100%' }}>
-        <table >
+        <table>
           <thead>
             <tr>
               <th></th> {/* Empty cell in the top-left corner */}
@@ -28,7 +27,13 @@ function OperationStatsTable({ operationStats }) {
           </thead>
           <tbody>
             {operationNames.map((operationName, operationIndex) => (
-              <tr key={operationIndex}>
+              <tr
+                key={operationIndex}
+                style={{ background: selectedOperation === operationName ? '#FFFFCC' : 'transparent' }}
+                onClick={() => {
+                  setSelectedOperation(operationName);
+                }}
+              >
                 <td>{operationName}</td>
                 {execColumnHeaders.map((header, headerIndex) => (
                   <td key={headerIndex}>{operationStats[operationName][header] / 1000 + ' ms'}</td>
@@ -41,7 +46,7 @@ function OperationStatsTable({ operationStats }) {
 
       {/* Start Table */}
       <div className="start-table" style={{ overflow: 'auto', width: '100%' }}>
-        <table >
+        <table>
           <thead>
             <tr>
               <th></th> {/* Empty cell in the top-left corner */}
@@ -52,7 +57,13 @@ function OperationStatsTable({ operationStats }) {
           </thead>
           <tbody>
             {operationNames.map((operationName, operationIndex) => (
-              <tr key={operationIndex}>
+              <tr
+                key={operationIndex}
+                style={{ background: selectedOperation === operationName ? '#FFFFCC' : 'transparent' }}
+                onClick={() => {
+                  setSelectedOperation(operationName); // Dodatkowo ustawiamy wybraną operację
+                }}
+              >
                 <td>{operationName}</td>
                 {startColumnHeaders.map((header, headerIndex) => (
                   <td key={headerIndex}>{operationStats[operationName][header] / 1000 + ' ms'}</td>

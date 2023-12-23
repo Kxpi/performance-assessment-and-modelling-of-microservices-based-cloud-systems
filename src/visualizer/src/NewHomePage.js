@@ -7,7 +7,7 @@ import { randomColors } from './helpers.js'
 import Header from "./components/Header/Header.js";
 import HistogramsPage from "./components/Histograms/HistogramsPage.js";
 import ScatterPlotPage from "./components/ScatterPlot/ScatterPlotPage.js";
-
+import TablePage from "./components/TablePage/TablePage.js";
 
 function NewHomePage() {
     const [data, setData] = useState(null);
@@ -17,7 +17,6 @@ function NewHomePage() {
     const [selectedOperation, setSelectedOperation] = useState(null)
     const [fileName, setFileName] = useState("No file uploaded");
     // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
-
 
     useEffect(() => {
 
@@ -56,16 +55,17 @@ function NewHomePage() {
                                 selectedTrace={selectedTrace}
                                 setSelectedTrace={setSelectedTrace}
                             />
-
-                        ) : currentView === 2 ? ( //ScatterPlot
+                        ) : currentView === 2 ? (
+                            <TablePage selectedGroup={selectedGroup} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />
+                        ) : currentView === 3 ? ( //ScatterPlot
                             // <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />
                             <ScatterPlotPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
                                 setSelectedOperation={setSelectedOperation} selectedTrace={selectedTrace} setSelectedTrace={setSelectedTrace}
                             />
 
-                        ) : currentView === 3 ? (
+                        ) : currentView === 4 ? (
                             <PercendenceGraph groupID={selectedGroup.groupID} />
-                        ) : currentView === 4 &&
+                        ) : currentView === 5 &&
                         <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
                             setSelectedOperation={setSelectedOperation} />
 

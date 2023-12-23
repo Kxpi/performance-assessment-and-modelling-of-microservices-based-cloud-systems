@@ -3,7 +3,7 @@ import './CallGraphPage.css';
 
 import TraceSelector from './components/TraceSelector';
 import TraceGraph from './components/TraceGraph';
-import OperationStatsTable from './components/OperationStatsTable';
+import OperationStatsTable from '../TablePage/components/OperationStatsTable';
 
 
 function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, selectedOperation, setSelectedOperation,
