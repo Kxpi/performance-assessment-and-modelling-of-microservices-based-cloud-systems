@@ -3,6 +3,7 @@ import React from 'react';
 const SpanInfo = ({ selectedSpan, operationStats }) => {
 
     var sOpName = selectedSpan["operationName"]
+    console.log(operationStats)
 
     return (
         <div style={{ height: '100%', overflow: 'auto' }}>
@@ -77,6 +78,47 @@ const SpanInfo = ({ selectedSpan, operationStats }) => {
                                 <td><b>IQR duration:</b></td>
                                 <td>{operationStats[sOpName].exec_time_IQR / 1000 + ' ms'}</td>
                             </tr>
+                            <tr>
+                                <td><b>Average startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_average / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Min startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_min / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Q1 startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_q1 / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Q2 startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_q2 / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Q3 startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_q3 / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Max startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_max / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>99_percentile startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_99_percentile / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>95_percentile startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_95_percentile / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Stdev startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_stddev / 1000 + ' ms'}</td>
+                            </tr>
+                            <tr>
+                                <td><b>IQR startTime:</b></td>
+                                <td>{operationStats[sOpName].start_time_IQR / 1000 + ' ms'}</td>
+                            </tr>
+
                         </tbody>
                     </table>
                 </div>
