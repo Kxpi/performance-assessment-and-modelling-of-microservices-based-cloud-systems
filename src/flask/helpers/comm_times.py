@@ -301,3 +301,25 @@ def find_traces(groups, groupID):
             for trace in group['traces']:
                 traces.append(trace['traceID'])
     return traces
+
+
+def get_edges(data, groups):
+    edges = {}
+    for group in groups:
+        groups_traces = find_traces(groups, group["groupID"])
+        #non_child = find_non_child(traces)
+        traces_reformatted = reformat_dict(data, groups_traces)
+        
+        communication_times = calculate_comm_times(traces_reformatted, False)
+        
+        graph = get_statistic_of_traces(communication_times)
+        print(graph)
+        graph_list = [(str(pair), stats) for pair, stats in graph.items()]
+        links = []
+        for item in graph_list:
+            source, target = item[0][1:-1].replace("'", "").split(",")
+            target = target[1:]
+            links.append([source, target, item[1][-1]])
+        edges[group["groupID"]] = links
+    
+    return edges

@@ -33,7 +33,7 @@ function App() {
         }
       )
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.edges);
         return response.data;
       })
       .then((jsonData) => {

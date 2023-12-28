@@ -55,8 +55,9 @@ def upload_file():
         data = request.get_json()
         global groups
         microservice_stats, groups = get_groups(data)
-    
-        return jsonify({"microservice_stats": microservice_stats, "groups": groups})
+        edges = get_edges(data, groups) 
+
+        return jsonify({"microservice_stats": microservice_stats, "groups": groups, "edges": edges})
 
     except Exception as e:
         print("TO na backendzie error")
