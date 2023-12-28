@@ -290,7 +290,7 @@ def get_statistic_of_traces(comm_time):
                         if statistic_to_graph[i][3] > np.percentile(np_array, 95):
                             del statistic_to_graph[i]
                             statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
-    
+    print(statistic_to_graph) 
     return statistic_to_graph
 
 def find_traces(groups, groupID):
