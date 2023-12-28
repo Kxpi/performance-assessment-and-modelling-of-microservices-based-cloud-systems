@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 
-function StartTimeHistogramGroupsOperations({ data }) {
+function StartTimeHistogramGroupsOperations({ data, setSelectedOperation }) {
   // Define dimensions
   const margin = { top: 30, right: 30, bottom: 80, left: 100 };
   const [width, setWidth] = useState(
@@ -73,6 +73,7 @@ function StartTimeHistogramGroupsOperations({ data }) {
         <g transform={`translate(${margin.left},${margin.top})`}>
           {data.map((d, i) => (
             <rect
+              onClick={() => setSelectedOperation(d.operationName)}
               key={d.operationName}
               x={x(i)}
               y={y(d.startTime99Percentile)} // Use d.startTime99Percentile for y value

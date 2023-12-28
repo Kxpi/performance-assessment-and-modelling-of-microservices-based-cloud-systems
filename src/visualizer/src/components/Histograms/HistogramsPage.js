@@ -52,12 +52,18 @@ function HistogramsPage({
         ) : selectedOperation ? (
           <div>
             <h1>
+              <h3>
+                Duration Histogram of Operation {selectedOperation}'s Spans
+              </h3>
               <DurationHistogramSingleGroup
                 data={processGroupOperationHistogramData(
                   selectedGroup,
                   selectedOperation
                 )}
               />
+              <h3>
+                Start Time Histogram of Operation {selectedOperation}'s Spans
+              </h3>
               <StartTimeHistogramSingleGroup
                 data={processGroupOperationHistogramData(
                   selectedGroup,
@@ -76,21 +82,29 @@ function HistogramsPage({
               justifyContent: "space-between",
             }}
           >
-            {/* <h3>Duration Histogram of Group {selectedGroup.groupID}</h3> */}
+            <h3>Duration Histogram of Group {selectedGroup.groupID}'s Spans</h3>
             <DurationHistogramSingleGroup
               data={processHistogramSingleGroupData(selectedGroup)}
             />
-            {/* <h3>Start Time Histogram of Group{selectedGroup.groupID}</h3> */}
+            <h3>
+              Start Time Histogram of Group {selectedGroup.groupID}'s Spans
+            </h3>
             <StartTimeHistogramSingleGroup
               data={processHistogramSingleGroupData(selectedGroup)}
             />
-            {/* <h3>Duration Histogram of Group {selectedGroup.groupID}'s Operations</h3> */}
+            <h3>
+              Duration Histogram of Group {selectedGroup.groupID}'s Operations
+            </h3>
             <DurationHistogramGroupsOperations
               data={processSelectedGroupData(selectedGroup, myColors)}
+              setSelectedOperation={setSelectedOperation}
             />
-            {/* <h3>Start Time Histogram of Group {selectedGroup.groupID}'s Operations</h3> */}
+            <h3>
+              Start Time Histogram of Group {selectedGroup.groupID}'s Operations
+            </h3>
             <StartTimeHistogramGroupsOperations
               data={processSelectedGroupData(selectedGroup, myColors)}
+              setSelectedOperation={setSelectedOperation}
             />
           </div>
         )
@@ -106,13 +120,13 @@ function HistogramsPage({
           }}
         >
           {/* <h2>Nie wybrano grupy, pokazuje graf dla wszystkich grup</h2> */}
-          {/* <h3>Duration Histogram of Groups</h3> */}
+          <h3>Duration Histogram of Groups</h3>
 
           <DurationHistogramGroups
             data={setDataForScatterPlotGroups(jsonData)}
             setGroupHistogramOnClick={setGroupHistogramOnClick}
           />
-          {/* <h3>Start Time Histogram of Groups</h3> */}
+          <h3>Start Time Histogram of Groups</h3>
 
           <StartTimeHistogramGroups
             data={setDataForScatterPlotGroups(jsonData)}

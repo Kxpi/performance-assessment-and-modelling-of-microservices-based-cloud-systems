@@ -196,47 +196,32 @@ const getRandomSubset = (data, percentage) => {
     return [];
   }
 
-  // Group spans by trace ID
-  const traces = data.reduce((acc, span) => {
-    if (!acc[span.traceID]) {
-      acc[span.traceID] = [];
-    }
-    acc[span.traceID].push(span);
-    return acc;
-  }, {});
+  // Calculate count
+  const count = Math.max(1, Math.ceil((data.length * percentage) / 100));
 
-  // Convert traces object to array and calculate count
-  const tracesArray = Object.values(traces);
-  const count = Math.max(1, Math.ceil((tracesArray.length * percentage) / 100));
+  // Create a copy of the data array
+  const dataCopy = [...data];
 
-  // Select random traces
-  const randomTraces = [];
+  // Select random spans
+  const randomSpans = [];
   for (let i = 0; i < count; i++) {
-    const randomIndex = Math.floor(Math.random() * tracesArray.length);
-    randomTraces.push(...tracesArray.splice(randomIndex, 1));
+    const randomIndex = Math.floor(Math.random() * dataCopy.length);
+    randomSpans.push(...dataCopy.splice(randomIndex, 1));
   }
-
-  // Flatten array of traces to array of spans
-  const randomSpans = randomTraces.flat();
 
   // Assign SVG and color to spans
   let svgIndex = 0;
   let colorIndex = 0;
-  const serviceSvgMap = new Map();
+
   const traceColorMap = new Map();
 
   randomSpans.forEach((span) => {
-    const serviceName = span.serviceName;
     const traceID = span.traceID;
     let svg;
 
-    if (serviceSvgMap.has(serviceName)) {
-      svg = serviceSvgMap.get(serviceName);
-    } else {
-      svg = svgComponents[svgIndex];
-      serviceSvgMap.set(serviceName, svg);
-      svgIndex = (svgIndex + 1) % svgComponents.length;
-    }
+    svg = svgComponents[svgIndex];
+
+    svgIndex = (svgIndex + 1) % svgComponents.length;
 
     span.svg = svg;
     if (traceColorMap.has(traceID) && span.color === null) {
@@ -252,135 +237,59 @@ const getRandomSubset = (data, percentage) => {
 };
 
 function ScatterPlotImpl(props) {
-  const {
-    data,
-    overValue,
-    onValueOver,
-    onValueOut,
-    selectedGroupNumber,
-    showMenu,
-  } = props;
+  const { data, overValue, onValueOver, onValueOut } = props;
 
   const [clickedDataPoint, setClickedDataPoint] = useState(null);
-  const [percentage, setPercentage] = useState(0.001);
+  const [percentage, setPercentage] = useState(1);
 
   const [filteredData, setFilteredData] = useState(null);
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
-  const [currentSpans, setCurrentSpans] = useState(filteredData);
 
   const isShiftPressed = useShiftPress();
 
-  const handlePercentageChange = (event) => {
-    const newPercentage = Number(event.target.value);
-    if (newPercentage >= 0.001 && newPercentage <= 100) {
-      setPercentage(newPercentage);
-    }
-  };
-
-  const handleOptionClick = (filterBy) => {
-    let newData;
-    if (filterBy === "trace") {
-      newData = currentSpans.filter(
-        (d) => d.traceID === clickedDataPoint.traceID
-      );
-    } else if (filterBy === "service") {
-      newData = currentSpans.filter(
-        (d) => d.serviceName === clickedDataPoint.serviceName
-      );
-    }
-    setCurrentSpans(filteredData);
-    setFilteredData(newData);
-  };
+  // Update filteredData whenever data or percentage changes
+  useEffect(() => {
+    setClickedDataPoint(null);
+    const visibleData = getRandomSubset(data, percentage);
+    setFilteredData(visibleData);
+    setLastDrawLocation(null);
+  }, [data, percentage]);
 
   return (
     <div>
-      {showMenu && (
-        <div
-          style={{
-            position: "sticky",
-            top: 130,
-            zIndex: 9998,
-          }}
-        >
-          <Dropdown>
-            <Dropdown.Toggle variant="primary" id="dropdown-basic">
-              Spans Scatter Plot
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={() => {
-                  setClickedDataPoint(null);
-                  const visibleData = getRandomSubset(data, percentage);
-                  setFilteredData(visibleData);
-                  setCurrentSpans(visibleData);
-                  setLastDrawLocation(null);
-                }}
-              >
-                Draw Other Spans to Be Displayed
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  setFilteredData(currentSpans);
-                  setLastDrawLocation(null);
-                }}
-              >
-                Show All Currently Drawn Spans
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          {clickedDataPoint && (
-            <div>
-              <Dropdown>
-                <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                  Selection Options
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setClickedDataPoint(null)}>
-                    Cancel Selection
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setLastDrawLocation(null);
-                      handleOptionClick("trace");
-                      setClickedDataPoint(null);
-                    }}
-                  >
-                    Show All Spans from Trace With ID:{" "}
-                    {clickedDataPoint.traceID}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setLastDrawLocation(null);
-                      handleOptionClick("service");
-                      setClickedDataPoint(null);
-                    }}
-                  >
-                    Show All Spans from Microservice Named:{" "}
-                    {clickedDataPoint.serviceName}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          )}
-        </div>
-      )}
       <div className="App" style={{ width: "100%", height: "100%" }}>
         <div className="TraceResultsScatterPlot">
-          <div className="centered-text">
-            Scatter Plot of Group {selectedGroupNumber}'s Spans
-          </div>
-          <div>Percentage of Spans to Display:</div>
-          <div>{percentage}%</div>
-          <div>
-            <input
-              type="number"
-              min="0.001"
-              max="100"
-              value={percentage}
-              onChange={handlePercentageChange}
-            />
+          <div>Percentage of Spans to Display: {percentage}%</div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Dropdown>
+              <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                Select Percentage
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setPercentage(1)}>
+                  1%
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPercentage(5)}>
+                  5%
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPercentage(10)}>
+                  10%
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPercentage(25)}>
+                  25%
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPercentage(50)}>
+                  50%
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPercentage(75)}>
+                  75%
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPercentage(100)}>
+                  100%
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
           {clickedDataPoint && (
             <div className="centered-text">
@@ -430,9 +339,7 @@ function ScatterPlotImpl(props) {
                         height={30}
                         fill={color}
                         onClick={() => {
-                          if (filteredData === currentSpans) {
-                            setClickedDataPoint(overValue);
-                          }
+                          setClickedDataPoint(overValue);
                         }}
                       />
                     </g>
@@ -463,10 +370,6 @@ function ScatterPlotImpl(props) {
             <div>
               <h4 className="scatter-plot-hint">
                 Span ID: {clickedDataPoint.spanID}
-              </h4>
-              <h4 className="scatter-plot-hint">
-                Operation name:{" "}
-                {clickedDataPoint.operationName || "<trace-without-root-span>"}
               </h4>
               <h4 className="scatter-plot-hint">
                 Time: {`${clickedDataPoint.x / 1000} ms`}
@@ -501,8 +404,6 @@ ScatterPlotImpl.propTypes = {
   overValue: valueShape,
   onValueOut: PropTypes.func.isRequired,
   onValueOver: PropTypes.func.isRequired,
-  selectedGroupNumber: PropTypes.number.isRequired,
-  showMenu: PropTypes.bool.isRequired, // Add this line
 };
 
 ScatterPlotImpl.defaultProps = {
@@ -510,7 +411,7 @@ ScatterPlotImpl.defaultProps = {
   // JSDOM does not, as of 2023, have a layout engine, so allow tests to supply a mock width as a workaround.
 };
 
-const ScatterPlot = compose(
+const ScatterPlotOperationsSpans = compose(
   withState("overValue", "setOverValue", null),
   withProps(({ setOverValue }) => ({
     onValueOver: (value) => setOverValue(value),
@@ -520,4 +421,4 @@ const ScatterPlot = compose(
 
 export { ScatterPlotImpl };
 
-export default ScatterPlot;
+export default ScatterPlotOperationsSpans;

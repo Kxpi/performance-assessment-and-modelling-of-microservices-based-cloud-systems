@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ScatterPlot from "../ScatterPlot";
+import ScatterPlotOperationsSpans from "../ScatterPlotOperationsSpans.jsx";
 import ScatterPlotGroupsOperationsCg from "../ScatterPlotGroupsOperationsCg";
 import ScatterPlotGroups from "./components/ScatterPlotGroups";
 import {
@@ -43,25 +43,29 @@ function ScatterPlotPage({
           </div>
         ) : (
           <div>
-            {/* <div className="centered-text">
-              Scatter Plot of Group's {selectedGroup.groupID} Operations
-            </div> */}
+            <h3>Scatter Plot of Group {selectedGroup.groupID}'s Operations</h3>
             <ScatterPlotGroupsOperationsCg
               data={processScatterPlotGroupsOperationsData(selectedGroup)}
               selectedOperation={selectedOperation}
               setSelectedOperation={setSelectedOperation}
             />
 
-            <ScatterPlot
-              data={processScatterPlotData(selectedGroup)}
-              showMenu={true}
-              selectedGroupNumber={selectedGroup.groupID}
-            />
+            {selectedOperation && (
+              <div>
+                <h3>Scatter Plot of Operation {selectedOperation}'s Spans</h3>
+                <ScatterPlotOperationsSpans
+                  data={processScatterPlotData(
+                    selectedGroup,
+                    selectedOperation
+                  )}
+                />
+              </div>
+            )}
           </div>
         )
       ) : (
         <div>
-          {/* <div className="centered-text">Scatter Plot of Groups</div> */}
+          <h3>Scatter Plot of Groups</h3>
           <ScatterPlotGroups
             data={setDataForScatterPlotGroups(jsonData)}
             showMenu={false}
