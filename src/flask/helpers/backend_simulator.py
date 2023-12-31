@@ -119,6 +119,15 @@ def dealWithDuplicates(spans):
         else:
             d[opName] = (s["spanID"], i)
 
+def add_service_name_stat(groups):
+
+    
+    for g in groups:
+        trace=g["traces"][0]
+        processes=trace["processes"]
+
+        for s in trace["spans"]:
+            g["operation_stats"][s["operationName"]]["service_name"]=processes[s["processID"]]["serviceName"]
 
 # main
 def get_groups(data):
@@ -356,7 +365,9 @@ def get_groups(data):
         # group["traces"] = [trace["traceID"] for trace in group["traces"]]
 
     microservices = {service: {} for service in microservices}
-
+    
+    add_service_name_stat(groups)
+    
     if len(traces_with_negative_start)>0:
         groups.append(
                     {
