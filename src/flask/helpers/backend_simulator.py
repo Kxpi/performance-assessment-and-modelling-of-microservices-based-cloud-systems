@@ -364,7 +364,7 @@ def get_groups(data):
         # Replace traces with traceIDs
         # group["traces"] = [trace["traceID"] for trace in group["traces"]]
 
-    microservices = {service: {} for service in microservices}
+    microservices = [service for service in microservices]
     
     add_service_name_stat(groups)
     

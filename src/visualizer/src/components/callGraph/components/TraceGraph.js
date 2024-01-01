@@ -6,7 +6,7 @@ import ReactFlow from 'reactflow';
 import dagre from 'dagre';
 
 import 'reactflow/dist/style.css';
-import './styles/TraceGraph.css'
+// import './styles/TraceGraph.css' breaks styling in GroupGraph
 import SpanInfo from './SpanInfo';
 import Legend from './Legend';
 

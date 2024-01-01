@@ -4,6 +4,7 @@ import './CallGraphPage.css';
 import TraceSelector from './components/TraceSelector';
 import TraceGraph from './components/TraceGraph';
 import OperationStatsTable from '../TablePage/components/OperationStatsTable';
+import GroupTraceGraph from './components/GroupTraceGraph';
 
 
 function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, selectedOperation, setSelectedOperation,
@@ -24,8 +25,11 @@ function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, s
         selectedGroup.groupID !== 'Negative start times'
           ? (
             <div style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-              <TraceGraph selectedTrace={selectedGroup["traces"][0]} serviceColors={serviceColors}
-                operationStats={selectedGroup["operation_stats"]} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />
+              {/* <TraceGraph selectedTrace={selectedGroup["traces"][0]} serviceColors={serviceColors}
+                operationStats={selectedGroup["operation_stats"]} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} /> */}
+
+              <GroupTraceGraph selectedTrace={selectedGroup["traces"][0]} operationStats={selectedGroup["operation_stats"]}
+                serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />
 
               <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '10px' }}>
                 <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace}

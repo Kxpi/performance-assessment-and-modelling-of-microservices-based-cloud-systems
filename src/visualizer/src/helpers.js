@@ -76,13 +76,11 @@ var hsvToRgb = function (h, s, v) {
 };
 
 export function randomColors(services) {
-  const serviceKeys = Object.keys(services);
 
-  var total = serviceKeys.length;
+  var total = services.length;
   var serviceColors = {};
   var i = 360 / (total - 1);
-
-  serviceKeys.forEach((serviceName, x) => {
+  services.forEach((serviceName, x) => {
     const color = hsvToRgb(i * x, 70, 100);
     serviceColors[serviceName] = color;
   });
