@@ -262,8 +262,9 @@ def get_number_of_percendance(output_of_commo_times):
 def get_statistic_of_traces(comm_time):
     count_of_percendence, number_of_traces = get_number_of_percendance(comm_time)
     statistic_to_graph = {}
-    
+    print(count_of_percendence)
     for pair_of_spans in count_of_percendence:
+
         if count_of_percendence[pair_of_spans][0] == number_of_traces:
             times = count_of_percendence[pair_of_spans][1]
             np_array = np.array(times)
@@ -303,23 +304,22 @@ def find_traces(groups, groupID):
     return traces
 
 
-def get_edges(data, groups):
-    edges = {}
-    for group in groups:
-        groups_traces = find_traces(groups, group["groupID"])
-        #non_child = find_non_child(traces)
-        traces_reformatted = reformat_dict(data, groups_traces)
+def get_edges(data, groups, groupID):
+    edges={}
+    groups_traces = find_traces(groups, groupID)
+    #non_child = find_non_child(traces)
+    traces_reformatted = reformat_dict(data, groups_traces)
         
-        communication_times = calculate_comm_times(traces_reformatted, False)
+    communication_times = calculate_comm_times(traces_reformatted, False)
         
-        graph = get_statistic_of_traces(communication_times)
-        print(graph)
-        graph_list = [(str(pair), stats) for pair, stats in graph.items()]
-        links = []
-        for item in graph_list:
-            source, target = item[0][1:-1].replace("'", "").split(",")
-            target = target[1:]
-            links.append([source, target, item[1][-1]])
-        edges[group["groupID"]] = links
+    graph = get_statistic_of_traces(communication_times)
+
+    graph_list = [(str(pair), stats) for pair, stats in graph.items()]
+    links = []
+    for item in graph_list:
+        source, target = item[0][1:-1].replace("'", "").split(",")
+        target = target[1:]
+        links.append([source, target, item[1][-1]])
+    edges[groupID] = links
     
     return edges

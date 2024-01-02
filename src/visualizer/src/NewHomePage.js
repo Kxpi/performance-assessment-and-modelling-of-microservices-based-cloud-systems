@@ -17,8 +17,8 @@ function NewHomePage() {
     const [selectedOperation, setSelectedOperation] = useState(null)
     const [selectedTrace, setSelectedTrace] = useState(null);
     const [selectedSpan, setSelectedSpan] = useState(null);
-
-
+    const [commTimes, setCommTimes] = useState(null);
+    const [edges, setEdges] = useState(null); //edges dla grafu mateusza
     const [fileName, setFileName] = useState(null);
     // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
 
@@ -41,7 +41,35 @@ function NewHomePage() {
 
     if (data) {
         var serviceColors = randomColors(data["microservice_stats"]);
+        console.log(serviceColors);
     }
+
+    useEffect(() => {
+        if (selectedGroup){
+         fetch(`http://localhost:5000/data/${selectedGroup.groupID}`)
+           .then(response => response.json())
+           .then(data => setCommTimes(data))
+           .catch(error => console.error('Error:', error));
+        } 
+       }, [selectedGroup]);
+    
+    useEffect(() => {
+        if (selectedGroup){
+         fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)
+           .then(response => response.json())
+           .then(data => setEdges(data))
+           .catch(error => console.error('Error:', error));
+        } 
+        
+    }, [selectedGroup]);
+
+    useEffect(() => {
+        if (!selectedGroup) {
+            console.log(edges);
+            console.log(commTimes);
+        }
+    }, [selectedGroup]);
+    
 
     return (
         <div className="homepage-root">
@@ -53,7 +81,6 @@ function NewHomePage() {
                 setSelectedGroup={setSelectedGroup} setSelectedTrace={setSelectedTrace}
                 selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan}
 
-
             />
 
 
@@ -61,7 +88,7 @@ function NewHomePage() {
                 {currentView === 0 ?
                     <FilesPage
                         data={data} setData={setData} fileName={fileName} setFileName={setFileName}
-                        setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />
+                        setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup}/>
                     :
                     data ? (
 
@@ -87,7 +114,7 @@ function NewHomePage() {
                             />
 
                         ) : currentView === 4 ? (
-                            <PercendenceGraph groupID={selectedGroup.groupID} />
+                            <PercendenceGraph data={commTimes} selectedGroup={selectedGroup} setSelectedOperation={setSelectedOperation} />
                         ) : currentView === 5 &&
                         <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
                             setSelectedOperation={setSelectedOperation} />

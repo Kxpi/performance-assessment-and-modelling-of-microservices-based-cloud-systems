@@ -11,6 +11,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 data = None
 groups = None
+edges = {}
 
 @app.before_request
 def handle_preflight():
@@ -55,7 +56,6 @@ def upload_file():
         data = request.get_json()
         global groups
         microservice_stats, groups = get_groups(data)
-   
 
         return jsonify({"microservice_stats": microservice_stats, "groups": groups})
 
@@ -102,6 +102,16 @@ def send_data(groupID):
         }
     )
 
+@app.route("/edges/<groupID>")
+def send_edges(groupID):
+    global data
+    global groups
+    global edges
+    if groupID in edges:  
+        return jsonify({"edges": edges[groupID]})
+    else:
+        edges[groupID] = get_edges(data, groups, groupID)
+        return jsonify({"edges": edges[groupID]})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

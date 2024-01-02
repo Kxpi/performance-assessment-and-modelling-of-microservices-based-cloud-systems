@@ -2,25 +2,21 @@ import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import './GraphComponent.css';
 
-function DirectedGraph({ groupID }) {
-  const svgRef = useRef(null);
 
+
+function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColors }) {
+  const svgRef = useRef(null);
+  
   useEffect(() => {
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/data/${groupID}`);
-        const data = await response.json();
-        renderGraph(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+    if (data && Object.keys(data).length !== 0) {
+      renderGraph(data, setSelectedOperation);
+    } else {
+      return (<div><p>Wait until receive data</p></div>);
     };
 
-    fetchData();
-
-
-    const tooltip = d3.select("body").append("div")
+    const tooltip = d3.select(svgRef.current)
+      .append("div")
       .attr("id", "tooltip")
       .style("display", "none")
       .style("position", "absolute")
@@ -34,12 +30,12 @@ function DirectedGraph({ groupID }) {
     return () => {
       tooltip.remove();
     };
-  }, [groupID]); 
+  }, [data]); 
 
-  const renderGraph = (data) => {
+  const renderGraph = (data, setSelectedOperation, serviceColors) => {
     const { nodes, links } = data;
-    const width = 2000;
-    const height = 1000;
+    const width = 2500;
+    const height = 1500;
     const margin = 50;
     const maxX = width - margin;
     const maxY = height - margin;
@@ -105,7 +101,10 @@ function DirectedGraph({ groupID }) {
       .call(d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)
-        .on("end", dragended));
+        .on("end", dragended))
+        .on("click", (event, d) => {
+          setSelectedOperation(d.id); 
+        });
 
     node.append("rect")
       .attr("width", d => calculateTextWidth(d.id) + 11)
@@ -169,10 +168,14 @@ function DirectedGraph({ groupID }) {
   };
 
   return (
-    <div className="graph-container" style={{ width: '100%', height: '500px', overflow: 'hidden' }}>
-      <svg ref={svgRef}></svg>
+    <div className="graph-container" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+      {selectedGroup ? (
+        <svg ref={svgRef}></svg>
+      ) : (
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}>No Group Selected</div>
+      )}
     </div>
-  );
+   );
 }
 
 export default DirectedGraph;
