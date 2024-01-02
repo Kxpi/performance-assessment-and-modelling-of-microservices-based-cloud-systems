@@ -10,7 +10,7 @@ function FilesPage({ data, setData, fileName, setFileName, setSelectedGroup, sel
         <div className="filespage-root">
             <FileUploader
                 setData={setData}
-                setFileName={setFileName}
+                setFName={setFileName}
             />
 
             <div className="filespage-files">

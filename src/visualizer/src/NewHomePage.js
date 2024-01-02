@@ -12,17 +12,32 @@ import TablePage from "./components/TablePage/TablePage.js";
 function NewHomePage() {
     const [data, setData] = useState(null);
     const [currentView, setCurrentView] = useState(0);
+
     const [selectedGroup, setSelectedGroup] = useState(null);
-    const [selectedTrace, setSelectedTrace] = useState(null);
     const [selectedOperation, setSelectedOperation] = useState(null)
-    const [fileName, setFileName] = useState("No file uploaded");
+    const [selectedTrace, setSelectedTrace] = useState(null);
+    const [selectedSpan, setSelectedSpan] = useState(null);
+
+
+    const [fileName, setFileName] = useState(null);
     // 0 -CallGraph 1 - ScatterPlot 2 - PercendanceGraph
+
+    useEffect(() => {
+
+        setSelectedGroup(null);
+
+    }, [data])
 
     useEffect(() => {
 
         setSelectedTrace(null);
         setSelectedOperation(null);
     }, [selectedGroup]);
+
+    useEffect(() => {
+
+        setSelectedSpan(null);
+    }, [selectedTrace]);
 
     if (data) {
         var serviceColors = randomColors(data["microservice_stats"]);
@@ -31,9 +46,15 @@ function NewHomePage() {
     return (
         <div className="homepage-root">
             <Header currentView={currentView} setCurrentView={setCurrentView}
-                selectedGroup={selectedGroup} selectedTrace={selectedTrace} selectedSpan={selectedOperation}
+                setData={setData}
+                fileName={fileName} setFileName={setFileName}
+                selectedGroup={selectedGroup} selectedTrace={selectedTrace}
+                selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation}
                 setSelectedGroup={setSelectedGroup} setSelectedTrace={setSelectedTrace}
-                setSelectedSpan={setSelectedOperation} />
+                selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan}
+
+
+            />
 
 
             <div className="homepage-content" style={{ height: '85vh' }}>
@@ -54,6 +75,8 @@ function NewHomePage() {
                                 setSelectedOperation={setSelectedOperation}
                                 selectedTrace={selectedTrace}
                                 setSelectedTrace={setSelectedTrace}
+                                selectedSpan={selectedSpan}
+                                setSelectedSpan={setSelectedSpan}
                             />
                         ) : currentView === 2 ? (
                             <TablePage selectedGroup={selectedGroup} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />

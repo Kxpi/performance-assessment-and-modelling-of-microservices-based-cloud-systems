@@ -129,6 +129,22 @@ def add_service_name_stat(groups):
         for s in trace["spans"]:
             g["operation_stats"][s["operationName"]]["service_name"]=processes[s["processID"]]["serviceName"]
 
+def get_operation_stats_for_negative_traces(traces):
+    
+    operation_stats={}
+    for trace in traces:
+        
+        processes=trace["processes"]
+
+        for s in trace["spans"]:
+            opName=s["operationName"]
+            if opName not in operation_stats:
+                operation_stats[opName]={"service_name": processes[s["processID"]]["serviceName"]}
+    
+    return operation_stats
+
+
+
 # main
 def get_groups(data):
     traces = data["data"]
@@ -375,7 +391,7 @@ def get_groups(data):
                         "traceNumber": len(traces_with_negative_start),
                         "traces": traces_with_negative_start,
                         "span_stats": None,
-                        "operation_stats": None
+                        "operation_stats":  get_operation_stats_for_negative_traces(traces_with_negative_start)
                     }
                 )
         

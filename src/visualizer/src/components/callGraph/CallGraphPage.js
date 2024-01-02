@@ -7,8 +7,8 @@ import OperationStatsTable from '../TablePage/components/OperationStatsTable';
 import GroupTraceGraph from './components/GroupTraceGraph';
 
 
-function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, selectedOperation, setSelectedOperation,
-  selectedTrace, setSelectedTrace }) {
+function CallGraphPage({ data, selectedGroup, setSelectedGroup, serviceColors, selectedOperation, setSelectedOperation,
+  selectedTrace, setSelectedTrace, selectedSpan, setSelectedSpan }) {
 
 
 
@@ -25,8 +25,6 @@ function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, s
         selectedGroup.groupID !== 'Negative start times'
           ? (
             <div style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-              {/* <TraceGraph selectedTrace={selectedGroup["traces"][0]} serviceColors={serviceColors}
-                operationStats={selectedGroup["operation_stats"]} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} /> */}
 
               <GroupTraceGraph selectedTrace={selectedGroup["traces"][0]} operationStats={selectedGroup["operation_stats"]}
                 serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />
@@ -35,14 +33,16 @@ function CallGraphPage({ selectedGroup, setSelectedGroup, data, serviceColors, s
                 <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace}
                   selectedTrace={selectedTrace} style={{ display: 'block', margin: 'auto' }} />
 
-                {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />}
+                {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
+                  selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan} />}
               </div>
             </div>
           )
           : (
             <div className="neg-start-times" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace} selectedTrace={selectedTrace} />
-              {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />}
+              {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
+                selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan} />}
             </div>
           )
 

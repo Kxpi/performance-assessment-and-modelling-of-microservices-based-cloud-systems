@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import ReactFlow, {
     Controls,
 } from 'reactflow';
 import dagre from 'dagre';
-import SpanInfo from './SpanInfo';
+import GraphInfo from './GraphInfo';
 import Legend from './Legend';
 
 import './styles/GroupTraceGraph.css';
@@ -52,11 +52,9 @@ const getLayoutedElements = (nodes, edges, direction = 'LR') => {
 
 const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selectedOperation, setSelectedOperation }) => {
 
-
-    console.log("renderuje się")
-    console.log(selectedOperation)
     const initialNodes = [];
     const initialEdges = [];
+
 
 
     var spans = selectedTrace.spans.sort((a, b) => a.startTime - b.startTime);
@@ -77,20 +75,22 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
 
 
         });
+        if (!span.warnings) {
+            const parentReference = span.references.find((ref) => ref.refType === 'CHILD_OF');
 
-        const parentReference = span.references.find((ref) => ref.refType === 'CHILD_OF');
 
+            if (parentReference) {
+                const parent = spans.find((p) => p.spanID === parentReference.spanID)
 
-        if (parentReference) {
-            const parent = spans.find((p) => p.spanID === parentReference.spanID)
-            initialEdges.push({
-                id: crypto.randomUUID(),
-                source: parent.operationName,
-                target: span.operationName,
-                markerEnd: { type: 'arrowclosed', width: 20, height: 20, color: 'black' },
-                type: 'step',
+                initialEdges.push({
+                    id: crypto.randomUUID(),
+                    source: parent.operationName,
+                    target: span.operationName,
+                    markerEnd: { type: 'arrowclosed', width: 20, height: 20, color: 'black' },
+                    type: 'step',
 
-            });
+                });
+            }
         }
 
     });
@@ -127,10 +127,10 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
 
                     }}
                 >
-                    <Controls position={'bottom-right'} showInteractive={false} >
+                    <Controls position={'top-left'} showInteractive={false} >
                     </Controls>
                 </ReactFlow>
-                {selectedOperation && <SpanInfo selectedSpan={selectedOperation} operationStats={operationStats[selectedOperation]} />}
+                {selectedOperation && <GraphInfo selectedOperation={selectedOperation} operationStats={operationStats[selectedOperation]} />}
             </div>
         </div >
     );

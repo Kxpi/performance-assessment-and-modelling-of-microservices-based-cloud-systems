@@ -85,6 +85,7 @@ function DurationHistogramGroupsOperations({ data, setSelectedOperation }) {
               width={x.bandwidth()} // use bandwidth to set width
               height={height - y(d.duration99Percentile)}
               fill={d.color}
+              style={{ cursor: "pointer" }}
             />
           ))}
           <g

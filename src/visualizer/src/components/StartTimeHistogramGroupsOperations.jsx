@@ -80,6 +80,7 @@ function StartTimeHistogramGroupsOperations({ data, setSelectedOperation }) {
               width={x.bandwidth()}
               height={height - y(d.startTime99Percentile)} // Use d.startTime99Percentile for height
               fill={d.color}
+              style={{ cursor: "pointer" }}
             />
           ))}
           <g

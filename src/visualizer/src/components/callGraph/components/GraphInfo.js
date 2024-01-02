@@ -1,29 +1,33 @@
 import React from 'react';
 
-const SpanInfo = ({ selectedSpan, operationStats }) => {
+const GraphInfo = ({ selectedOperation, operationStats, span }) => {
 
 
     return (
         <div style={{ height: '100%', overflow: 'auto' }}>
-            {!operationStats ? (
+            {span ? (
                 <div className="span-info">
                     <table>
                         <tbody>
                             <tr>
                                 <td><b>Operation name:</b></td>
-                                <td>{selectedSpan.operationName}</td>
+                                <td>{span.operationName}</td>
+                            </tr>
+                            <tr>
+                                <td><b>SpanID:</b></td>
+                                <td>{span.spanID}</td>
                             </tr>
                             <tr>
                                 <td><b>Start Time:</b></td>
-                                <td>{selectedSpan.startTime + ' μs'}</td>
+                                <td>{span.startTime + ' μs'}</td>
                             </tr>
                             <tr>
                                 <td><b>Duration:</b></td>
-                                <td>{selectedSpan.duration / 1000 + ' ms'}</td>
+                                <td>{span.duration / 1000 + ' ms'}</td>
                             </tr>
                             <tr>
                                 <td><b>Service:</b></td>
-                                <td>{selectedSpan.serviceName}</td>
+                                <td>{operationStats[span.operationName]["service_name"]}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -34,7 +38,7 @@ const SpanInfo = ({ selectedSpan, operationStats }) => {
                         <tbody>
                             <tr>
                                 <td><b>Operation name:</b></td>
-                                <td>{selectedSpan}</td>
+                                <td>{selectedOperation}</td>
                             </tr>
                             <tr>
                                 <td><b>Average duration:</b></td>
@@ -125,4 +129,4 @@ const SpanInfo = ({ selectedSpan, operationStats }) => {
     );
 };
 
-export default SpanInfo;
+export default GraphInfo;

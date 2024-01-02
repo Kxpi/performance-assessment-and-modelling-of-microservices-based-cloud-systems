@@ -3,9 +3,11 @@ import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 
-const FileUploader = ({ setData, setFileName }) => {
+const FileUploader = ({ setData, setFName }) => {
   const [fileContent, setFileContent] = useState(null);
+  const [fileName, setFileName] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  var fname=""
 
   // Funkcja do odczytu zawartości pliku i walidacji rozszerzenia
   const handleFileDrop = useCallback((acceptedFiles) => {
@@ -20,7 +22,7 @@ const FileUploader = ({ setData, setFileName }) => {
       alert("Błąd: Plik musi mieć rozszerzenie JSON.");
       return;
     }
-    setFileName(file.name);
+    setFileName(file.name)
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target.result;
@@ -53,6 +55,7 @@ const FileUploader = ({ setData, setFileName }) => {
           },
         })
         .then((response) => {
+          setFName(fileName)
           setIsLoading(false);
           // Set the data using the 'setData' prop
           // console.log(response.data)
