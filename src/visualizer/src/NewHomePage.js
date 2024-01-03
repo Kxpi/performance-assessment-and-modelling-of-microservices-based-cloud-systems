@@ -50,6 +50,7 @@ function NewHomePage() {
            .then(response => response.json())
            .then(data => setCommTimes(data))
            .catch(error => console.error('Error:', error));
+
         } 
        }, [selectedGroup]);
     
@@ -59,6 +60,7 @@ function NewHomePage() {
            .then(response => response.json())
            .then(data => setEdges(data))
            .catch(error => console.error('Error:', error));
+
         } 
         
     }, [selectedGroup]);
@@ -114,7 +116,7 @@ function NewHomePage() {
                             />
 
                         ) : currentView === 4 ? (
-                            <PercendenceGraph data={commTimes} selectedGroup={selectedGroup} setSelectedOperation={setSelectedOperation} />
+                            <PercendenceGraph data={commTimes} selectedGroup={selectedGroup} setSelectedOperation={setSelectedOperation} serviceColors={serviceColors} />
                         ) : currentView === 5 &&
                         <HistogramsPage jsonData={data} selectedGroup={selectedGroup} setSelectedGroup={setSelectedGroup} selectedOperation={selectedOperation}
                             setSelectedOperation={setSelectedOperation} />

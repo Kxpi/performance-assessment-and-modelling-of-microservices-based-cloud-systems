@@ -6,25 +6,23 @@ import './GraphComponent.css';
 
 function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColors }) {
   const svgRef = useRef(null);
-  
+    
   useEffect(() => {
 
-    if (data && Object.keys(data).length !== 0) {
-      renderGraph(data, setSelectedOperation);
-    } else {
-      return (<div><p>Wait until receive data</p></div>);
-    };
+    const tooltip = d3.select("body").append("div")
+    .attr("id", "tooltip")
+    .style("display", "none")
+    .style("position", "absolute")
+    .style("background", "rgba(0, 0, 0, 0.7)")
+    .style("color", "#fff")
+    .style("padding", "5px 10px")
+    .style("border-radius", "5px")
+    .style("pointer-events", "none")
+    .style("z-index", "10"); 
 
-    const tooltip = d3.select(svgRef.current)
-      .append("div")
-      .attr("id", "tooltip")
-      .style("display", "none")
-      .style("position", "absolute")
-      .style("background", "rgba(0, 0, 0, 0.7)")
-      .style("color", "#fff")
-      .style("padding", "5px 10px")
-      .style("border-radius", "5px")
-      .style("pointer-events", "none");
+    if (data && Object.keys(data).length !== 0) {
+      renderGraph(data, selectedGroup, setSelectedOperation, serviceColors);
+    };
 
 
     return () => {
@@ -32,7 +30,7 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
     };
   }, [data]); 
 
-  const renderGraph = (data, setSelectedOperation, serviceColors) => {
+  const renderGraph = (data, selectedGroup, setSelectedOperation, serviceColors) => {
     const { nodes, links } = data;
     const width = 2500;
     const height = 1500;
@@ -108,18 +106,19 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
 
     node.append("rect")
       .attr("width", d => calculateTextWidth(d.id) + 11)
-      .attr("height", 17)
+      .attr("height", 18)
       .attr("rx", 0)
       .attr("ry", 0)
-      .attr("fill", "#69b3a2");
+      .attr("fill", d => set_color(d));
 
     node.append("text")
       .attr("x", d => calculateTextWidth(d.id) / 2 + 5.5)
-      .attr("y", 16) 
+      .attr("y", 12) 
       .attr("text-anchor", "middle")
       .attr("fill", "black")
-      .style("font-size", "14px")
+      .style("font-size", "15px")
       .text(d => d.id);
+
 
 
     simulation.on('tick', () => {
@@ -158,24 +157,38 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
         .style("visibility", "hidden");
 
       const tempText = tempSvg.append("text")
-        .attr("font-size", "14px")
+        .attr("font-size", "15px")
         .text(text);
 
       const textWidth = tempText.node().getComputedTextLength();
       tempSvg.remove(); 
       return textWidth;
     }
+    function set_color(d){
+        return(serviceColors[selectedGroup["operation_stats"][d.id]["service_name"]])
+    }
   };
 
   return (
     <div className="graph-container" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
-      {selectedGroup ? (
-        <svg ref={svgRef}></svg>
-      ) : (
-        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}>No Group Selected</div>
-      )}
+      {!selectedGroup ? (
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+          No Group Selected
+        </div>
+      ) : data ? (
+        Object.keys(data).length !== 0 ? (
+          <svg ref={svgRef}></svg>
+        ) : (
+          <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+            Wait until receive data
+          </div>
+        )
+      ) : (<div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+        Wait until receive data
+        </div>)}
     </div>
-   );
+  );
 }
 
 export default DirectedGraph;
+

@@ -270,13 +270,13 @@ def get_statistic_of_traces(comm_time):
             np_array = np.array(times)
             
             if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
-                statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+                statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
             else:
                 for i in list(statistic_to_graph.keys()):
                     if i[0] == pair_of_spans[0]:
                         if statistic_to_graph[i][3] > np.percentile(np_array, 95):
                             del statistic_to_graph[i]
-                            statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+                            statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
     
     if len(statistic_to_graph) == 0:
         for pair_of_spans in count_of_percendence:
@@ -284,13 +284,13 @@ def get_statistic_of_traces(comm_time):
             np_array = np.array(times)
             
             if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
-                statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+                statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
             else:
                 for i in list(statistic_to_graph.keys()):
                     if i[0] == pair_of_spans[0]:
                         if statistic_to_graph[i][3] > np.percentile(np_array, 95):
                             del statistic_to_graph[i]
-                            statistic_to_graph[pair_of_spans] = [np.mean(np_array), np.median(np_array), np.percentile(np_array, 75), np.percentile(np_array, 95)]
+                            statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
     print(statistic_to_graph) 
     return statistic_to_graph
 
