@@ -53,7 +53,7 @@ function NewHomePage() {
 
         } 
        }, [selectedGroup]);
-    
+
     useEffect(() => {
         if (selectedGroup){
          fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)

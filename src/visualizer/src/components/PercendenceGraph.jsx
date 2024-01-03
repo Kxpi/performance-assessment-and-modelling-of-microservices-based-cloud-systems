@@ -172,20 +172,17 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
   return (
     <div className="graph-container" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
       {!selectedGroup ? (
+        // If no group is selected, display "No Group Selected"
         <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
           No Group Selected
         </div>
-      ) : data ? (
-        Object.keys(data).length !== 0 ? (
-          <svg ref={svgRef}></svg>
-        ) : (
-          <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
-            Wait until receive data
-          </div>
-        )
-      ) : (<div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
-        Wait until receive data
-        </div>)}
+      ) : data === null ? (
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+          Wait until receive data
+        </div>
+      ) : (
+        <svg ref={svgRef}></svg>
+      )}
     </div>
   );
 }
