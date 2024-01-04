@@ -69,7 +69,7 @@ def generate_trace(num_spans_per_service, comm_time_arg, processes_arg, processe
         'traceID': traceID,
         'spans': []
     }
-    current_parent = traceID
+    current_parent = ''
     curr_start_time = int(time.time() * 1000000)
     
     for _ in range(num_spans_per_service):
