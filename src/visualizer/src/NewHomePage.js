@@ -89,6 +89,7 @@ function NewHomePage() {
                 setSelectedGroup={setSelectedGroup} setSelectedTrace={setSelectedTrace}
                 selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan}
 
+
             />
 
 

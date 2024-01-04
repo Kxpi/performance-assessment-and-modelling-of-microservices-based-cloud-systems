@@ -262,10 +262,10 @@ def get_number_of_percendance(output_of_commo_times):
 def get_statistic_of_traces(comm_time):
     count_of_percendence, number_of_traces = get_number_of_percendance(comm_time)
     statistic_to_graph = {}
-    print(count_of_percendence)
+
     for pair_of_spans in count_of_percendence:
 
-        if count_of_percendence[pair_of_spans][0] == number_of_traces:
+        if count_of_percendence[pair_of_spans][0] > 0.5*number_of_traces:
             times = count_of_percendence[pair_of_spans][1]
             np_array = np.array(times)
             
@@ -278,20 +278,6 @@ def get_statistic_of_traces(comm_time):
                             del statistic_to_graph[i]
                             statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
     
-    if len(statistic_to_graph) == 0:
-        for pair_of_spans in count_of_percendence:
-            times = count_of_percendence[pair_of_spans][1]
-            np_array = np.array(times)
-            
-            if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
-                statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
-            else:
-                for i in list(statistic_to_graph.keys()):
-                    if i[0] == pair_of_spans[0]:
-                        if statistic_to_graph[i][3] > np.percentile(np_array, 95):
-                            del statistic_to_graph[i]
-                            statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
-    print(statistic_to_graph) 
     return statistic_to_graph
 
 def find_traces(groups, groupID):

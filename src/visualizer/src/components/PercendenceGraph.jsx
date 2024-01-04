@@ -4,7 +4,7 @@ import './GraphComponent.css';
 
 
 
-function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColors }) {
+function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColors, lastSelected }) {
   const svgRef = useRef(null);
     
   useEffect(() => {
@@ -106,17 +106,17 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
 
     node.append("rect")
       .attr("width", d => calculateTextWidth(d.id) + 11)
-      .attr("height", 18)
+      .attr("height", 30)
       .attr("rx", 0)
       .attr("ry", 0)
       .attr("fill", d => set_color(d));
 
     node.append("text")
       .attr("x", d => calculateTextWidth(d.id) / 2 + 5.5)
-      .attr("y", 12) 
+      .attr("y", 26) 
       .attr("text-anchor", "middle")
       .attr("fill", "black")
-      .style("font-size", "15px")
+      .style("font-size", "20px")
       .text(d => d.id);
 
 
@@ -157,7 +157,7 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
         .style("visibility", "hidden");
 
       const tempText = tempSvg.append("text")
-        .attr("font-size", "15px")
+        .attr("font-size", "20px")
         .text(text);
 
       const textWidth = tempText.node().getComputedTextLength();
@@ -165,6 +165,7 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
       return textWidth;
     }
     function set_color(d){
+ 
         return(serviceColors[selectedGroup["operation_stats"][d.id]["service_name"]])
     }
   };
@@ -172,35 +173,16 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
   return (
     <div className="graph-container" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
       {!selectedGroup ? (
-        // If no group is selected, display "No Group Selected"
-        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
-          No Group Selected
-        </div>
-      ) : 
-      
-        selectedGroup["groupID"] === "Negative start times" ? (
-          <div
-                      style={{
-                          width: "100%",
-                          height: "100%",
-                          display: "flex",
-                          justifyContent: "center",
-                          textAlign: "center",
-                          flexDirection: "column",
-                      }}
-                  >
-                      Negative start times group selected
-                  </div>
-
-
-            
-      
-      ) : data === null ? (
-        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
-          Wait until receive data
-        </div>
+      // If no group is selected, display "No Group Selected"
+      <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+        No Group Selected
+      </div>
+      ) : data === null  ? (
+      <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+        Wait until receive data
+      </div>
       ) : (
-        <svg ref={svgRef}></svg>
+      <svg ref={svgRef}></svg>
       )}
     </div>
   );
