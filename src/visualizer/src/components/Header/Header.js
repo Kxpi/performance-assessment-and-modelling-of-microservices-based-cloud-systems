@@ -10,7 +10,7 @@ function Header({
     selectedGroup, setSelectedGroup,
     selectedOperation, setSelectedOperation,
     selectedTrace, setSelectedTrace,
-    selectedSpan, setSelectedSpan, setEdges, setCommTimes
+    selectedSpan, setSelectedSpan
 }) {
 
     const tabs = ['Input', 'CallGraph', 'Table', 'ScatterPlot', 'Transfer times', 'Histograms']

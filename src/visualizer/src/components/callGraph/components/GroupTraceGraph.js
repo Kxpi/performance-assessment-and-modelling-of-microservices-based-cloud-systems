@@ -5,6 +5,7 @@ import ReactFlow, {
 import dagre from 'dagre';
 import GraphInfo from './GraphInfo';
 import Legend from './Legend';
+import CustomNode from './CustomNode';
 
 import './styles/GroupTraceGraph.css';
 import 'reactflow/dist/style.css';
@@ -15,6 +16,7 @@ const proOptions = { hideAttribution: true };
 const nodeWidth = 200;
 const nodeHeight = 50;
 const position = { x: 0, y: 0 };
+const nodeTypes = { custom: CustomNode };
 
 const getLayoutedElements = (nodes, edges, direction = 'LR') => {
     const isHorizontal = direction === 'LR'
@@ -50,7 +52,7 @@ const getLayoutedElements = (nodes, edges, direction = 'LR') => {
 
 
 
-const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selectedOperation, setSelectedOperation }) => {
+const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selectedOperation, setSelectedOperation, transfer_edges }) => {
 
     const initialNodes = [];
     const initialEdges = [];
@@ -60,21 +62,37 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
     var spans = selectedTrace.spans.sort((a, b) => a.startTime - b.startTime);
 
     spans.forEach((span) => {
+
         initialNodes.push({
+            type: 'custom',
             id: span.operationName,
             position: position,
             data: {
                 label: span.operationName.replaceAll("_", "-"),
+                basic_handlers: [],
+                transfer_handlers: []
 
             },
             style: {
-                background: serviceColors[operationStats[span.operationName]["service_name"]]
-
+                background: serviceColors[operationStats[span.operationName]["service_name"]],
+                width: 175,
+                height: 50,
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: '#1a192b',
+                padding: '10px',
+                borderRadius: '3px',
+                fontSize: '12px',
+                color: '#222',
+                textAlign: 'center',
+                boxShadow: span.operationName === selectedOperation ? '0 0 0 0.5px #1a192b' : 'none',
+                filter: span.operationName === selectedOperation ? 'brightness(70%)' : 'none'
             },
-            selected: true ? span.operationName === selectedOperation : false
-
-
         });
+    });
+
+    spans.forEach((span) => {
+
         if (!span.warnings) {
             const parentReference = span.references.find((ref) => ref.refType === 'CHILD_OF');
 
@@ -82,25 +100,99 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
             if (parentReference) {
                 const parent = spans.find((p) => p.spanID === parentReference.spanID)
 
+                const sourceHandle = `${span.operationName}-source-b`
+                const targetHandle = `${parent.operationName}-target-b`
+
                 initialEdges.push({
                     id: crypto.randomUUID(),
                     source: parent.operationName,
+                    sourceHandle: sourceHandle,
                     target: span.operationName,
+                    targetHandle: targetHandle,
                     markerEnd: { type: 'arrowclosed', width: 20, height: 20, color: 'black' },
                     type: 'step',
 
                 });
+
+                initialNodes.forEach(node => {
+
+                    if (node.id === span.operationName) {
+
+                        node['data']["basic_handlers"].push({ handleID: targetHandle, type: 'target' });
+                    }
+                });
+
+                initialNodes.forEach(node => {
+
+                    if (node.id === parent.operationName) {
+
+                        node['data']["basic_handlers"].push({ handleID: sourceHandle, type: 'source' });
+                    }
+                });
             }
         }
+
 
     });
 
 
+    if (transfer_edges) {
+        console.log(transfer_edges)
+
+        transfer_edges.forEach((transfer_edge, index) => {
+
+
+
+            const sourceHandle = `${transfer_edge[1]}-target-t`
+            const targetHandle = `${transfer_edge[0]}-source-t`
+
+
+            initialEdges.push({
+                id: crypto.randomUUID(),
+                source: transfer_edge[0],
+                sourceHandle: sourceHandle,
+                target: transfer_edge[1],
+                targetHandle: targetHandle,
+                label: transfer_edge[2] + ' ms',
+                markerEnd: { type: 'arrowclosed', width: 20, height: 20, color: 'black' },
+                type: 'smoothstep',
+                animated: true,
+                data: { 'bot': index % 2 === 0 ? 'bottom' : 'top' },
+                pathOptions: {}
+
+
+            });
+
+
+            initialNodes.forEach(node => {
+
+                if (node.id === transfer_edge[0]) {
+
+                    node['data']["transfer_handlers"].push({ handleID: sourceHandle, type: 'source', position: index % 2 === 0 ? 'bottom' : 'top' });
+                }
+            });
+
+            initialNodes.forEach(node => {
+
+                if (node.id === transfer_edge[1]) {
+
+                    node['data']["transfer_handlers"].push({ handleID: targetHandle, type: 'target', position: index % 2 === 0 ? 'bottom' : 'top' });
+                }
+            });
+
+            console.log(initialEdges)
+        });
+
+    }
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
         initialNodes,
         initialEdges
     );
+
+
+
+
 
 
 
@@ -119,6 +211,7 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
                     nodesDraggable={false}
                     nodesConnectable={false}
                     selectionOnDrag={false}
+                    nodeTypes={nodeTypes}
                     onNodeClick={(event, node) => {
                         if (node) {
                             setSelectedOperation(node.id);

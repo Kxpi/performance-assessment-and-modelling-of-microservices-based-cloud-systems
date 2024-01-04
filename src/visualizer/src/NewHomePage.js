@@ -41,37 +41,43 @@ function NewHomePage() {
 
     if (data) {
         var serviceColors = randomColors(data["microservice_stats"]);
-        console.log(serviceColors);
+
     }
 
     useEffect(() => {
-        if (selectedGroup){
-         fetch(`http://localhost:5000/data/${selectedGroup.groupID}`)
-           .then(response => response.json())
-           .then(data => setCommTimes(data))
-           .catch(error => console.error('Error:', error));
+        if (selectedGroup) {
+            fetch(`http://localhost:5000/data/${selectedGroup.groupID}`)
+                .then(response => response.json())
+                .then(data => setCommTimes(data))
+                .catch(error => console.error('Error:', error));
 
-        } 
-       }, [selectedGroup]);
+            setEdges(null)
+            fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)
+                .then(response => response.json())
+                .then(data => setEdges(data["edges"][selectedGroup.groupID]))
+                .catch(error => console.error('Error:', error));
 
-    useEffect(() => {
-        if (selectedGroup){
-         fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)
-           .then(response => response.json())
-           .then(data => setEdges(data))
-           .catch(error => console.error('Error:', error));
-
-        } 
-        
-    }, [selectedGroup]);
-
-    useEffect(() => {
-        if (!selectedGroup) {
-            console.log(edges);
-            console.log(commTimes);
         }
     }, [selectedGroup]);
+
     
+    // useEffect(() => {
+    //     if (selectedGroup) {
+    // fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)
+    //     .then(response => response.json())
+    //     .then(data => setEdges(data["edges"][selectedGroup.groupID]))
+    //     .catch(error => console.error('Error:', error));
+    //     }
+
+    // }, [selectedGroup]);
+
+    // useEffect(() => {
+    //     if (!selectedGroup) {
+    //         console.log(edges);
+    //         console.log(commTimes);
+    //     }
+    // }, [selectedGroup]);
+
 
     return (
         <div className="homepage-root">
@@ -90,7 +96,7 @@ function NewHomePage() {
                 {currentView === 0 ?
                     <FilesPage
                         data={data} setData={setData} fileName={fileName} setFileName={setFileName}
-                        setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup}/>
+                        setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />
                     :
                     data ? (
 
@@ -106,6 +112,7 @@ function NewHomePage() {
                                 setSelectedTrace={setSelectedTrace}
                                 selectedSpan={selectedSpan}
                                 setSelectedSpan={setSelectedSpan}
+                                transfer_edges={edges}
                             />
                         ) : currentView === 2 ? (
                             <TablePage selectedGroup={selectedGroup} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />

@@ -176,6 +176,25 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
         <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
           No Group Selected
         </div>
+      ) : 
+      
+        selectedGroup["groupID"] === "Negative start times" ? (
+          <div
+                      style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          textAlign: "center",
+                          flexDirection: "column",
+                      }}
+                  >
+                      Negative start times group selected
+                  </div>
+
+
+            
+      
       ) : data === null ? (
         <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
           Wait until receive data

@@ -8,7 +8,7 @@ import GroupTraceGraph from './components/GroupTraceGraph';
 
 
 function CallGraphPage({ data, selectedGroup, setSelectedGroup, serviceColors, selectedOperation, setSelectedOperation,
-  selectedTrace, setSelectedTrace, selectedSpan, setSelectedSpan }) {
+  selectedTrace, setSelectedTrace, selectedSpan, setSelectedSpan, transfer_edges }) {
 
 
 
@@ -27,7 +27,7 @@ function CallGraphPage({ data, selectedGroup, setSelectedGroup, serviceColors, s
             <div style={{ width: '100%', height: '100%', alignItems: 'center' }}>
 
               <GroupTraceGraph selectedTrace={selectedGroup["traces"][0]} operationStats={selectedGroup["operation_stats"]}
-                serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} />
+                serviceColors={serviceColors} selectedOperation={selectedOperation} setSelectedOperation={setSelectedOperation} transfer_edges={transfer_edges} />
 
               <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '10px' }}>
                 <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace}
