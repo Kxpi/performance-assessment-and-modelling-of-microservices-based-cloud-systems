@@ -87,7 +87,6 @@ def generate_trace(num_spans_per_service, comm_time_arg, processes_arg, processe
     return trace
 
 def main():
-
     args = cli_parser()
     test_data = {'data': []}
 
