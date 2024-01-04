@@ -58,7 +58,8 @@ def generate_span(traceID: str, operation: str, start_time: int, duration: int, 
         "startTime": start_time,
         "duration": duration,
         'communication_time_to_next': communication_time,
-        'processID': process_id
+        'processID': process_id,
+        'warnings': None
     }
     return span, spanID
 
