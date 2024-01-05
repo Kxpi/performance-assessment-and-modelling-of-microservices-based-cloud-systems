@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ScatterPlotOperationsSpans from "../ScatterPlotOperationsSpans.jsx";
 import ScatterPlotGroupsOperationsCg from "../ScatterPlotGroupsOperationsCg";
 import ScatterPlotGroups from "./components/ScatterPlotGroups";
@@ -18,7 +18,31 @@ function ScatterPlotPage({
   setSelectedOperation,
   selectedTrace,
   setSelectedTrace,
+  selectedSpan,
+  setSelectedSpan,
 }) {
+  const [changedSpanElsewhere, setChangedSpanElsewhere] = useState(null);
+  const [selectedSpanScatterPlot, setSelectedSpanScatterPlot] = useState(null);
+
+  const processedData = useMemo(() => {
+    if (selectedGroup && selectedOperation) {
+      return processScatterPlotData(selectedGroup, selectedOperation);
+    }
+    return null;
+  }, [selectedGroup, selectedOperation]);
+
+  const handleSelectedSpanScatterPlotChange = (span, trace) => {
+    setSelectedTrace(trace);
+    setSelectedSpan(span);
+    setSelectedSpanScatterPlot(span);
+  };
+
+  useEffect(() => {
+    if (selectedSpan !== selectedSpanScatterPlot) {
+      setChangedSpanElsewhere(selectedSpan);
+    }
+  }, [selectedSpan]);
+
   function setSelectedGroupFromScatterPlotGroups(groupID) {
     setSelectedGroup(
       jsonData.groups.find((group) => group.groupID === groupID)
@@ -54,10 +78,11 @@ function ScatterPlotPage({
               <div>
                 <h3>Scatter Plot of Operation {selectedOperation}'s Spans</h3>
                 <ScatterPlotOperationsSpans
-                  data={processScatterPlotData(
-                    selectedGroup,
-                    selectedOperation
-                  )}
+                  data={processedData}
+                  changedSpanElsewhere={changedSpanElsewhere}
+                  selectedSpanScatterPlotChange={
+                    handleSelectedSpanScatterPlotChange
+                  }
                 />
               </div>
             )}

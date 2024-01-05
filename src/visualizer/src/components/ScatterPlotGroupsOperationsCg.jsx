@@ -161,9 +161,9 @@ function ScatterPlotImpl(props) {
                       onClick={() => {
                         // setClickedDataPoint(overValue);
                         // console.log(overValue.operationName);\
-                        console.log(overValue)
-                        if(overValue){
-                        setSelectedOperation(overValue["operationName"])
+                        console.log(overValue);
+                        if (overValue) {
+                          setSelectedOperation(overValue["operationName"]);
                         }
                         // setIsDurationHistogramSingleGroupOperationVisible(
                         //   false
@@ -172,7 +172,7 @@ function ScatterPlotImpl(props) {
                         //   false
                         // );
                       }}
-                      style={{cursor: 'pointer'}}
+                      style={{ cursor: "pointer" }}
                     />
                   </g>
                 );

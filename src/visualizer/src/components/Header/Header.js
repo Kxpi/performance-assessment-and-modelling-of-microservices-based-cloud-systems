@@ -54,7 +54,7 @@ function Header({
                 <div className="selectedTrace">
                     selectedTrace: <br />{selectedTrace ? (
                         <span>
-                            {selectedTrace.traceID}
+                            {selectedTrace}
                             <Button variant="danger" onClick={() => setSelectedTrace(null)}>
                                 &#x2717;
                             </Button>

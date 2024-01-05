@@ -15,6 +15,7 @@ import {
 import "react-vis/dist/style.css";
 import * as SVGs from "./SVGs";
 import { Dropdown } from "react-bootstrap";
+import { over } from "lodash";
 
 const svgComponents = Object.entries(SVGs)
   .sort(([keyA], [keyB]) => {
@@ -237,7 +238,14 @@ const getRandomSubset = (data, percentage) => {
 };
 
 function ScatterPlotImpl(props) {
-  const { data, overValue, onValueOver, onValueOut } = props;
+  const {
+    data,
+    overValue,
+    onValueOver,
+    onValueOut,
+    changedSpanElsewhere,
+    selectedSpanScatterPlotChange,
+  } = props;
 
   const [clickedDataPoint, setClickedDataPoint] = useState(null);
   const [percentage, setPercentage] = useState(1);
@@ -339,8 +347,15 @@ function ScatterPlotImpl(props) {
                         height={30}
                         fill={color}
                         onClick={() => {
-                          setClickedDataPoint(overValue);
+                          if (overValue) {
+                            setClickedDataPoint(overValue);
+                            selectedSpanScatterPlotChange(
+                              overValue.spanID,
+                              overValue.traceID
+                            );
+                          }
                         }}
+                        style={{ cursor: "pointer" }}
                       />
                     </g>
                   );
