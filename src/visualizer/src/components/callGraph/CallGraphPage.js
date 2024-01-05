@@ -3,7 +3,6 @@ import './CallGraphPage.css';
 
 import TraceSelector from './components/TraceSelector';
 import TraceGraph from './components/TraceGraph';
-import OperationStatsTable from '../TablePage/components/OperationStatsTable';
 import GroupTraceGraph from './components/GroupTraceGraph';
 
 
@@ -33,7 +32,8 @@ function CallGraphPage({ data, selectedGroup, setSelectedGroup, serviceColors, s
                 <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace}
                   selectedTrace={selectedTrace} style={{ display: 'block', margin: 'auto' }} />
 
-                {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
+                {selectedTrace && <TraceGraph selectedTrace={selectedGroup["traces"].find((trace) => trace["traceID"] === selectedTrace)}
+                 serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
                   selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan} />}
               </div>
             </div>

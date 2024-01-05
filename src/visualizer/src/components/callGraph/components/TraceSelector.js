@@ -33,14 +33,14 @@ const TraceSelector = ({ traces, setSelectedTrace, selectedTrace }) => {
   };
 
   const handleItemClick = (trace) => {
-    setSelectedTrace(trace);
+    setSelectedTrace(trace["traceID"]);
     setIsActive(false);
   };
 
   return (
     <div className='dropdown' ref={dropdownRef}>
       <div className='dropdown-btn' onClick={handleButtonClick}>
-        {selectedTrace ? "TraceID: " + selectedTrace.traceID : "--Choose Trace--v"}
+        {selectedTrace ? "TraceID: " + selectedTrace : "--Choose Trace--v"}
 
       </div>
       {isActive && (
