@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CallGraphPage from "./components/callGraph/CallGraphPage";
 import FilesPage from "./components/InputPage/FilesPage.js";
-import PercendenceGraph from "./components/PercendenceGraph";
+import PercendenceGraph from "./components/percendenceGraph/PercendenceGraph.jsx";
 
 import { randomColors } from "./helpers.js";
 import Header from "./components/Header/Header.js";

@@ -265,7 +265,7 @@ def get_statistic_of_traces(comm_time):
 
     for pair_of_spans in count_of_percendence:
 
-        if count_of_percendence[pair_of_spans][0] > 0.5*number_of_traces:
+        if count_of_percendence[pair_of_spans][0] > 3:
             times = count_of_percendence[pair_of_spans][1]
             np_array = np.array(times)
             

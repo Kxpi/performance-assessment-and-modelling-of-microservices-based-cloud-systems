@@ -1,12 +1,16 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import './GraphComponent.css';
-
+import ReactFlow, {
+  Controls,
+} from 'reactflow';
 
 
 function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColors, lastSelected }) {
   const svgRef = useRef(null);
-    
+  let svg;
+  let zoom;
+
   useEffect(() => {
 
     const tooltip = d3.select("body").append("div")
@@ -24,8 +28,23 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
       renderGraph(data, selectedGroup, setSelectedOperation, serviceColors);
     };
 
+    if (svgRef.current) {
+      svg = d3.select(svgRef.current);
+
+      // Initialize zoom behavior
+      zoom = d3.zoom()
+        .scaleExtent([0.1, 10]) // Set minimum and maximum zoom levels
+        .on('zoom', (event) => {
+          svg.selectAll('.nodes, .links').attr('transform', event.transform);
+        });
+
+      svg.call(zoom);
+    }
 
     return () => {
+      if (svg) {
+        svg.on('.zoom', null); // Remove zoom behavior
+      }
       tooltip.remove();
     };
   }, [data]); 
@@ -49,7 +68,6 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('preserveAspectRatio', 'xMidYMid meet');
 
-
     svg.append('defs').selectAll('marker')
       .data(['arrow']) 
       .enter().append('marker')
@@ -62,11 +80,12 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
       .attr('orient', 'auto')
       .append('path')
       .attr('d', 'M0,-5L10,0L0,5')
-      .attr('class', 'arrowHead');
+      .attr('class', 'arrowHead')
+
 
 
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.Statistic[0] * 0.6))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.Statistic[0] * 0.8))
       .force('charge', d3.forceManyBody())
       .force('center', d3.forceCenter(width / 2, height / 2));
 
@@ -165,8 +184,32 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
       return textWidth;
     }
     function set_color(d){
- 
         return(serviceColors[selectedGroup["operation_stats"][d.id]["service_name"]])
+    }
+  };
+
+  const handleZoomIn = () => {
+    if (svg) {
+      svg.transition().call(zoom.scaleBy, 1.2); // Zoom in by a factor of 1.2
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (svg) {
+      svg.transition().call(zoom.scaleBy, 0.8); // Zoom out by a factor of 0.8
+    }
+  };
+
+  const handleCenterGraph = () => {
+    if (svg) {
+      const svgWidth = svg.node().getBoundingClientRect().width;
+      const svgHeight = svg.node().getBoundingClientRect().height;
+      const containerWidth = svg.node().parentElement.clientWidth;
+      const containerHeight = svg.node().parentElement.clientHeight;
+      const offsetX = (containerWidth - svgWidth) / 2;
+      const offsetY = (containerHeight - svgHeight) / 2;
+      
+      svg.transition().call(zoom.transform, d3.zoomIdentity.translate(offsetX, offsetY)); // Center the graph
     }
   };
 
@@ -182,7 +225,14 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
         Wait until receive data
       </div>
       ) : (
+      <div>
+      <div class="react-flow__panel_top_left">
+        <button class="react-flow__controls-button" onClick={handleZoomIn}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z"></path></svg></button>
+        <button class="react-flow__controls-button" onClick={handleZoomOut}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 5"><path d="M0 0h32v4.2H0z"></path></svg></button>
+        <button class="react-flow__controls-button" onClick={handleCenterGraph}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><path d="M3.692 4.63c0-.53.4-.938.939-.938h5.215V0H4.708C2.13 0 0 2.054 0 4.63v5.216h3.692V4.631zM27.354 0h-5.2v3.692h5.17c.53 0 .984.4.984.939v5.215H32V4.631A4.624 4.624 0 0027.354 0zm.954 24.83c0 .532-.4.94-.939.94h-5.215v3.768h5.215c2.577 0 4.631-2.13 4.631-4.707v-5.139h-3.692v5.139zm-23.677.94c-.531 0-.939-.4-.939-.94v-5.138H0v5.139c0 2.577 2.13 4.707 4.708 4.707h5.138V25.77H4.631z"></path></svg></button>
+      </div>
       <svg ref={svgRef}></svg>
+      </div>
       )}
     </div>
   );

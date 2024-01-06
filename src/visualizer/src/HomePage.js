@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CallGraphPage from "./components/callGraph/CallGraphPage";
 import FileUploader from "./components/callGraph/components/OldFileUploader";
-import PercendenceGraph from "./components/PercendenceGraph";
+import PercendenceGraph from "./components/percendenceGraph/PercendenceGraph.jsx";
 import AppGroups from "./AppGroups";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
