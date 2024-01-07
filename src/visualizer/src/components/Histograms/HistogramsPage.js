@@ -2,6 +2,7 @@ import { React, useEffect } from "react";
 import {
   setDataForScatterPlotGroups,
   processHistogramSingleGroupData,
+  processHistogramAllGroupsData,
   processSelectedGroupData,
   processGroupOperationHistogramData,
   myColors,
@@ -82,16 +83,6 @@ function HistogramsPage({
               justifyContent: "space-between",
             }}
           >
-            <h3>Duration Histogram of Group {selectedGroup.groupID}'s Spans</h3>
-            <DurationHistogramSingleGroup
-              data={processHistogramSingleGroupData(selectedGroup)}
-            />
-            <h3>
-              Start Time Histogram of Group {selectedGroup.groupID}'s Spans
-            </h3>
-            <StartTimeHistogramSingleGroup
-              data={processHistogramSingleGroupData(selectedGroup)}
-            />
             <h3>
               Duration Histogram of Group {selectedGroup.groupID}'s Operations
             </h3>
@@ -105,6 +96,16 @@ function HistogramsPage({
             <StartTimeHistogramGroupsOperations
               data={processSelectedGroupData(selectedGroup, myColors)}
               setSelectedOperation={setSelectedOperation}
+            />
+            <h3>Duration Histogram of Group {selectedGroup.groupID}'s Spans</h3>
+            <DurationHistogramSingleGroup
+              data={processHistogramSingleGroupData(selectedGroup)}
+            />
+            <h3>
+              Start Time Histogram of Group {selectedGroup.groupID}'s Spans
+            </h3>
+            <StartTimeHistogramSingleGroup
+              data={processHistogramSingleGroupData(selectedGroup)}
             />
           </div>
         )
@@ -131,6 +132,14 @@ function HistogramsPage({
           <StartTimeHistogramGroups
             data={setDataForScatterPlotGroups(jsonData)}
             setGroupHistogramOnClick={setGroupHistogramOnClick}
+          />
+          <h3>Duration Histogram of Spans</h3>
+          <DurationHistogramSingleGroup
+            data={processHistogramAllGroupsData(jsonData)}
+          />
+          <h3>Start Time Histogram of Spans</h3>
+          <StartTimeHistogramSingleGroup
+            data={processHistogramAllGroupsData(jsonData)}
           />
         </div>
       )}

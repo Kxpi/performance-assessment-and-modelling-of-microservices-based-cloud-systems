@@ -15,7 +15,6 @@ import {
 import "react-vis/dist/style.css";
 import * as SVGs from "./SVGs";
 import { Dropdown } from "react-bootstrap";
-import { over } from "lodash";
 
 const svgComponents = Object.entries(SVGs)
   .sort(([keyA], [keyB]) => {
@@ -265,7 +264,7 @@ function ScatterPlotImpl(props) {
 
   return (
     <div>
-      <div className="App" style={{ width: "100%", height: "100%" }}>
+      <div className="App">
         <div className="TraceResultsScatterPlot">
           <div>Percentage of Spans to Display: {percentage}%</div>
           <div style={{ display: "flex", justifyContent: "center" }}>

@@ -15,7 +15,6 @@ import {
   makeHeightFlexible,
 } from "react-vis";
 import "react-vis/dist/style.css";
-import { Dropdown } from "react-bootstrap";
 
 const FlexibleXYPlot = makeHeightFlexible(makeWidthFlexible(XYPlot));
 
@@ -24,6 +23,31 @@ function formatDuration(duration) {
   const durationInMilliseconds = duration / 1000;
   return `${durationInMilliseconds} ms`;
 }
+
+function Legend({ data }) {
+  return (
+    <div className="legend">
+      {data.map((d, index) => (
+        <div key={index} className="legend-item">
+          <span
+            className="legend-color"
+            style={{ backgroundColor: d.color }}
+          ></span>
+          <span className="legend-text">{d.operationName}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+Legend.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      operationName: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
 
 function useShiftPress() {
   const [isShiftPressed, setIsShiftPressed] = useState(false);
@@ -54,26 +78,9 @@ function useShiftPress() {
 }
 
 function ScatterPlotImpl(props) {
-  const {
-    data,
-    selectedOperation,
-    setSelectedOperation,
-    overValue,
-    onValueOver,
-    onValueOut,
-
-    selectedGroupNumber,
-  } = props;
-  const [clickedDataPoint, setClickedDataPoint] = useState(null);
+  const { data, setSelectedOperation, overValue, onValueOver, onValueOut } =
+    props;
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
-  const [
-    isDurationHistogramSingleGroupOperationVisible,
-    setIsDurationHistogramSingleGroupOperationVisible,
-  ] = useState(false);
-  const [
-    isStartTimeHistogramSingleGroupOperationVisible,
-    setIsStartTimeHistogramSingleGroupOperationVisible,
-  ] = useState(false);
 
   const isShiftPressed = useShiftPress();
 
@@ -81,11 +88,7 @@ function ScatterPlotImpl(props) {
     <div>
       <div className="App">
         <div className="TraceResultsScatterPlot">
-          {clickedDataPoint && (
-            <div className="centered-text">
-              Selected Operation: {clickedDataPoint.operationName}
-            </div>
-          )}
+          <Legend data={data} />
           <FlexibleXYPlot
             xType="time"
             xDomain={
@@ -102,6 +105,7 @@ function ScatterPlotImpl(props) {
             }
             margin={{
               top: 25,
+              bottom: 200,
               left: 80,
               right: 60,
             }}
@@ -159,18 +163,9 @@ function ScatterPlotImpl(props) {
                       height={30}
                       fill={color}
                       onClick={() => {
-                        // setClickedDataPoint(overValue);
-                        // console.log(overValue.operationName);\
-                        console.log(overValue);
                         if (overValue) {
                           setSelectedOperation(overValue["operationName"]);
                         }
-                        // setIsDurationHistogramSingleGroupOperationVisible(
-                        //   false
-                        // );
-                        // setIsStartTimeHistogramSingleGroupOperationVisible(
-                        //   false
-                        // );
                       }}
                       style={{ cursor: "pointer" }}
                     />
@@ -215,7 +210,6 @@ ScatterPlotImpl.propTypes = {
   overValue: valueShape,
   onValueOut: PropTypes.func.isRequired,
   onValueOver: PropTypes.func.isRequired,
-  selectedGroupNumber: PropTypes.number,
 };
 
 ScatterPlotImpl.defaultProps = {

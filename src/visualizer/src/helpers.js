@@ -76,7 +76,6 @@ var hsvToRgb = function (h, s, v) {
 };
 
 export function randomColors(services) {
-
   var total = services.length;
   var serviceColors = {};
   var i = 360 / (total - 1);
@@ -120,6 +119,18 @@ export function processHistogramSingleGroupData(selectedGroup) {
       }))
   );
   return processedHistogramSingleGroupData;
+}
+
+export function processHistogramAllGroupsData(allGroupsData) {
+  const processedHistogramAllGroupsData = allGroupsData.groups.flatMap(
+    (group) =>
+      group.traces.flatMap((trace) =>
+        trace.spans.map((span) => ({
+          ...span,
+        }))
+      )
+  );
+  return processedHistogramAllGroupsData;
 }
 
 export const myColors = [
@@ -253,10 +264,7 @@ export const myColors = [
 ];
 
 //Selected Group, Spans from selected group, Scatter Plot
-export function processScatterPlotGroupsOperationsData(
-  selectedGroup
-  //svgComponents
-) {
+export function processScatterPlotGroupsOperationsData(selectedGroup) {
   const processedScatterPlotGroupsOperationsData = Object.entries(
     selectedGroup.operation_stats
   ).map(([operationName, operationStats], index) => {
