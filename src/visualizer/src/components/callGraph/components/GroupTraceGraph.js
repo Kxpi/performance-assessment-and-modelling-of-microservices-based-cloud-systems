@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactFlow, {
+    ControlButton,
     Controls,
+    Panel,
 } from 'reactflow';
 import dagre from 'dagre';
 import GraphInfo from './GraphInfo';
 import Legend from './Legend';
 import CustomNode from './CustomNode';
-
 import './styles/GroupTraceGraph.css';
 import 'reactflow/dist/style.css';
 
@@ -54,8 +55,10 @@ const getLayoutedElements = (nodes, edges, direction = 'LR') => {
 
 const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selectedOperation, setSelectedOperation, transfer_edges }) => {
 
+    const [showTransferEdges, setShowTransferEdges] = useState(false)
     const initialNodes = [];
     const initialEdges = [];
+    let flowKey;
 
 
 
@@ -135,19 +138,22 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
 
     });
 
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+        initialNodes,
+        initialEdges
+    );
 
-    if (transfer_edges) {
-        console.log(transfer_edges)
 
+    if (showTransferEdges && transfer_edges) {
+
+        flowKey='transfer-edges'
         transfer_edges.forEach((transfer_edge, index) => {
-
-
 
             const sourceHandle = `${transfer_edge[1]}-target-t`
             const targetHandle = `${transfer_edge[0]}-source-t`
 
 
-            initialEdges.push({
+            layoutedEdges.push({
                 id: crypto.randomUUID(),
                 source: transfer_edge[0],
                 sourceHandle: sourceHandle,
@@ -164,7 +170,7 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
             });
 
 
-            initialNodes.forEach(node => {
+            layoutedNodes.forEach(node => {
 
                 if (node.id === transfer_edge[0]) {
 
@@ -172,29 +178,17 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
                 }
             });
 
-            initialNodes.forEach(node => {
+            layoutedNodes.forEach(node => {
 
                 if (node.id === transfer_edge[1]) {
 
                     node['data']["transfer_handlers"].push({ handleID: targetHandle, type: 'target', position: index % 2 === 0 ? 'bottom' : 'top' });
                 }
             });
-
-            console.log(initialEdges)
         });
+    }else{flowKey='no-transfer-edges';}
 
-    }
-
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-        initialNodes,
-        initialEdges
-    );
-
-
-
-
-
-
+    //crypto.randomUUID()}
 
 
     return (
@@ -202,6 +196,7 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
             <Legend microserviceColors={serviceColors} />
             <div style={{ height: '100%', width: '100%', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <ReactFlow
+                    key={flowKey}
                     nodes={layoutedNodes}
                     edges={layoutedEdges}
                     style={{ border: "solid", padding: "10px" }}
@@ -220,8 +215,17 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
 
                     }}
                 >
-                    <Controls position={'top-left'} showInteractive={false} >
-                    </Controls>
+                    <Panel position="top-left">
+                        {
+                            transfer_edges ?
+                                <button onClick={() => { setShowTransferEdges(!showTransferEdges) }}>{!showTransferEdges ? "Show Transfer Edges" : "Hide Transfer Edges"}</button>
+                                :
+                                <div>No transfer edges</div>
+                        }
+
+                    </Panel>
+                    <Controls position={'top-left'} style={{ marginTop: '70px' }} showInteractive={false} />
+
                 </ReactFlow>
                 {selectedOperation && <GraphInfo selectedOperation={selectedOperation} operationStats={operationStats[selectedOperation]} />}
             </div>

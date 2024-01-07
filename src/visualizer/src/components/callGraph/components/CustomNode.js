@@ -26,7 +26,7 @@ function CustomNode({ data }) {
         <div>
             {Handlers.map((handle) => (
 
-                <Handle type={handle.type} position={handle.position} id={handle.id} style={handle.style} />
+                <Handle key={handle.id} type={handle.type} position={handle.position} id={handle.id} style={handle.style} />
 
             ))}
 

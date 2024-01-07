@@ -4,14 +4,14 @@ const GraphInfo = ({ selectedOperation, operationStats, span }) => {
 
 
     return (
-        <div style={{ height: '100%', overflow: 'auto' }}>
+        <div style={{ width: '25%', height: '100%', overflow: 'auto' }}>
             {span ? (
                 <div className="span-info">
                     <table>
                         <tbody>
                             <tr>
                                 <td><b>Operation name:</b></td>
-                                <td>{span.operationName}</td>
+                                <td>{span.operationName.replaceAll("_", "-")}</td>
                             </tr>
                             <tr>
                                 <td><b>SpanID:</b></td>
@@ -38,7 +38,7 @@ const GraphInfo = ({ selectedOperation, operationStats, span }) => {
                         <tbody>
                             <tr>
                                 <td><b>Operation name:</b></td>
-                                <td>{selectedOperation}</td>
+                                <td>{selectedOperation.replaceAll("_", "-")}</td>
                             </tr>
                             <tr>
                                 <td><b>Average duration:</b></td>
@@ -124,8 +124,9 @@ const GraphInfo = ({ selectedOperation, operationStats, span }) => {
                         </tbody>
                     </table>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 
