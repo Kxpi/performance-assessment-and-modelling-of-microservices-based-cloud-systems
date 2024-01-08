@@ -29,7 +29,7 @@ function OperationStatsTable({ operationStats, selectedOperation, setSelectedOpe
             {operationNames.map((operationName, operationIndex) => (
               <tr
                 key={operationIndex}
-                style={{ background: selectedOperation === operationName ? '#FFFFCC' : 'transparent' }}
+                style={{ cursor: 'pointer', background: selectedOperation === operationName ? '#FFFFCC' : 'transparent' }}
                 onClick={() => {
                   setSelectedOperation(operationName);
                 }}
@@ -59,7 +59,7 @@ function OperationStatsTable({ operationStats, selectedOperation, setSelectedOpe
             {operationNames.map((operationName, operationIndex) => (
               <tr
                 key={operationIndex}
-                style={{ background: selectedOperation === operationName ? '#FFFFCC' : 'transparent' }}
+                style={{ cursor: 'pointer', background: selectedOperation === operationName ? '#FFFFCC' : 'transparent' }}
                 onClick={() => {
                   setSelectedOperation(operationName); // Dodatkowo ustawiamy wybraną operację
                 }}

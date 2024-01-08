@@ -1,4 +1,4 @@
-.legend {
+.cg-legend {
     display: flex;
     flex-wrap: wrap; /* Zapewnia, że elementy zamiast przejścia na nową linię, będą się "zawijać" do nowego wiersza */
     background-color: white;
@@ -6,14 +6,14 @@
     padding: 10px;
   }
   
-  .legend-item {
+  .cg-legend-item {
     display: flex;
     align-items: center;
     margin-right: 15px; /* Dodatkowe marginesy między elementami */
     margin-bottom: 5px;
   }
   
-  .legend-color {
+  .cg-legend-color {
     width: 20px;
     height: 20px;
     margin-right: 5px;
