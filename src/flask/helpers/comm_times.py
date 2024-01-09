@@ -9,6 +9,7 @@ from itertools import combinations
 import numpy as np
 from flask import Flask, render_template, jsonify
 from helpers.backend_simulator import *
+import sys
 
 app = Flask(__name__)
 
@@ -285,16 +286,12 @@ def is_ancestor(nested_dict, target_operation, potential_ancestor, ancestors=Non
 
     if isinstance(nested_dict, dict):
         for key, value in nested_dict.items():
-            # Check if we've found the target operation
             if key == target_operation:
-                # Check if the potential ancestor is in the list of ancestors
                 return potential_ancestor in ancestors
-            # If not, continue searching deeper
             if isinstance(value, dict):
-                # Add the current key to the list of ancestors
                 new_ancestors = ancestors + [key]
                 result = is_ancestor(value, target_operation, potential_ancestor, new_ancestors)
-                if result is not None:  # If the target operation was found in a deeper level
+                if result is not None: 
                     return result
     return None
 
@@ -306,19 +303,46 @@ def get_statistic_of_traces(comm_time,ancestors):
         if is_ancestor(ancestors, pair_of_spans[0], pair_of_spans[1]):
             continue
 
-        if count_of_percendence[pair_of_spans][0] > number_of_traces*0.3:
+        if count_of_percendence[pair_of_spans][0] > number_of_traces*0.2:
             times = count_of_percendence[pair_of_spans][1]
             np_array = np.array(times)
+            
             statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
-            # if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
-            #     statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
+            if len(statistic_to_graph) == 50:
+                break
+
+            # if size:
+            #     if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
+            #         statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
+            #     else:
+            #         for i in list(statistic_to_graph.keys()):
+            #             if i[0] == pair_of_spans[0]:
+            #                 if statistic_to_graph[i][3] > np.percentile(np_array, 95) :
+            #                     del statistic_to_graph[i]
+            #                     statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
             # else:
-            #     for i in list(statistic_to_graph.keys()):
-            #         if i[0] == pair_of_spans[0]:
-            #             if statistic_to_graph[i][3] > np.percentile(np_array, 95):
-            #                 del statistic_to_graph[i]
-            #                 statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
+            #     statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
     
+    if len(statistic_to_graph) >= 50:
+        statistic_to_graph = {}
+        for pair_of_spans in count_of_percendence:
+            if is_ancestor(ancestors, pair_of_spans[0], pair_of_spans[1]):
+                continue
+
+            if count_of_percendence[pair_of_spans][0] > number_of_traces*0.2:
+                times = count_of_percendence[pair_of_spans][1]
+                np_array = np.array(times)
+                
+
+                if not any(pair_of_spans[0]==value[0] for value in statistic_to_graph.keys()):
+                    statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
+                else:
+                    for i in list(statistic_to_graph.keys()):
+                        if i[0] == pair_of_spans[0]:
+                            if statistic_to_graph[i][3] > np.percentile(np_array, 95) :
+                                del statistic_to_graph[i]
+                                statistic_to_graph[pair_of_spans] = [round(np.mean(np_array),4), round(np.median(np_array),4), round(np.percentile(np_array, 75),4), round(np.percentile(np_array, 95),4)]
+
     return statistic_to_graph
 
 def find_traces(groups, groupID):
@@ -329,6 +353,7 @@ def find_traces(groups, groupID):
             for trace in group['traces']:
                 traces.append(trace['traceID'])
     return traces
+
 
 
 # def get_edges(data, groups, groupID):

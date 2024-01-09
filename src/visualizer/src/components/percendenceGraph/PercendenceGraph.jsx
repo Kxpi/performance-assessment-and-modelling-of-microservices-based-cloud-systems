@@ -31,9 +31,9 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
     if (svgRef.current) {
       svg = d3.select(svgRef.current);
 
-      // Initialize zoom behavior
+
       zoom = d3.zoom()
-        .scaleExtent([0.1, 10]) // Set minimum and maximum zoom levels
+        .scaleExtent([0.1, 10]) 
         .on('zoom', (event) => {
           svg.selectAll('.nodes, .links').attr('transform', event.transform);
         });
@@ -43,7 +43,7 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
 
     return () => {
       if (svg) {
-        svg.on('.zoom', null); // Remove zoom behavior
+        svg.on('.zoom', null); 
       }
       tooltip.remove();
     };
@@ -124,15 +124,15 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
         });
 
     node.append("rect")
-      .attr("width", d => calculateTextWidth(d.id) + 11)
-      .attr("height", 30)
+      .attr("width", d => calculateTextWidth(d.id) + 20)
+      .attr("height", 40)
       .attr("rx", 0)
       .attr("ry", 0)
       .attr("fill", d => set_color(d));
 
     node.append("text")
       .attr("x", d => calculateTextWidth(d.id) / 2 + 5.5)
-      .attr("y", 26) 
+      .attr("y", 30) 
       .attr("text-anchor", "middle")
       .attr("fill", "black")
       .style("font-size", "20px")
@@ -190,13 +190,13 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
 
   const handleZoomIn = () => {
     if (svg) {
-      svg.transition().call(zoom.scaleBy, 1.2); // Zoom in by a factor of 1.2
+      svg.transition().call(zoom.scaleBy, 1.2); 
     }
   };
 
   const handleZoomOut = () => {
     if (svg) {
-      svg.transition().call(zoom.scaleBy, 0.8); // Zoom out by a factor of 0.8
+      svg.transition().call(zoom.scaleBy, 0.8); 
     }
   };
 
