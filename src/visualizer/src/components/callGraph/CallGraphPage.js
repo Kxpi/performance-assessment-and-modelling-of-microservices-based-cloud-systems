@@ -33,7 +33,7 @@ function CallGraphPage({ data, selectedGroup, setSelectedGroup, serviceColors, s
                   selectedTrace={selectedTrace} style={{ display: 'block', margin: 'auto' }} />
 
                 {selectedTrace && <TraceGraph selectedTrace={selectedGroup["traces"].find((trace) => trace["traceID"] === selectedTrace)}
-                 serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
+                  serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
                   selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan} />}
               </div>
             </div>
@@ -41,7 +41,7 @@ function CallGraphPage({ data, selectedGroup, setSelectedGroup, serviceColors, s
           : (
             <div className="neg-start-times" style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <TraceSelector traces={selectedGroup["traces"]} setSelectedTrace={setSelectedTrace} selectedTrace={selectedTrace} />
-              {selectedTrace && <TraceGraph selectedTrace={selectedTrace} serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
+              {selectedTrace && <TraceGraph selectedTrace={selectedGroup["traces"].find((trace) => trace["traceID"] === selectedTrace)} serviceColors={serviceColors} operationStats={selectedGroup["operation_stats"]}
                 selectedSpan={selectedSpan} setSelectedSpan={setSelectedSpan} />}
             </div>
           )
