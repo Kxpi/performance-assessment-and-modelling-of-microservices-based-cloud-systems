@@ -4,8 +4,9 @@ import json
 from helpers.processing import get_data
 from flask_cors import CORS
 
-from helpers.backend_simulator import get_groups
+from helpers.backend_simulator import get_groups, get_callGraphRep, findRoot
 from helpers.comm_times import *
+import sys
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -58,6 +59,7 @@ def upload_file():
         microservice_stats, groups = get_groups(data)
         global edges 
         edges = {}
+        
         return jsonify({"microservice_stats": microservice_stats, "groups": groups})
 
     except Exception as e:
@@ -70,14 +72,19 @@ def send_data(groupID):
     global data
     global groups
     global edges
+
     if groupID not in edges: 
         groups_traces = find_traces(groups,groupID)
-        #non_child = find_non_child(traces)
+        for i in data["data"]:
+            if i["traceID"] in groups_traces:
+                ancestors, _ = get_callGraphRep(i["spans"], findRoot(i["spans"]))
+                break
+
         traces_reformatted = reformat_dict(data, groups_traces)
         
         communication_times = calculate_comm_times(traces_reformatted, False)
         
-        graph = get_statistic_of_traces(communication_times)
+        graph = get_statistic_of_traces(communication_times, ancestors)
         print(graph)
         graph_list = [(str(pair), stats) for pair, stats in graph.items()]
 
