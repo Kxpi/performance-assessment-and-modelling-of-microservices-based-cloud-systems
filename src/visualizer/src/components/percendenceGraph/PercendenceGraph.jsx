@@ -85,7 +85,7 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
 
 
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.Statistic[0] * 1.2))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.Statistic[0]+50))
       .force('charge', d3.forceManyBody())
       .force('center', d3.forceCenter(width / 2, height / 2));
 
@@ -226,6 +226,15 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
     }
     return false;
   };
+
+  const add_distance = (d) => {
+    if (d.Statistic[0] < 100){
+      return (d.Statistic[0]+25)*0.8;
+    }
+    else{
+      return d.Statistic[0]*0.8;
+    }
+  }
 
   return (
     <div className="graph-container" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
