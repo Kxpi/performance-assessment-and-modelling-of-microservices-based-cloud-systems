@@ -319,7 +319,7 @@ function ScatterPlotImpl(props) {
               ]
             }
             margin={{
-              top: 25,
+              top: 80,
               left: 80,
               right: 60,
             }}

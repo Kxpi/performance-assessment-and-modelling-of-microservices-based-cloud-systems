@@ -18,6 +18,31 @@ import "react-vis/dist/style.css";
 
 const FlexibleXYPlot = makeHeightFlexible(makeWidthFlexible(XYPlot));
 
+function Legend({ data }) {
+  return (
+    <div className="legend">
+      {data.map((d, index) => (
+        <div key={index} className="legend-item">
+          <span
+            className="legend-color"
+            style={{ backgroundColor: d.color }}
+          ></span>
+          <span className="legend-text">{d.groupID}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+Legend.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      operationName: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
+
 function formatDuration(duration) {
   // Convert microseconds to milliseconds
   const durationInMilliseconds = duration / 1000;
@@ -63,6 +88,7 @@ function ScatterPlotGroupsImpl(props) {
     <div>
       <div className="App">
         <div className="TraceResultsScatterPlot">
+          <Legend data={data} />
           <FlexibleXYPlot
             xType="time"
             xDomain={
