@@ -43,18 +43,32 @@ function NewHomePage() {
 
   useEffect(() => {
     if (selectedGroup) {
+      setEdges(null);
+      setCommTimes(null);
       fetch(`http://localhost:5000/data/${selectedGroup.groupID}`)
         .then((response) => response.json())
-        .then((data) => setCommTimes(data))
+        .then((data) => {
+          setCommTimes(data.graph);
+          setEdges(data.edge["edges"][selectedGroup.groupID]);
+          }
+        )
         .catch((error) => console.error("Error:", error));
 
-      setEdges(null);
-      fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)
-        .then((response) => response.json())
-        .then((data) => setEdges(data["edges"][selectedGroup.groupID]))
-        .catch((error) => console.error("Error:", error));
+      
+      // setEdges(null);
+      // fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)
+      //   .then((response) => response.json())
+      //   .then((data) => setEdges(data["edges"][selectedGroup.groupID]))
+      //   .catch((error) => console.error("Error:", error));
+      
+      
     }
   }, [selectedGroup]);
+
+  if (edges){
+    console.log(commTimes);
+    console.log(edges);
+  }
 
   // useEffect(() => {
   //     if (selectedGroup) {
@@ -89,6 +103,8 @@ function NewHomePage() {
         setSelectedTrace={setSelectedTrace}
         selectedSpan={selectedSpan}
         setSelectedSpan={setSelectedSpan}
+        setCommTimes={setCommTimes}
+        setEdges={setEdges}
       />
 
       <div className="homepage-content" style={{ height: "85vh" }}>

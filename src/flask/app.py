@@ -56,7 +56,8 @@ def upload_file():
         data = request.get_json()
         global groups
         microservice_stats, groups = get_groups(data)
-
+        global edges 
+        edges = {}
         return jsonify({"microservice_stats": microservice_stats, "groups": groups})
 
     except Exception as e:
@@ -68,50 +69,62 @@ def upload_file():
 def send_data(groupID):
     global data
     global groups
-    traces = data.copy()
-    groups_traces = find_traces(groups,groupID)
-    #non_child = find_non_child(traces)
-    traces_reformatted = reformat_dict(traces, groups_traces)
-    
-    communication_times = calculate_comm_times(traces_reformatted, False)
-    
-    graph = get_statistic_of_traces(communication_times)
-    print(graph)
-    graph_list = [(str(pair), stats) for pair, stats in graph.items()]
-
-    nodes = set()
-    links = []
-
-    for item in graph_list:
-        source, target = item[0][1:-1].replace("'", "").split(",")
-        target = target[1:]
-        nodes.add(source)
-        nodes.add(target)
-        links.append({"source": source, "target": target, "Statistic": item[1]})
-
-    nodes = list(nodes)
-
-    # Transform nodes to node objects
-    nodes = [{"id": node} for node in nodes]
-
-    # Return a JSON response
-    return jsonify(
-        {
-            "nodes": nodes,
-            "links": links,
-        }
-    )
-
-@app.route("/edges/<groupID>")
-def send_edges(groupID):
-    global data
-    global groups
     global edges
-    if groupID in edges:  
-        return jsonify({"edges": edges[groupID]})
+    if groupID not in edges: 
+        groups_traces = find_traces(groups,groupID)
+        #non_child = find_non_child(traces)
+        traces_reformatted = reformat_dict(data, groups_traces)
+        
+        communication_times = calculate_comm_times(traces_reformatted, False)
+        
+        graph = get_statistic_of_traces(communication_times)
+        print(graph)
+        graph_list = [(str(pair), stats) for pair, stats in graph.items()]
+
+        nodes = set()
+        links = []
+        edge = []
+        edge_to_send = {}
+        for item in graph_list:
+            source, target = item[0][1:-1].replace("'", "").split(",")
+            target = target[1:]
+            nodes.add(source)
+            nodes.add(target)
+            links.append({"source": source, "target": target, "Statistic": item[1]})
+            edge.append([source, target, item[1][-1]])
+        edge_to_send[groupID] = edge
+        nodes = list(nodes)
+
+        nodes = [{"id": node} for node in nodes]
+        edges[groupID] = [nodes, links , edge_to_send]
+    
+    if edges[groupID] == []:
+        return jsonify("no data")
     else:
-        edges[groupID] = get_edges(data, groups, groupID)
-        return jsonify({"edges": edges[groupID]})
+        return jsonify(
+            {
+            "graph":{
+                "nodes": edges[groupID][0],
+                "links": edges[groupID][1],
+            },
+            "edge": {
+                "edges": edges[groupID][2]
+            }
+        })
+
+# @app.route("/edges/<groupID>")
+# def send_edges(groupID):
+#     global data
+#     global groups
+#     global edges
+#     if groupID in edges: 
+#         print(edges)
+#         return jsonify({"edges": edges[groupID]})
+#     else:
+#         edges[groupID] = get_edges(data, groups, groupID)
+#         print(edges[groupID])
+#         return jsonify({"edges": edges[groupID]})
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

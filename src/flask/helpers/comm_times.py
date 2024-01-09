@@ -243,10 +243,12 @@ def get_number_of_percendance(output_of_commo_times):
     '''
     Here count if percendance is in every trace or if it is  
     '''
+
     count_of_percendence = {}
     number_of_traces=0
     for trace in output_of_commo_times:
-        number_of_traces+=1
+        if trace != []:
+            number_of_traces+=1
         for single_percendence in output_of_commo_times[trace]:
             key = (single_percendence["initOperationName"], single_percendence["targetOperationName"])
             
@@ -265,7 +267,7 @@ def get_statistic_of_traces(comm_time):
 
     for pair_of_spans in count_of_percendence:
 
-        if count_of_percendence[pair_of_spans][0] > 3:
+        if count_of_percendence[pair_of_spans][0] > number_of_traces*0.5:
             times = count_of_percendence[pair_of_spans][1]
             np_array = np.array(times)
             
@@ -290,22 +292,22 @@ def find_traces(groups, groupID):
     return traces
 
 
-def get_edges(data, groups, groupID):
-    edges={}
-    groups_traces = find_traces(groups, groupID)
-    #non_child = find_non_child(traces)
-    traces_reformatted = reformat_dict(data, groups_traces)
+# def get_edges(data, groups, groupID):
+#     edges={}
+#     groups_traces = find_traces(groups, groupID)
+#     #non_child = find_non_child(traces)
+#     traces_reformatted = reformat_dict(data, groups_traces)
         
-    communication_times = calculate_comm_times(traces_reformatted, False)
+#     communication_times = calculate_comm_times(traces_reformatted, False)
         
-    graph = get_statistic_of_traces(communication_times)
+#     graph = get_statistic_of_traces(communication_times)
 
-    graph_list = [(str(pair), stats) for pair, stats in graph.items()]
-    links = []
-    for item in graph_list:
-        source, target = item[0][1:-1].replace("'", "").split(",")
-        target = target[1:]
-        links.append([source, target, item[1][-1]])
-    edges[groupID] = links
+#     graph_list = [(str(pair), stats) for pair, stats in graph.items()]
+#     links = []
+#     for item in graph_list:
+#         source, target = item[0][1:-1].replace("'", "").split(",")
+#         target = target[1:]
+#         links.append([source, target, item[1][-1]])
+#     edges[groupID] = links
     
-    return edges
+#     return edges

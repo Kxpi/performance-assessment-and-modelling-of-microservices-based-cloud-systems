@@ -85,7 +85,7 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
 
 
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.Statistic[0] * 0.8))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.Statistic[0] * 1.2))
       .force('charge', d3.forceManyBody())
       .force('center', d3.forceCenter(width / 2, height / 2));
 
@@ -213,26 +213,54 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
     }
   };
 
+  const isServicedifferent = () => {
+    if (data && data.nodes && selectedGroup && selectedGroup["operation_stats"]) {
+      return data.nodes.some(node => {
+        const operationStat = selectedGroup["operation_stats"][node.id];
+        if (operationStat) {
+          const serviceColor = serviceColors[operationStat["service_name"]];
+          return serviceColor === null;
+        }
+        return false;
+      });
+    }
+    return false;
+  };
+
   return (
     <div className="graph-container" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
       {!selectedGroup ? (
-      // If no group is selected, display "No Group Selected"
-      <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
-        No Group Selected
-      </div>
-      ) : data === null  ? (
-      <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
-        Wait until receive data
-      </div>
+        // If no group is selected, display "No Group Selected"
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+          No Group Selected
+        </div>
+      ) : data === null ? (
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+          Wait until receive data
+        </div>
+      ) : data.nodes.length === 0  ? (
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+          Impossible to get transfer time
+        </div>
+      ) : ! isServicedifferent() ?(
+        <div>
+          <div className="react-flow__panel_top_left">
+            <button className="react-flow__controls-button" onClick={handleZoomIn}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z"></path></svg>
+            </button>
+            <button className="react-flow__controls-button" onClick={handleZoomOut}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 5"><path d="M0 0h32v4.2H0z"></path></svg>
+            </button>
+            <button className="react-flow__controls-button" onClick={handleCenterGraph}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><path d="M3.692 4.63c0-.53.4-.938.939-.938h5.215V0H4.708C2.13 0 0 2.054 0 4.63v5.216h3.692V4.631zM27.354 0h-5.2v3.692h5.17c.53 0 .984.4.984.939v5.215H32V4.631A4.624 4.624 0 0027.354 0zm.954 24.83c0 .532-.4.94-.939.94h-5.215v3.768h5.215c2.577 0 4.631-2.13 4.631-4.707v-5.139h-3.692v5.139zm-23.677.94c-.531 0-.939-.4-.939-.94v-5.138H0v5.139c0 2.577 2.13 4.707 4.708 4.707h5.138V25.77H4.631z"></path></svg>
+            </button>
+          </div>
+          <svg ref={svgRef}></svg>
+        </div>
       ) : (
-      <div>
-      <div class="react-flow__panel_top_left">
-        <button class="react-flow__controls-button" onClick={handleZoomIn}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M32 18.133H18.133V32h-4.266V18.133H0v-4.266h13.867V0h4.266v13.867H32z"></path></svg></button>
-        <button class="react-flow__controls-button" onClick={handleZoomOut}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 5"><path d="M0 0h32v4.2H0z"></path></svg></button>
-        <button class="react-flow__controls-button" onClick={handleCenterGraph}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><path d="M3.692 4.63c0-.53.4-.938.939-.938h5.215V0H4.708C2.13 0 0 2.054 0 4.63v5.216h3.692V4.631zM27.354 0h-5.2v3.692h5.17c.53 0 .984.4.984.939v5.215H32V4.631A4.624 4.624 0 0027.354 0zm.954 24.83c0 .532-.4.94-.939.94h-5.215v3.768h5.215c2.577 0 4.631-2.13 4.631-4.707v-5.139h-3.692v5.139zm-23.677.94c-.531 0-.939-.4-.939-.94v-5.138H0v5.139c0 2.577 2.13 4.707 4.708 4.707h5.138V25.77H4.631z"></path></svg></button>
-      </div>
-      <svg ref={svgRef}></svg>
-      </div>
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+          Wait until receive data
+        </div>
       )}
     </div>
   );

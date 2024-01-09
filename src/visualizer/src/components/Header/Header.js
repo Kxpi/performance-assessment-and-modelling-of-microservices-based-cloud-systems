@@ -10,7 +10,7 @@ function Header({
     selectedGroup, setSelectedGroup,
     selectedOperation, setSelectedOperation,
     selectedTrace, setSelectedTrace,
-    selectedSpan, setSelectedSpan
+    selectedSpan, setSelectedSpan, setCommTimes, setEdges
 }) {
 
     const tabs = ['Input', 'CallGraph', 'Table', 'ScatterPlot', 'Transfer times', 'Histograms']
@@ -33,7 +33,7 @@ function Header({
                     selectedGroup: <br /> {selectedGroup ? (
                         <span>
                             {selectedGroup.groupID}
-                            <Button variant="danger" onClick={() => setSelectedGroup(null)}>
+                            <Button variant="danger" onClick={() => { setSelectedGroup(null); setCommTimes(null); setEdges(null); }}>
                                 &#x2717;
                             </Button>
                         </span>
