@@ -43,13 +43,17 @@ function NewHomePage() {
 
   useEffect(() => {
     if (selectedGroup) {
+      console.log(selectedGroup);
+
       setEdges(null);
       setCommTimes(null);
       fetch(`http://localhost:5000/data/${selectedGroup.groupID}`)
         .then((response) => response.json())
         .then((data) => {
-          setCommTimes(data.graph);
-          setEdges(data.edge["edges"][selectedGroup.groupID]);
+          if (data != "no data"){
+            setCommTimes(data.graph);
+            setEdges(data.edge["edges"][selectedGroup.groupID]);
+            }
           }
         )
         .catch((error) => console.error("Error:", error));

@@ -7,6 +7,7 @@ from flask_cors import CORS
 from helpers.backend_simulator import get_groups, get_callGraphRep, findRoot
 from helpers.comm_times import *
 import sys
+from urllib.parse import unquote
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -73,6 +74,9 @@ def send_data(groupID):
     global groups
     global edges
 
+    if unquote(groupID) == "Negative start times":
+        return jsonify("no data")
+    
     if groupID not in edges: 
         groups_traces = find_traces(groups,groupID)
         for i in data["data"]:

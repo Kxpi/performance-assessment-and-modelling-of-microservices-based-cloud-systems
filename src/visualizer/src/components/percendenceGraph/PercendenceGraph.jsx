@@ -243,7 +243,11 @@ function DirectedGraph({ data, selectedGroup, setSelectedOperation, serviceColor
         <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
           No Group Selected
         </div>
-      ) : data === null ? (
+      ) : selectedGroup.groupID === 'Negative start times' ?( 
+        <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
+        Impossible to get transfer time
+        </div>
+      ) :data === null ? (
         <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', flexDirection: 'column' }}>
           Wait until receive data
         </div>
