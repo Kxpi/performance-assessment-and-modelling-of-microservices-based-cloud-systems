@@ -316,14 +316,14 @@ valign=top</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>660</x>
+      <x>650</x>
       <y>760</y>
-      <w>610</w>
+      <w>620</w>
       <h>180</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>590.0;162.0;10.0;15.0</additional_attributes>
+    <additional_attributes>600.0;162.0;10.0;15.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
@@ -370,14 +370,14 @@ valign=top</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>660</x>
+      <x>650</x>
       <y>440</y>
-      <w>690</w>
+      <w>700</w>
       <h>300</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>670.0;10.0;10.0;280.0</additional_attributes>
+    <additional_attributes>680.0;10.0;10.0;280.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
