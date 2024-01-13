@@ -270,7 +270,7 @@ def get_number_of_percendance(output_of_commo_times):
         if trace != []:
             number_of_traces+=1
         for single_percendence in output_of_commo_times[trace]:
-            key = (single_percendence["initOperationName"], single_percendence["targetOperationName"])
+            key = (single_percendence["targetOperationName"], single_percendence["initOperationName"])
             
             if key not in count_of_percendence:
                 count_of_percendence[key] = [1, [single_percendence['time']]]
@@ -300,6 +300,7 @@ def get_statistic_of_traces(comm_time,ancestors):
     statistic_to_graph = {}
 
     for pair_of_spans in count_of_percendence:
+
         if is_ancestor(ancestors, pair_of_spans[0], pair_of_spans[1]):
             continue
 

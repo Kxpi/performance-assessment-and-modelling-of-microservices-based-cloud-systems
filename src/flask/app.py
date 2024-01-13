@@ -73,7 +73,7 @@ def send_data(groupID):
     global data
     global groups
     global edges
-
+    
     if unquote(groupID) == "Negative start times":
         return jsonify("no data")
     
@@ -84,13 +84,11 @@ def send_data(groupID):
                 ancestors, _ = get_callGraphRep(i["spans"], findRoot(i["spans"]))
                 break
 
-
+        
         traces_reformatted = reformat_dict(data, groups_traces)
-        
-        communication_times = calculate_comm_times(traces_reformatted, False)
-        
-        graph = get_statistic_of_traces(communication_times, ancestors)
 
+        communication_times = calculate_comm_times(traces_reformatted, False)
+        graph = get_statistic_of_traces(communication_times, ancestors)
         graph_list = [(str(pair), stats) for pair, stats in graph.items()]
 
         nodes = set()
