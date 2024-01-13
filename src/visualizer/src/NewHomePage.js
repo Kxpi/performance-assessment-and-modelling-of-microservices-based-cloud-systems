@@ -43,7 +43,7 @@ function NewHomePage() {
 
   useEffect(() => {
     if (selectedGroup) {
-      console.log(selectedGroup);
+      // console.log(selectedGroup);
 
       setEdges(null);
       setCommTimes(null);
