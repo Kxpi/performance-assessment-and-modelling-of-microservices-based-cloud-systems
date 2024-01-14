@@ -41,7 +41,7 @@ def generate_processes(num_processes_arg: int):
         }
     return processes_dict
 
-def generate_span(traceID: str, operation: str, start_time: int, duration: int, communication_time: int, process_id: str, child_of: str = None):
+def generate_span(traceID: str, operation: str, start_time: int, duration: int, communication_time: int, process_id: str, child_of: str):
     spanID = format(random.randint(1, 999999999), 'x')
     references = []
     if child_of:
@@ -49,6 +49,12 @@ def generate_span(traceID: str, operation: str, start_time: int, duration: int, 
             'refType': 'CHILD_OF',
             'traceID': traceID,
             'spanID': child_of
+        }]
+    else:
+        references = [{
+            'refType': 'CHILD_OF',
+            'traceID': traceID,
+            'spanID': traceID
         }]
     span = {
         "traceID": traceID,
