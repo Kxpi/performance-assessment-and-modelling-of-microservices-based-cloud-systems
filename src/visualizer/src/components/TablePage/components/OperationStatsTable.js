@@ -12,14 +12,12 @@ function OperationStatsTable({ operationStats, selectedOperation, setSelectedOpe
 
   return (
     <div className="table-container">
-      <h1>Operation Stats</h1>
-
       {/* Exec Table */}
-      <div className="exec-table" style={{ overflow: 'auto', marginBottom: '10px', width: '100%' }}>
+      <div className="exec-table" style={{ overflow: 'auto', marginTop: '10px', marginBottom: '10px', width: '100%' }}>
         <table>
           <thead>
             <tr>
-              <th></th> {/* Empty cell in the top-left corner */}
+              <th>Operation Name</th>
               {execColumnHeaders.map((header, index) => (
                 <th key={index}>{header}</th>
               ))}
@@ -49,7 +47,7 @@ function OperationStatsTable({ operationStats, selectedOperation, setSelectedOpe
         <table>
           <thead>
             <tr>
-              <th></th> {/* Empty cell in the top-left corner */}
+              <th>Operation Name</th>
               {startColumnHeaders.map((header, index) => (
                 <th key={index}>{header}</th>
               ))}

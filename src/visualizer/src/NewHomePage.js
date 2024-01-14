@@ -50,26 +50,26 @@ function NewHomePage() {
       fetch(`http://localhost:5000/data/${selectedGroup.groupID}`)
         .then((response) => response.json())
         .then((data) => {
-          if (data != "no data"){
+          if (data != "no data") {
             setCommTimes(data.graph);
             setEdges(data.edge["edges"][selectedGroup.groupID]);
-            }
           }
+        }
         )
         .catch((error) => console.error("Error:", error));
 
-      
+
       // setEdges(null);
       // fetch(`http://localhost:5000/edges/${selectedGroup.groupID}`)
       //   .then((response) => response.json())
       //   .then((data) => setEdges(data["edges"][selectedGroup.groupID]))
       //   .catch((error) => console.error("Error:", error));
-      
-      
+
+
     }
   }, [selectedGroup]);
 
-  if (edges){
+  if (edges) {
     console.log(commTimes);
     console.log(edges);
   }
@@ -141,6 +141,10 @@ function NewHomePage() {
               selectedGroup={selectedGroup}
               selectedOperation={selectedOperation}
               setSelectedOperation={setSelectedOperation}
+              selectedTrace={selectedTrace}
+              setSelectedTrace={setSelectedTrace}
+              selectedSpan={selectedSpan}
+              setSelectedSpan={setSelectedSpan}
             />
           ) : currentView === 3 ? ( //ScatterPlot
             // <AppGroups jsonData={data} showMenu={true} setSelectedGroup={setSelectedGroup} propselectedGroup={selectedGroup} />

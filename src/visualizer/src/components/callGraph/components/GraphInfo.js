@@ -19,7 +19,7 @@ const GraphInfo = ({ selectedOperation, operationStats, span }) => {
                             </tr>
                             <tr>
                                 <td><b>Start Time:</b></td>
-                                <td>{span.startTime + ' μs'}</td>
+                                <td>{span.startTime / 1000 + ' ms'}</td>
                             </tr>
                             <tr>
                                 <td><b>Duration:</b></td>
