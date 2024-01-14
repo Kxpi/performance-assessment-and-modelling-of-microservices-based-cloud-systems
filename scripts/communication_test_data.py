@@ -46,7 +46,7 @@ def generate_span(traceID: str, operation: str, start_time: int, duration: int, 
     references = []
     if child_of:
         references = [{
-            'type': 'CHILD_OF',
+            'refType': 'CHILD_OF',
             'traceID': traceID,
             'spanID': child_of
         }]
