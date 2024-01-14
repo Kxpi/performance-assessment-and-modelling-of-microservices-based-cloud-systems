@@ -13,14 +13,14 @@ body{
   height: 100vh;
 }
 
-.dropdown{
+.c-dropdown{
   width: 400px;
   margin: 10px 0px;
   user-select: none;
   position: relative;
 }
 
-.dropdown .dropdown-btn{
+.c-dropdown .c-dropdown-btn{
   width: 100%;
   margin: auto;
   padding: 15px 20px;
@@ -35,7 +35,7 @@ body{
   z-index: 0;
 }
 
-.dropdown .dropdown-content{
+.c-dropdown .c-dropdown-content{
 position: absolute;
 z-index: 1;
 top: 110%;
@@ -50,16 +50,45 @@ max-height: 400px; /* Ustaw maksymalną wysokość, którą chcesz ograniczyć *
 overflow-y: auto;
 }
 
-.dropdown .dropdown-content .dropdown-item{
+.c-dropdown .c-dropdown-content{
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  height: 100px;
+  
   border: 1px solid black;
 }
 
-.dropdown .dropdown-content .dropdown-item:hover{
+.c-dropdown .c-dropdown-content .c-dropdown-item:hover{
 background: #f4f4f4;
+cursor: pointer;
+}
+
+.c-dropdown-item{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid black;
+}
+
+.services-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: space-between;
+}
+
+.service-badge{
+  border: solid 1px;
+  border-radius: 20%;
+  text-align: center;
+  margin: 2px;
+  padding: 5px 1px;
+  font-weight: 500;
+  color: darkslategrey;
+  
 }
 
 

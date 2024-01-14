@@ -3,7 +3,7 @@ import FileUploader from "./components/FileUploader";
 import './FilePage.css';
 import GroupSelector from './components/GroupSelector';
 
-function FilesPage({ data, setData, fileName, setFileName, setSelectedGroup, selectedGroup }) {
+function FilesPage({ data, setData, fileName, setFileName, setSelectedGroup, selectedGroup,serviceColors }) {
 
 
     return (
@@ -21,7 +21,7 @@ function FilesPage({ data, setData, fileName, setFileName, setSelectedGroup, sel
                 }
             </div>
             {data && data['groups'] &&
-                <GroupSelector setSelectedGroup={setSelectedGroup} groups={data['groups']} selectedGroup={selectedGroup} />
+                <GroupSelector setSelectedGroup={setSelectedGroup} groups={data['groups']} selectedGroup={selectedGroup} serviceColors={serviceColors} />
             }
 
         </div>

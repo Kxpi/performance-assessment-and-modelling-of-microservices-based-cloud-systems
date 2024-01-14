@@ -2,7 +2,7 @@ import { useState, React, useEffect, useRef } from 'react';
 import './styles/GroupSelector.css';
 
 
-const GroupSelector = ({ groups, setSelectedGroup, selectedGroup }) => {
+const GroupSelector = ({ groups, setSelectedGroup, selectedGroup, serviceColors }) => {
   const [isActive, setIsActive] = useState(false)
   let dropdownRef = useRef();
 
@@ -22,25 +22,32 @@ const GroupSelector = ({ groups, setSelectedGroup, selectedGroup }) => {
 
 
   return (
-    <div className='dropdown' ref={dropdownRef}>
-      <div className='dropdown-btn' onClick={e =>
+    <div className='c-dropdown' ref={dropdownRef}>
+      <div className='c-dropdown-btn' onClick={e =>
         setIsActive(!isActive)}>
         {selectedGroup ? "Group " + selectedGroup["groupID"] : "--Choose group--v"}
 
       </div>
       {isActive && (
-        <div className='dropdown-content' >
+        <div className='c-dropdown-content' >
 
-          {groups.map((group) => (
+          {groups.map((group) => {
+            const traceServiceNames = Object.values(group['traces'][0]['processes']).map(process => process.serviceName).sort((a, b) => a.length - b.length);;
 
-            <div onClick={(e) => {
-              setSelectedGroup(group);
-              setIsActive(false);
-            }}
-              className='dropdown-item'>
-              {"GroupID:" + group["groupID"] + " TraceNumber: " + group["traceNumber"]}
-            </div>
-          ))}
+            return (
+              <div onClick={(e) => {
+                setSelectedGroup(group);
+                setIsActive(false);
+              }} className='c-dropdown-item'>
+                {"GroupID:" + group["groupID"] + " TraceNumber: " + group["traceNumber"]}
+                <div className='services-container'>
+                  { group["groupID"] !=='Negative start times' && traceServiceNames.map((serviceName, index) => (
+                    <span className='service-badge' key={index} style={{ backgroundColor: serviceColors[serviceName]}}>{serviceName}</span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
 
 
         </div>

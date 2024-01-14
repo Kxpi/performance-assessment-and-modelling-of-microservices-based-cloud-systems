@@ -120,6 +120,7 @@ function NewHomePage() {
             setFileName={setFileName}
             setSelectedGroup={setSelectedGroup}
             selectedGroup={selectedGroup}
+            serviceColors={serviceColors}
           />
         ) : data ? (
           currentView === 1 ? (
