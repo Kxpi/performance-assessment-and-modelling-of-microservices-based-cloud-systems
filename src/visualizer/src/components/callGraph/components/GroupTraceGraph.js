@@ -146,7 +146,7 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
 
     if (showTransferEdges && transfer_edges) {
 
-        flowKey='transfer-edges'
+        flowKey = 'transfer-edges'
         transfer_edges.forEach((transfer_edge, index) => {
 
             const sourceHandle = `${transfer_edge[1]}-target-t`
@@ -186,14 +186,14 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
                 }
             });
         });
-    }else{flowKey='no-transfer-edges';}
+    } else { flowKey = 'no-transfer-edges'; }
 
     //crypto.randomUUID()}
 
 
     return (
         <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Legend microserviceColors={serviceColors} />
+            <Legend microserviceColors={serviceColors} processes={selectedTrace['processes']} />
             <div style={{ height: '100%', width: '100%', display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
                 <ReactFlow
                     key={flowKey}

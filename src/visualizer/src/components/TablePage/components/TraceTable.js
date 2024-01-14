@@ -7,6 +7,10 @@ function TraceTable({ selectedTrace, operationStats, selectedSpan, setSelectedSp
   const ColumnHeaders = ["spanID", "operationName", "startTime", "duration", "serviceName"]
 
 
+  const sortedSpans = [...selectedTrace.spans];
+
+  sortedSpans.sort((a, b) => a.startTime - b.startTime);
+
   return (
     <div className="table-container" style={{ width: '95%' }}>
 
@@ -20,7 +24,7 @@ function TraceTable({ selectedTrace, operationStats, selectedSpan, setSelectedSp
             </tr>
           </thead>
           <tbody>
-            {selectedTrace["spans"].map((span, operationIndex) => (
+            {sortedSpans.map((span, operationIndex) => (
               <tr
                 key={operationIndex}
                 style={{ cursor: 'pointer', background: selectedSpan === span["spanID"] ? '#FFFFCC' : 'transparent' }}
