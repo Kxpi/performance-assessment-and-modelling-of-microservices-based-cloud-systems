@@ -10,6 +10,7 @@ import Legend from './Legend';
 import CustomNode from './CustomNode';
 import './styles/GroupTraceGraph.css';
 import 'reactflow/dist/style.css';
+import { SmartStepEdge, SmartStraightEdge, SmartBezierEdge } from '@tisoap/react-flow-smart-edge';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -18,6 +19,9 @@ const nodeWidth = 200;
 const nodeHeight = 50;
 const position = { x: 0, y: 0 };
 const nodeTypes = { custom: CustomNode };
+const edgeTypes = {
+    smart: SmartStepEdge
+}
 
 const getLayoutedElements = (nodes, edges, direction = 'LR') => {
     const isHorizontal = direction === 'LR'
@@ -146,7 +150,10 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
 
     if (showTransferEdges && transfer_edges) {
 
+
         flowKey = 'transfer-edges'
+        const rootCords = layoutedNodes[0].position
+
         transfer_edges.forEach((transfer_edge, index) => {
 
             const sourceHandle = `${transfer_edge[1]}-target-t`
@@ -161,20 +168,17 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
                 targetHandle: targetHandle,
                 label: transfer_edge[2] + ' ms',
                 markerEnd: { type: 'arrowclosed', width: 20, height: 20, color: 'black' },
-                type: 'smoothstep',
                 animated: true,
-                data: { 'bot': index % 2 === 0 ? 'bottom' : 'top' },
-                pathOptions: {}
-
+                type: 'smart',
 
             });
 
-
+            var offset = 0;
             layoutedNodes.forEach(node => {
 
                 if (node.id === transfer_edge[0]) {
-
-                    node['data']["transfer_handlers"].push({ handleID: sourceHandle, type: 'source', position: index % 2 === 0 ? 'bottom' : 'top' });
+                    offset = Math.max(node['data']["transfer_handlers"].length, layoutedNodes.find((node) => node.id === transfer_edge[1])['data']['transfer_handlers'].length)
+                    node['data']["transfer_handlers"].push({ handleID: sourceHandle, type: 'source', position: node.position.y > rootCords.y ? 'bottom' : 'top', offset: offset });
                 }
             });
 
@@ -182,7 +186,7 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
 
                 if (node.id === transfer_edge[1]) {
 
-                    node['data']["transfer_handlers"].push({ handleID: targetHandle, type: 'target', position: index % 2 === 0 ? 'bottom' : 'top' });
+                    node['data']["transfer_handlers"].push({ handleID: targetHandle, type: 'target', position: node.position.y > rootCords.y ? 'bottom' : 'top', offset: offset });
                 }
             });
         });
@@ -207,6 +211,7 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
                     nodesConnectable={false}
                     selectionOnDrag={false}
                     nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
                     onNodeClick={(event, node) => {
                         if (node) {
                             setSelectedOperation(node.id);
@@ -217,7 +222,7 @@ const GroupTraceGraph = ({ selectedTrace, operationStats, serviceColors, selecte
                 >
                     <Panel position="top-left">
                         {
-                            transfer_edges ?
+                            transfer_edges?.length > 0 ?
                                 <button onClick={() => { setShowTransferEdges(!showTransferEdges) }}>{!showTransferEdges ? "Show Transfer Edges" : "Hide Transfer Edges"}</button>
                                 :
                                 <div>No transfer edges</div>

@@ -8,7 +8,7 @@ function CustomNode({ data }) {
 
 
     data["basic_handlers"]?.forEach(handle => {
-        Handlers.push({ id: handle.handleID, type: handle.type, position: handle.type === 'source' ? Position.Right : Position.Left })
+        Handlers.push({ id: handle.handleID, type: handle.type, position: handle.type === 'source' ? Position.Right : Position.Left , offset: handle.offset })
 
     });
 
@@ -17,7 +17,7 @@ function CustomNode({ data }) {
 
     data["transfer_handlers"]?.forEach((handle, index) => {
 
-        Handlers.push({ id: handle.handleID, type: handle.type, position: handle.position === 'top' ? Position.Top : Position.Bottom, style: { left: index * interval + interval } })
+        Handlers.push({ id: handle.handleID, type: handle.type, position: handle.position === 'top' ? Position.Top : Position.Bottom, style: { left: handle.offset * interval + interval } })
 
     });
 
