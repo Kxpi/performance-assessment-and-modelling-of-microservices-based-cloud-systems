@@ -331,7 +331,7 @@ valign=top</panel_attributes>
       <x>460</x>
       <y>890</y>
       <w>270</w>
-      <h>130</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>Analyze Histograms
 --
@@ -340,6 +340,7 @@ For groups of traces
 For operations within the groups
 For spans within the operations
 For spans within the groups
+For spans within the file
 valign=top</panel_attributes>
     <additional_attributes/>
   </element>
@@ -500,7 +501,7 @@ valign=top</panel_attributes>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>660.0;10.0;440.0;120.0;17.0;100.0</additional_attributes>
+    <additional_attributes>660.0;10.0;440.0;120.0;17.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -660,14 +661,14 @@ valign=top</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>710</x>
+      <x>720</x>
       <y>800</y>
-      <w>670</w>
+      <w>660</w>
       <h>190</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>650.0;10.0;10.0;170.0</additional_attributes>
+    <additional_attributes>640.0;10.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -680,5 +681,28 @@ valign=top</panel_attributes>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
     <additional_attributes>150.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>890</x>
+      <y>950</y>
+      <w>170</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>For spans within the file</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>960</y>
+      <w>220</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>200.0;10.0;10.0;40.0</additional_attributes>
   </element>
 </diagram>
