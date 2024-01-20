@@ -77,7 +77,7 @@ function StartTimeHistogramSingleGroup({ data }) {
         viewBox={`0 0 ${width + margin.left + margin.right} ${
           height + margin.top + margin.bottom
         }`}
-        style={{ width: "90%", height: "75%" }}
+        style={{ width: "auto", height: "auto" }}
       >
         <g transform={`translate(${margin.left},${margin.top})`}>
           {bins
