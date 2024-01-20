@@ -101,14 +101,14 @@ function DurationHistogramGroupsOperations({ data, setSelectedOperation }) {
             dy="1em"
             style={{ textAnchor: "middle" }}
           >
-            99th Percentile of Duration
+            99th percentile of duration
           </text>
           <text
             x={width / 2}
             y={height + margin.bottom / 2}
             style={{ textAnchor: "middle" }}
           >
-            Operation Name
+            Operation name
           </text>
         </g>
       </svg>

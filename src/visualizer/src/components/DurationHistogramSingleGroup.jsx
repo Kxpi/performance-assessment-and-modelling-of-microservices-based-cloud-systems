@@ -101,7 +101,7 @@ function DurationHistogramSingleGroup({ data }) {
             dy="1em"
             style={{ textAnchor: "middle", fontSize: "1rem" }}
           >
-            Count (Logarithmic Scale)
+            Count (logarithmic scale)
           </text>
           <text
             x={width / 2}

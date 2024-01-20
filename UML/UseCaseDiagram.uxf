@@ -7,8 +7,8 @@
     <coordinates>
       <x>140</x>
       <y>0</y>
-      <w>1440</w>
-      <h>1200</h>
+      <w>1110</w>
+      <h>1150</h>
     </coordinates>
     <panel_attributes>System
 halign=left</panel_attributes>
@@ -18,7 +18,7 @@ halign=left</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>300</x>
-      <y>50</y>
+      <y>40</y>
       <w>180</w>
       <h>70</h>
     </coordinates>
@@ -30,7 +30,7 @@ halign=left</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>690</x>
-      <y>50</y>
+      <y>40</y>
       <w>120</w>
       <h>140</h>
     </coordinates>
@@ -42,19 +42,19 @@ halign=left</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>730</x>
-      <y>190</y>
-      <w>400</w>
+      <y>180</y>
+      <w>310</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>380.0;20.0;10.0;20.0</additional_attributes>
+    <additional_attributes>290.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>610</x>
-      <y>240</y>
+      <y>230</y>
       <w>100</w>
       <h>90</h>
     </coordinates>
@@ -66,7 +66,7 @@ halign=left</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>500</x>
-      <y>150</y>
+      <y>140</y>
       <w>240</w>
       <h>110</h>
     </coordinates>
@@ -82,7 +82,7 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>160</x>
-      <y>50</y>
+      <y>40</y>
       <w>150</w>
       <h>90</h>
     </coordinates>
@@ -97,7 +97,7 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>460</x>
-      <y>20</y>
+      <y>10</y>
       <w>160</w>
       <h>90</h>
     </coordinates>
@@ -112,7 +112,7 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>730</x>
-      <y>30</y>
+      <y>20</y>
       <w>120</w>
       <h>40</h>
     </coordinates>
@@ -123,7 +123,7 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>610</x>
-      <y>30</y>
+      <y>20</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
@@ -134,18 +134,18 @@ valign=top</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>1110</x>
-      <y>150</y>
+      <x>1020</x>
+      <y>140</y>
       <w>220</w>
       <h>150</h>
     </coordinates>
     <panel_attributes>Analyze diagrams
 --
 extension points
-Analyze Call Graphs
-Analyze Scatter Plots
-Analyze Histograms
-Analyze Precedence Graph
+Analyze call graphs
+Analyze scatter plots
+Analyze histograms
+Analyze precedence graph
 valign=top</panel_attributes>
     <additional_attributes/>
   </element>
@@ -153,43 +153,43 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>580</x>
-      <y>230</y>
-      <w>560</w>
-      <h>310</h>
+      <y>210</y>
+      <w>460</w>
+      <h>320</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;290.0;540.0;10.0</additional_attributes>
+    <additional_attributes>10.0;300.0;440.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>580</x>
-      <y>280</y>
-      <w>600</w>
+      <y>270</y>
+      <w>510</w>
       <h>420</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>15.0;392.0;270.0;180.0;585.0;10.0</additional_attributes>
+    <additional_attributes>15.0;392.0;270.0;180.0;495.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>650</x>
-      <y>290</y>
-      <w>580</w>
+      <y>280</y>
+      <w>490</w>
       <h>630</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>12.0;605.0;210.0;330.0;560.0;10.0</additional_attributes>
+    <additional_attributes>12.0;605.0;210.0;330.0;470.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>1230</x>
-      <y>910</y>
+      <x>1050</x>
+      <y>960</y>
       <w>140</w>
       <h>50</h>
     </coordinates>
@@ -200,11 +200,11 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>380</x>
-      <y>490</y>
+      <y>480</y>
       <w>210</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>Analyze Call Graphs
+    <panel_attributes>Analyze call graphs
 --
 extension points
 For traces
@@ -215,8 +215,8 @@ valign=top</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>1320</x>
-      <y>630</y>
+      <x>1020</x>
+      <y>690</y>
       <w>210</w>
       <h>50</h>
     </coordinates>
@@ -226,8 +226,8 @@ valign=top</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>1330</x>
-      <y>420</y>
+      <x>1020</x>
+      <y>560</y>
       <w>210</w>
       <h>50</h>
     </coordinates>
@@ -238,7 +238,7 @@ valign=top</panel_attributes>
     <id>UMLActor</id>
     <coordinates>
       <x>0</x>
-      <y>60</y>
+      <y>50</y>
       <w>80</w>
       <h>110</h>
     </coordinates>
@@ -249,11 +249,11 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>450</x>
-      <y>670</y>
+      <y>660</y>
       <w>220</w>
       <h>150</h>
     </coordinates>
-    <panel_attributes>Analyze Scatter Plots
+    <panel_attributes>Analyze scatter plots
 --
 extension points
 For groups of traces
@@ -266,7 +266,7 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>750</x>
-      <y>540</y>
+      <y>530</y>
       <w>120</w>
       <h>40</h>
     </coordinates>
@@ -277,7 +277,7 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>570</x>
-      <y>540</y>
+      <y>530</y>
       <w>200</w>
       <h>40</h>
     </coordinates>
@@ -289,7 +289,7 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>500</x>
-      <y>310</y>
+      <y>300</y>
       <w>250</w>
       <h>120</h>
     </coordinates>
@@ -305,35 +305,35 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>660</x>
-      <y>640</y>
-      <w>680</w>
-      <h>130</h>
+      <y>700</y>
+      <w>380</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>660.0;10.0;10.0;102.0</additional_attributes>
+    <additional_attributes>360.0;10.0;10.0;32.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>650</x>
-      <y>760</y>
-      <w>620</w>
-      <h>180</h>
+      <y>750</y>
+      <w>430</w>
+      <h>240</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>600.0;162.0;10.0;15.0</additional_attributes>
+    <additional_attributes>410.0;222.0;10.0;15.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
       <x>460</x>
-      <y>890</y>
+      <y>880</y>
       <w>270</w>
       <h>140</h>
     </coordinates>
-    <panel_attributes>Analyze Histograms
+    <panel_attributes>Analyze histograms
 --
 extension points
 For groups of traces
@@ -347,56 +347,56 @@ valign=top</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>710</x>
-      <y>460</y>
-      <w>690</w>
-      <h>490</h>
+      <x>700</x>
+      <y>600</y>
+      <w>390</w>
+      <h>340</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>670.0;10.0;400.0;250.0;10.0;470.0</additional_attributes>
+    <additional_attributes>370.0;10.0;10.0;320.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>740</x>
-      <y>350</y>
-      <w>630</w>
-      <h>100</h>
+      <y>340</y>
+      <w>320</w>
+      <h>250</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>610.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>300.0;230.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>650</x>
-      <y>440</y>
-      <w>700</w>
-      <h>300</h>
+      <y>580</y>
+      <w>390</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>680.0;10.0;10.0;280.0</additional_attributes>
+    <additional_attributes>370.0;10.0;10.0;130.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
-      <y>660</y>
-      <w>670</w>
-      <h>310</h>
+      <x>710</x>
+      <y>720</y>
+      <w>380</w>
+      <h>240</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>647.0;10.0;320.0;190.0;10.0;290.0</additional_attributes>
+    <additional_attributes>357.0;10.0;10.0;220.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>90</y>
+      <y>80</y>
       <w>30</w>
       <h>1010</h>
     </coordinates>
@@ -407,18 +407,18 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>150</x>
-      <y>480</y>
+      <y>470</y>
       <w>150</w>
       <h>140</h>
     </coordinates>
-    <panel_attributes>View Call Graph</panel_attributes>
+    <panel_attributes>View call graph</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>680</y>
+      <y>670</y>
       <w>70</w>
       <h>50</h>
     </coordinates>
@@ -429,7 +429,7 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>150</x>
-      <y>340</y>
+      <y>330</y>
       <w>230</w>
       <h>130</h>
     </coordinates>
@@ -440,29 +440,29 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>150</x>
-      <y>640</y>
+      <y>630</y>
       <w>220</w>
       <h>150</h>
     </coordinates>
-    <panel_attributes>View Scatter Plot</panel_attributes>
+    <panel_attributes>View scatter plot</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
       <x>150</x>
-      <y>860</y>
+      <y>850</y>
       <w>210</w>
       <h>150</h>
     </coordinates>
-    <panel_attributes>View Histogram</panel_attributes>
+    <panel_attributes>View histogram</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>920</y>
+      <y>910</y>
       <w>70</w>
       <h>40</h>
     </coordinates>
@@ -473,7 +473,7 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>360</y>
+      <y>350</y>
       <w>80</w>
       <h>50</h>
     </coordinates>
@@ -484,7 +484,7 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>500</y>
+      <y>490</y>
       <w>80</w>
       <h>50</h>
     </coordinates>
@@ -495,31 +495,31 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>570</x>
-      <y>920</y>
-      <w>680</w>
-      <h>140</h>
+      <y>970</y>
+      <w>500</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>660.0;10.0;440.0;120.0;17.0;110.0</additional_attributes>
+    <additional_attributes>480.0;10.0;440.0;60.0;17.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>550</x>
-      <y>560</y>
-      <w>770</w>
-      <h>370</h>
+      <y>550</y>
+      <w>590</w>
+      <h>430</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>750.0;350.0;10.0;10.0</additional_attributes>
+    <additional_attributes>570.0;410.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>360</x>
-      <y>350</y>
+      <y>340</y>
       <w>160</w>
       <h>50</h>
     </coordinates>
@@ -531,31 +531,31 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>290</x>
-      <y>530</y>
-      <w>110</w>
+      <y>520</y>
+      <w>120</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;includes&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;20.0;90.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>360</x>
-      <y>700</y>
-      <w>110</w>
+      <y>690</y>
+      <w>120</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;includes&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;20.0;90.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>350</x>
-      <y>930</y>
+      <y>920</y>
       <w>130</w>
       <h>40</h>
     </coordinates>
@@ -567,18 +567,18 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>160</x>
-      <y>1050</y>
+      <y>1040</y>
       <w>190</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>View Precedence Graph</panel_attributes>
+    <panel_attributes>View precedence graph</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>1060</y>
+      <y>1050</y>
       <w>80</w>
       <h>40</h>
     </coordinates>
@@ -589,7 +589,7 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>340</x>
-      <y>1070</y>
+      <y>1060</y>
       <w>150</w>
       <h>40</h>
     </coordinates>
@@ -601,11 +601,11 @@ valign=top</panel_attributes>
     <id>UMLUseCase</id>
     <coordinates>
       <x>470</x>
-      <y>1050</y>
+      <y>1040</y>
       <w>200</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>Analyze Precedence Graph
+    <panel_attributes>Analyze precedence graph
 --
 extension points
 For groups of traces
@@ -616,7 +616,7 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>30</x>
-      <y>80</y>
+      <y>70</y>
       <w>150</w>
       <h>40</h>
     </coordinates>
@@ -627,19 +627,19 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>660</x>
-      <y>950</y>
-      <w>660</w>
-      <h>160</h>
+      <y>1000</y>
+      <w>480</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>640.0;10.0;400.0;140.0;10.0;140.0</additional_attributes>
+    <additional_attributes>460.0;10.0;400.0;80.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>1300</x>
-      <y>770</y>
+      <x>1020</x>
+      <y>820</y>
       <w>210</w>
       <h>40</h>
     </coordinates>
@@ -650,31 +650,31 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>660</x>
-      <y>740</y>
-      <w>660</w>
-      <h>70</h>
+      <y>730</y>
+      <w>380</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>640.0;50.0;10.0;10.0</additional_attributes>
+    <additional_attributes>360.0;110.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
-      <y>800</y>
-      <w>660</w>
-      <h>190</h>
+      <x>710</x>
+      <y>850</y>
+      <w>390</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>640.0;10.0;10.0;170.0</additional_attributes>
+    <additional_attributes>370.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>620</x>
-      <y>420</y>
+      <y>410</y>
       <w>170</w>
       <h>150</h>
     </coordinates>
@@ -685,8 +685,8 @@ valign=top</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>890</x>
-      <y>950</y>
+      <x>850</x>
+      <y>970</y>
       <w>170</w>
       <h>40</h>
     </coordinates>
@@ -697,12 +697,12 @@ valign=top</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>690</x>
-      <y>960</y>
-      <w>220</w>
-      <h>60</h>
+      <y>970</y>
+      <w>180</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
 &lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>200.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>160.0;20.0;10.0;20.0</additional_attributes>
   </element>
 </diagram>

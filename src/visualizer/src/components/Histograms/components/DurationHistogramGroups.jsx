@@ -97,7 +97,7 @@ function DurationHistogramGroups({ data, setGroupHistogramOnClick }) {
           dy="1em"
           style={{ textAnchor: "middle" }}
         >
-          99th Percentile of Duration
+          99th percentile of duration
         </text>
         <text
           x={width / 2}

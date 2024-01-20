@@ -67,7 +67,7 @@ function ScatterPlotPage({
           </div>
         ) : (
           <div>
-            <h3>Scatter Plot of Group {selectedGroup.groupID}'s Operations</h3>
+            <h3>Scatter plot of group {selectedGroup.groupID} operations</h3>
             <ScatterPlotGroupsOperationsCg
               data={processScatterPlotGroupsOperationsData(selectedGroup)}
               selectedOperation={selectedOperation}
@@ -76,7 +76,7 @@ function ScatterPlotPage({
 
             {selectedOperation && (
               <div>
-                <h3>Scatter Plot of Operation {selectedOperation}'s Spans</h3>
+                <h3>Scatter plot of operation {selectedOperation} spans</h3>
                 <ScatterPlotOperationsSpans
                   data={processedData}
                   changedSpanElsewhere={changedSpanElsewhere}
@@ -90,7 +90,7 @@ function ScatterPlotPage({
         )
       ) : (
         <div>
-          <h3>Scatter Plot of Groups</h3>
+          <h3>Scatter plot of groups</h3>
           <ScatterPlotGroups
             data={setDataForScatterPlotGroups(jsonData)}
             showMenu={false}

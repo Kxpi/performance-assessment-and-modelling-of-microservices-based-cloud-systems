@@ -266,11 +266,11 @@ function ScatterPlotImpl(props) {
     <div>
       <div className="App">
         <div className="TraceResultsScatterPlot">
-          <div>Percentage of Spans to Display: {percentage}%</div>
+          <div>Percentage of spans to display: {percentage}%</div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Dropdown>
               <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                Select Percentage
+                Select percentage
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
@@ -300,7 +300,7 @@ function ScatterPlotImpl(props) {
           </div>
           {clickedDataPoint && (
             <div className="centered-text">
-              Selected Span: {clickedDataPoint.spanID}
+              Selected span: {clickedDataPoint.spanID}
             </div>
           )}
 
@@ -328,7 +328,7 @@ function ScatterPlotImpl(props) {
             <HorizontalGridLines />
             <VerticalGridLines />
             <XAxis
-              title="Start Time"
+              title="Start time"
               tickTotal={18}
               tickFormat={(t) => formatDuration(t)}
             />
@@ -395,7 +395,7 @@ function ScatterPlotImpl(props) {
                 Trace ID: {clickedDataPoint.traceID}
               </h4>
               <h4 className="scatter-plot-hint">
-                Service Name: {clickedDataPoint.serviceName}
+                Service name: {clickedDataPoint.serviceName}
               </h4>
             </div>
           )}

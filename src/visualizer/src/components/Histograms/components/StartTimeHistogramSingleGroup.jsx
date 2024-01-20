@@ -77,7 +77,7 @@ function StartTimeHistogramSingleGroup({ data }) {
         viewBox={`0 0 ${width + margin.left + margin.right} ${
           height + margin.top + margin.bottom
         }`}
-        style={{ width: "100%", height: "auto" }}
+        style={{ width: "90%", height: "75%" }}
       >
         <g transform={`translate(${margin.left},${margin.top})`}>
           {bins
@@ -106,16 +106,16 @@ function StartTimeHistogramSingleGroup({ data }) {
             y={0 - margin.left}
             x={0 - height / 2}
             dy="1em"
-            style={{ textAnchor: "middle" }}
+            style={{ textAnchor: "middle", fontSize: "1rem" }}
           >
-            Count (Logarithmic Scale)
+            Count (logarithmic scale)
           </text>
           <text
             x={width / 2}
             y={height + margin.bottom / 2}
-            style={{ textAnchor: "middle" }}
+            style={{ textAnchor: "middle", fontSize: "1rem" }}
           >
-            Start Time
+            Start time
           </text>
         </g>
       </svg>

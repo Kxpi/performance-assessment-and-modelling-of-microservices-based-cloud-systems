@@ -13,7 +13,7 @@ function Header({
     selectedSpan, setSelectedSpan, setCommTimes, setEdges
 }) {
 
-    const tabs = ['Input', 'CallGraph', 'Table', 'ScatterPlot', 'Transfer times', 'Histograms']
+    const tabs = ['Input', 'CallGraph', 'Table', 'Scatter plots', 'Transfer times', 'Histograms']
 
     return (
         <div className="header-root">

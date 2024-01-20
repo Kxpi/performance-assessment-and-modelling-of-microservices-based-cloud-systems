@@ -93,7 +93,7 @@ function StartTimeHistogramGroups({ data }) {
           dy="1em"
           style={{ textAnchor: "middle" }}
         >
-          99th Percentile of Start Time
+          99th percentile of start time
         </text>
         <text
           x={width / 2}

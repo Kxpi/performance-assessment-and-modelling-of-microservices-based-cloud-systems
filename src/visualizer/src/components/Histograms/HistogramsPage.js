@@ -9,10 +9,10 @@ import {
 } from "../../helpers.js";
 import DurationHistogramGroups from "./components/DurationHistogramGroups.jsx";
 import StartTimeHistogramGroups from "./components/StartTimeHistogramGroups.jsx";
-import DurationHistogramSingleGroup from "../DurationHistogramSingleGroup.jsx";
-import StartTimeHistogramSingleGroup from "../StartTimeHistogramSingleGroup.jsx";
-import DurationHistogramGroupsOperations from "../DurationHistogramGroupsOperations.jsx";
-import StartTimeHistogramGroupsOperations from "../StartTimeHistogramGroupsOperations.jsx";
+import DurationHistogramSingleGroup from "./components/DurationHistogramSingleGroup.jsx";
+import StartTimeHistogramSingleGroup from "./components/StartTimeHistogramSingleGroup.jsx";
+import DurationHistogramGroupsOperations from "./components/DurationHistogramGroupsOperations.jsx";
+import StartTimeHistogramGroupsOperations from "./components/StartTimeHistogramGroupsOperations.jsx";
 
 // #toDo Add group selection from Histogram of all groups (click on bar method?)
 // #toDo Add operation selection (click on bar method?)
@@ -53,9 +53,7 @@ function HistogramsPage({
         ) : selectedOperation ? (
           <div>
             <h1>
-              <h3>
-                Duration Histogram of Operation {selectedOperation}'s Spans
-              </h3>
+              <h3>Duration histogram of operation {selectedOperation} spans</h3>
               <DurationHistogramSingleGroup
                 data={processGroupOperationHistogramData(
                   selectedGroup,
@@ -63,7 +61,7 @@ function HistogramsPage({
                 )}
               />
               <h3>
-                Start Time Histogram of Operation {selectedOperation}'s Spans
+                Start time histogram of operation {selectedOperation} spans
               </h3>
               <StartTimeHistogramSingleGroup
                 data={processGroupOperationHistogramData(
@@ -75,35 +73,33 @@ function HistogramsPage({
           </div>
         ) : (
           <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "felx",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
+            // style={{
+            //   width: "100%",
+            //   height: "100%",
+            //   display: "flex",
+            //   flexDirection: "column",
+            //   justifyContent: "space-between",
+            // }}
           >
             <h3>
-              Duration Histogram of Group {selectedGroup.groupID}'s Operations
+              Duration histogram of group {selectedGroup.groupID} operations
             </h3>
             <DurationHistogramGroupsOperations
               data={processSelectedGroupData(selectedGroup, myColors)}
               setSelectedOperation={setSelectedOperation}
             />
             <h3>
-              Start Time Histogram of Group {selectedGroup.groupID}'s Operations
+              Start time histogram of group {selectedGroup.groupID} operations
             </h3>
             <StartTimeHistogramGroupsOperations
               data={processSelectedGroupData(selectedGroup, myColors)}
               setSelectedOperation={setSelectedOperation}
             />
-            <h3>Duration Histogram of Group {selectedGroup.groupID}'s Spans</h3>
+            <h3>Duration histogram of group {selectedGroup.groupID} spans</h3>
             <DurationHistogramSingleGroup
               data={processHistogramSingleGroupData(selectedGroup)}
             />
-            <h3>
-              Start Time Histogram of Group {selectedGroup.groupID}'s Spans
-            </h3>
+            <h3>Start time histogram of group {selectedGroup.groupID} spans</h3>
             <StartTimeHistogramSingleGroup
               data={processHistogramSingleGroupData(selectedGroup)}
             />
@@ -111,33 +107,33 @@ function HistogramsPage({
         )
       ) : (
         <div
-          className="no-selected-group"
-          style={{
-            width: "100%",
-            height: "100%",
-            // display: "flex",
-            // flexDirection: "column",
-            // justifyContent: 'space-between'
-          }}
+          //className="no-selected-group"
+          // style={{
+          //   width: "100%",
+          //   height: "100%",
+          //   display: "flex",
+          //   flexDirection: "column",
+          //   justifyContent: "space-between",
+          // }}
         >
           {/* <h2>Nie wybrano grupy, pokazuje graf dla wszystkich grup</h2> */}
-          <h3>Duration Histogram of Groups</h3>
+          <h3>Duration histogram of groups</h3>
 
           <DurationHistogramGroups
             data={setDataForScatterPlotGroups(jsonData)}
             setGroupHistogramOnClick={setGroupHistogramOnClick}
           />
-          <h3>Start Time Histogram of Groups</h3>
+          <h3>Start time histogram of groups</h3>
 
           <StartTimeHistogramGroups
             data={setDataForScatterPlotGroups(jsonData)}
             setGroupHistogramOnClick={setGroupHistogramOnClick}
           />
-          <h3>Duration Histogram of Spans</h3>
+          <h3>Duration histogram of spans</h3>
           <DurationHistogramSingleGroup
             data={processHistogramAllGroupsData(jsonData)}
           />
-          <h3>Start Time Histogram of Spans</h3>
+          <h3>Start time histogram of spans</h3>
           <StartTimeHistogramSingleGroup
             data={processHistogramAllGroupsData(jsonData)}
           />

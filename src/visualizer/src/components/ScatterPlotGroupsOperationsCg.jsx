@@ -114,7 +114,7 @@ function ScatterPlotImpl(props) {
             <HorizontalGridLines />
             <VerticalGridLines />
             <XAxis
-              title="Start Time"
+              title="Start time"
               tickTotal={18}
               tickFormat={(t) => formatDuration(t)}
             />

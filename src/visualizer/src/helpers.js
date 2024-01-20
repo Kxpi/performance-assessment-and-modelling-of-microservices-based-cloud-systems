@@ -238,6 +238,7 @@ export const myColors = [
   "PowderBlue",
   "Purple",
   "RebeccaPurple",
+  "Red",
   "RosyBrown",
   "RoyalBlue",
   "SaddleBrown",
@@ -321,9 +322,6 @@ export function processScatterPlotGroupsOperationsData(selectedGroup) {
   return processedScatterPlotGroupsOperationsData;
 }
 
-const isErrorTag = ({ key, value }) =>
-  key === "error" && (value === true || value === "true");
-
 export function processScatterPlotData(selectedGroup, selectedOperation) {
   const processedScatterPlotData = selectedGroup.traces.reduce((acc, t) => {
     const spansData = t.spans
@@ -339,10 +337,7 @@ export function processScatterPlotData(selectedGroup, selectedOperation) {
           spanID: span.spanID,
           traceID: t.traceID,
           operationName: span.operationName,
-          color:
-            Array.isArray(span.tags) && span.tags.some(isErrorTag)
-              ? "red"
-              : null,
+          color: null,
           serviceName: t.processes[span.processID].serviceName,
           groupID: selectedGroup.groupID,
           operationStats: operationStats,

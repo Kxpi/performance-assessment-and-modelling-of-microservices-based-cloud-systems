@@ -130,6 +130,7 @@ const myColors = [
   "PowderBlue",
   "Purple",
   "RebeccaPurple",
+  "Red",
   "RosyBrown",
   "RoyalBlue",
   "SaddleBrown",
@@ -371,7 +372,7 @@ function ScatterPlotImpl(props) {
           <div className="centered-text">
             Scatter Plot of Group {selectedGroupNumber}'s Spans
           </div>
-          <div>Percentage of Spans to Display:</div>
+          <div>Percentage of spans to display:</div>
           <div>{percentage}%</div>
           <div>
             <input
@@ -412,7 +413,7 @@ function ScatterPlotImpl(props) {
             <HorizontalGridLines />
             <VerticalGridLines />
             <XAxis
-              title="Start Time"
+              title="Start time"
               tickTotal={18}
               tickFormat={(t) => formatDuration(t)}
             />
