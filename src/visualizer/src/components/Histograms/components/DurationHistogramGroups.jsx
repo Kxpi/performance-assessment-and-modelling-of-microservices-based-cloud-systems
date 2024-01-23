@@ -41,21 +41,11 @@ function DurationHistogramGroups({ data, setGroupHistogramOnClick }) {
 
   // Function to update the y-axis units
   function updateUnits(data) {
-    // Determine the maximum value in the data
-    const maxValue = d3.max(data, (d) => d.duration99Percentile);
-
-    // Determine the appropriate units based on the maximum value
-    let units;
-    if (maxValue < 1000) {
-      units = "μs"; // microseconds
-    } else {
-      units = "ms"; // milliseconds
-    }
+    // Always use milliseconds as the unit
+    const units = "ms"; // milliseconds
 
     // Update the y-axis with the appropriate tick format
-    yAxis
-      .scale(y)
-      .tickFormat((d) => `${d / (units === "ms" ? 1000 : 1)} ${units}`);
+    yAxis.scale(y).tickFormat((d) => `${d / 1000} ${units}`);
   }
 
   // Call updateUnits with your data

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as d3 from "d3";
 import PropTypes from "prop-types";
 
-function StartTimeHistogramGroups({ data,setGroupHistogramOnClick }) {
+function StartTimeHistogramGroups({ data, setGroupHistogramOnClick }) {
   // Define dimensions
   const margin = { top: 30, right: 30, bottom: 80, left: 100 };
   const [width, setWidth] = useState(
@@ -41,21 +41,11 @@ function StartTimeHistogramGroups({ data,setGroupHistogramOnClick }) {
 
   // Function to update the y-axis units
   function updateUnits(data) {
-    // Determine the maximum value in the data
-    const maxValue = d3.max(data, (d) => d.startTime99Percentile);
-
-    // Determine the appropriate units based on the maximum value
-    let units;
-    if (maxValue < 1000) {
-      units = "μs"; // microseconds
-    } else {
-      units = "ms"; // milliseconds
-    }
+    // Always use milliseconds as the unit
+    const units = "ms"; // milliseconds
 
     // Update the y-axis with the appropriate tick format
-    yAxis
-      .scale(y)
-      .tickFormat((d) => `${d / (units === "ms" ? 1000 : 1)} ${units}`);
+    yAxis.scale(y).tickFormat((d) => `${d / 1000} ${units}`);
   }
 
   // Call updateUnits with your data
@@ -73,13 +63,15 @@ function StartTimeHistogramGroups({ data,setGroupHistogramOnClick }) {
         {data.map((d, i) => (
           <rect
             key={d.groupID}
-            onClick={()=>{setGroupHistogramOnClick(d.groupID)}}
+            onClick={() => {
+              setGroupHistogramOnClick(d.groupID);
+            }}
             x={x(i)}
             y={y(d.startTime99Percentile)} // Use d.startTime99Percentile for y value
             width={x.bandwidth()}
             height={height - y(d.startTime99Percentile)} // Use d.startTime99Percentile for height
             fill={d.color}
-            style={{cursor: 'pointer'}}
+            style={{ cursor: "pointer" }}
           />
         ))}
         <g

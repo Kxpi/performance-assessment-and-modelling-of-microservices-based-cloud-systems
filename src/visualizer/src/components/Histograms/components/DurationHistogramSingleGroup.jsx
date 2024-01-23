@@ -43,23 +43,13 @@ function DurationHistogramSingleGroup({ data }) {
 
   // Function to update the x-axis units
   function updateUnits(data) {
-    // Determine the maximum value in the data
-    const maxValue = d3.max(data, (d) => d.duration);
-
-    // Determine the appropriate units based on the maximum value
-    let units;
-    if (maxValue < 1000) {
-      units = "μs"; // microseconds
-    } else {
-      units = "ms"; // milliseconds
-    }
+    // Always use milliseconds as the unit for the x-axis
+    const units = "ms"; // milliseconds
 
     x.domain(d3.extent(data, (d) => d.duration));
 
     // Update the x-axis with the appropriate tick format
-    xAxis
-      .scale(x)
-      .tickFormat((d) => `${d / (units === "ms" ? 1000 : 1)} ${units}`);
+    xAxis.scale(x).tickFormat((d) => `${d / 1000} ${units}`);
   }
 
   // Call updateUnits with your data
